@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import Stam from './components/stam';
+import Login from './components/Login';
 function App() {
   return (
     <div className="App">
-    <Stam/>
+    <Login/>
     </div>
   );
 }

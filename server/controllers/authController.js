@@ -2,15 +2,15 @@ const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const UserCourse = require('../models/UserCourse')
 const jwt = require('jsonwebtoken')
-const { funcCreateUserCourse } = require('./userCourseController')
+const {funcCreateUserCourse} = require('./userCourseController')
 
 //register
 const register = async (req, res) => {
-    const { username, password, firstName,lastName, email, phone, course_id } = req.body
+    const { username, password, firstName,lastName, email, phone, course} = req.body
                 
-    if (!firstName || !username || password || !email || !course_id)
+    if (!firstName || !username || !password || !email || !course)
         return res.status(400).send('all field are required')
-
+debugger
     const duplicate = await User.findOne({ username: username })
 
     if (duplicate)//i need check his password and if she incorrect don't allow him register 
@@ -19,12 +19,12 @@ const register = async (req, res) => {
         const match = await bcrypt.compare(password, duplicate.password)
         if (!match)
             return res.status(401).send('duplicate username')
-        const alreadyRegistered = UserCourse.find({ user: duplicate._id, course: course_id })
+        const alreadyRegistered = UserCourse.find({ user: duplicate._id, course: course })
 
         if (alreadyRegistered)
             return res.status(401).send('you already regestered for this course')
 
-        const usercourse_id = funcCreateUserCourse({ user: duplicate._id, course: course_id })
+        const usercourse_id =await funcCreateUserCourse({ user: duplicate._id, course: course })
         if (!usercourse_id)
             return res.status(400).send('failed in create usercourse in register')
 
@@ -37,7 +37,7 @@ const register = async (req, res) => {
 
     const user = await User.create({ username, password: hashedPwd, name:{firstName:firstName,lastName:lastName}, email, phone })
     if (user) {
-        const usercourse_id = funcCreateUserCourse({ user: user._id, course: course_id })
+        const usercourse_id = funcCreateUserCourse({ user: user._id, course: course})
         if (!usercourse_id)
             return res.status(400).send('failed in create usercourse in register')
         return res.status(200).send('new user created')
@@ -49,8 +49,9 @@ const register = async (req, res) => {
 
 
 const login = async (req, res) => {
-    const { username, password, course_id } = req.body
 
+    const { username, password, course} = req.body
+     console.log({username,password,course})
     if (!username || !password)
         return res.status(400).send('all field are required')
 
@@ -61,7 +62,7 @@ const login = async (req, res) => {
         return res.status(401).send('unauthorized')
 
 
-    const match = await bcrypt.compare(password, foundUser.passord)
+    const match = await bcrypt.compare(password, foundUser.password)
     if (!match)
         return res.status(401).send('unauthorized')
 
@@ -70,16 +71,15 @@ const login = async (req, res) => {
     //to check if the course is exist in this user:
 
     const userscourses = await UserCourse.find({ user: foundUser._id })
-    console.log('it is realy array?', userscourses)
-    const course = userscourses.filter(uc =>
-        uc.course == course_id && uc.active
+    const course_i = userscourses.filter(uc =>
+        uc.course_i== course && uc.active
     )
 
-    if (!course)
+    if (!course_i)
         return res.status(401).send('you need register for this course')
 
     //relate to the token
-    const userInfo = { _id: foundUser._id, name: foundUser.name, roles: foundUser.roles, username: foundUser.username, email: foundUser.email, phone: foundUser.phone, courses: foundUser.courses }
+    const userInfo = { _id: foundUser._id, name: foundUser.name, role: foundUser.role, username: foundUser.username, email: foundUser.email, phone: foundUser.phone }
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
     res.json({ accessToken: accessToken })
 }

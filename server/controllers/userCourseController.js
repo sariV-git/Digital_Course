@@ -1,13 +1,15 @@
 const UserCourse = require('../models/UserCourse')
 
 //create
-const funcCreatUserCourse = async ({ user, course }) => {
+const funcCreateUserCourse = async ({ user, course }) => {
+    console.log({user,course});
     if (!user || !course)
         return false
     const usercourse = await UserCourse.create({ user, course })
+    console.log(usercourse);
     if (!usercourse)
-        return null
-    return usercourse._id
+        return false
+    return true
 }
 
 
@@ -78,4 +80,4 @@ const deleteUserCourse=async(_id)=>{
         return res.status(404).send('error in deleteUserCourse of usercourse')
 return res.send('succeed delete usercourse')
 }
-module.exports = {getAllUserCourses,getAllUserCourses,getByIdUserCourse,getUserCourseAccordingUser,funcCreatUserCourse,funcDeleteUseCourse,deleteUserCourse,updateUserCourse}
+module.exports = {getAllUserCourses,getAllUserCourses,getByIdUserCourse,getUserCourseAccordingUser,funcCreateUserCourse,funcDeleteUseCourse,deleteUserCourse,updateUserCourse}
