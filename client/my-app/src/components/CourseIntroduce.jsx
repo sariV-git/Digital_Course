@@ -1,15 +1,22 @@
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from "axios";
 import { useEffect, useState } from 'react';
+import Register from './Register';
+import { setCourse } from "../store/reducer/courseSlice"
 
 const CourseIntroduce = (props) => {
 
-    const course = props.course
+    // const course = props.course
 
-    // let speakerInformation;
+    const course = useSelector(state => state.course.course)
+    const dispatch = useDispatch()
+
+    dispatch(setCourse(props.course))
 
     const [speakerInformation, setSpeakerInformation] = useState(null);
+    const [register, setRegister] = useState(false);
 
     const getSpeakerInformation = async () => {
         try {
@@ -17,8 +24,8 @@ const CourseIntroduce = (props) => {
             if (res.status == 200) {
                 {
                     console.log("-----------------", res.data);
-                    const speaker=res.data
-                    return (speaker)
+                    const speaker = res.data
+                    setSpeakerInformation(speaker)
                 }
             }
         } catch (err) {
@@ -32,35 +39,33 @@ const CourseIntroduce = (props) => {
     // );
     const footer = (
         <>
-            <Button label="רישום לקורס" icon="pi pi-check" />
+            <Button label="רישום לקורס" icon="pi pi-check" onClick={() => setRegister(true)} />
             <Button label="כניסה לקורס" severity="secondary" icon="pi pi-times" style={{ marginLeft: '0.5em' }} />
         </>
     );
 
     useEffect(() => {
-        setSpeakerInformation(getSpeakerInformation());
+        getSpeakerInformation();
     }, [])
 
     return (
         <>
             {/* <div className="card flex justify-content-center"> */}
+
             <Card title={course.name} subTitle={course.information} footer={footer} /*header={header}*/ className="md:w-20rem">
                 <br></br>
                 {console.log("getSpeakerInformation().informationOnSpeaker")}
                 <h2 >
-                 {getSpeakerInformation().informationOnSpeaker}
-                    {/* {SpeakerInformation.name} */}
+                    {speakerInformation.name.firstName+" "+speakerInformation.lastName}
                 </h2>
-                {console.log("555555555555")}
                 {/* {console.log(speakerInformation)}
-                <h2>{speakerInformation.name.firstName+" "+speakerInformation.lastName}</h2>
-                <p>{speakerInformation.information}</p> */}
-               
+                <h2>{speakerInformation.name.firstName+" "+speakerInformation.lastName}</h2> */}
+                <p>{speakerInformation.information}</p>
+
             </Card>
             {/* </div> */}
 
-            {/* {course.name, style{{}}} */}
-
+            {register ? <Register /> : ""}
 
         </>
     )

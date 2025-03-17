@@ -20,6 +20,7 @@ router.put('/',verifyJWTmanager,upload.single('pathTriler'),courseController.upd
 router.delete('/:_id',verifyJWTmanager,courseController.deleteCourse)
 router.get('/',courseController.getAllCourses)
 router.get(':_id',courseController.getCourse)
+router.get("/getSpeakerInformation/:_id",courseController.getSpeakerInformationByCoursId)
 
 
 module.exports=router

@@ -3,7 +3,7 @@ import '../App.css';
 import { useForm } from "react-hook-form"
 import axios from 'axios'
 
-const MyForm=()=> {
+const Register=()=> {
 
     const createUser=async(data)=>{
         const newUser={
@@ -91,4 +91,4 @@ const MyForm=()=> {
   );
 }
 
-export default MyForm;
+export default Register;

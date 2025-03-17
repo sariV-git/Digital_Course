@@ -11,8 +11,8 @@ import 'primereact/resources/primereact.min.css'; // סגנון ה-PrimeReact
 function App() {
   return (
     <div className="App">
-    {/* <Login/> */}
-    <Home/>
+    <Login/>
+    {/* <Home/> */}
     </div>
   );
 }
