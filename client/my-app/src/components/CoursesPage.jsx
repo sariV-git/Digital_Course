@@ -6,6 +6,9 @@ const CoursesPage=(props)=>{
 
     return(
         <>
+        {courses.forEach(course => {
+            //View each course on the card
+        })}
         in CoursesPage
         </>
     )
