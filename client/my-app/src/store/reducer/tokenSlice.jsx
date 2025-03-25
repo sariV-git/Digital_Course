@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
@@ -8,9 +9,7 @@ export const tokenSlice = createSlice({
       setToken: (state,action) => {
         const {accessToken}=action.payload;
         console.log(accessToken);
-       
         state.token = accessToken;
-
       },
       logOut: (state,action) => {
         

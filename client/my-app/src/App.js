@@ -10,9 +10,9 @@ import 'primereact/resources/primereact.min.css'; // סגנון ה-PrimeReact
 
 function App() {
   return (
-    <div className="App">
+    <div >
     <Login/>
-    {/* <Home/> */}
+    <Home/>
     </div>
   );
 }
