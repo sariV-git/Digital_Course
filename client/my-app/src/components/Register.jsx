@@ -34,6 +34,7 @@ const Register=()=> {
     
 
   return (
+    <div className='login'>
     <div className="app-container">
       <div className="form-container">
         <h2 className="form-title">Create an Account</h2>
@@ -87,6 +88,7 @@ const Register=()=> {
           <button type="submit" className="submit-btn">Sign Up</button>
         </form>
       </div>
+    </div>
     </div>
   );
 }

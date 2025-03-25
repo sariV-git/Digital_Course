@@ -39,8 +39,10 @@
 
 
 /* ///// */
+/* //
+for the login and register */
 
-* {
+.login {* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -122,11 +124,11 @@ body {
 .input-group.error input {
   border-color: red;
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
-}
+} }
 
 /* //for the recording: */
-* {
-  margin: 0;
+/* * { */
+  /* margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
@@ -210,4 +212,4 @@ body {
 
 .audio-link a:hover {
   text-decoration: underline;
-}
+} */

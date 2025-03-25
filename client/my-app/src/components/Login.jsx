@@ -35,6 +35,7 @@ const Login = () => {
   }
 
   return (
+    <div className='login'>
     <div className="app-container">
       <div className="form-container">
         <h2 className="form-title">כניסה לקורס</h2>
@@ -58,6 +59,7 @@ const Login = () => {
           {token}
         </form>
       </div>
+    </div>
     </div>
   );
 }
