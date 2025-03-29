@@ -6,7 +6,8 @@ const Task = require('../models/Task')
 
 //create
 const createCourse = async (req, res) => {
-    const { name, information, speaker } = JSON.parse(req.body.obj)
+    const { name, information, speaker } = req.body
+   
     const pathTriler = req.file.filename
     if (!name)
         return res.status(400).send('need name in createCourse')

@@ -7,7 +7,7 @@ const { funcDeleteTask } = require('./taskController')
 //create
 const createLesson = async (req, res) => {
     
-    const { name, course, numOfLesson } = JSON.parse(req.body.obj)
+    const { name, course, numOfLesson } = req.body
     const path = req.file.filename
     if (!name || !course || !path)
         return res.status(400).send('error in create lesson video')
@@ -72,7 +72,7 @@ const deleteLesson = async (req, res) => {
 //getAll
 const getAllLessons = async (req, res) => {
     const lessons = await Lesson.find()
-    if (!lesson)
+    if (!lessons)
         return res.status(404).send('error with getAll Lesson')
     res.json(lessons)
 }
