@@ -2,6 +2,7 @@ const express=require('express')
 const router=express.Router()
 const courseController=require('../controllers/courseController')
 const verifyJWTmanager=require('../middleware/verifyJWTmanager')
+const verifyJWTuser=require('../middleware/verifyJWTuser')
 // const verifyJWTuser=require('../middleware/verifyJWTuser')
 const multer=require('multer')
 const path=require('path')
@@ -21,6 +22,6 @@ router.delete('/:_id',verifyJWTmanager,courseController.deleteCourse)
 router.get('/',courseController.getAllCourses)
 router.get(':_id',courseController.getCourse)
 router.get("/getSpeakerInformation/:_id",courseController.getSpeakerInformationByCoursId)
-
+router.get('/allLessonsAccordingCourse/:_id',verifyJWTuser,courseController.getAllLessonAccordingCourse)
 
 module.exports=router

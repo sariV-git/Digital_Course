@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { CustomerService } from './service/CustomerService';
 
-export default function FlexibleScrollDemo() {
+const IntroduceLesson=() =>{
     const [customers, setCustomers] = useState([]);
     const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -32,4 +32,4 @@ export default function FlexibleScrollDemo() {
         </div>
     );
 }
-        
+export default IntroduceLesson

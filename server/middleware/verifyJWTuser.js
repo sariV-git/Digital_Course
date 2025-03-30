@@ -13,7 +13,7 @@ const verifyJWT=(req,res,next)=>{
             return res.status(403).json({message :'Forbidden'})
     
     req.userMiddleware=decoded
-    if(decoded.role!='User'&&decoded.role!='Adimin'&&decoded.role!='Speeker')
+    if(decoded.role!='User'&&decoded.role!='Admin'&&decoded.role!='Speeker')
           return res.status(403).json({message :'Forbidden'})
     next()})
 }

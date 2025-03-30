@@ -10,13 +10,16 @@ import 'primereact/resources/themes/saga-blue/theme.css'; // נושא PrimeReact
 import 'primereact/resources/primereact.min.css'; // סגנון ה-PrimeReact
 import 'primeicons/primeicons.css'; // אייקונים של PrimeIcons
 import 'primeflex/primeflex.css'
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter>
         <App />
+        </BrowserRouter>
       </PersistGate>
     </Provider>
   </React.StrictMode>

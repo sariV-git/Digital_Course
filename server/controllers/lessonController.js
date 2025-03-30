@@ -77,6 +77,9 @@ const getAllLessons = async (req, res) => {
     res.json(lessons)
 }
 
+//getAllLessonAccordingCourse
+
+
 //getById
 const getByIdLesson = async (req, res) => {
     const { _id } = req.params

@@ -17,6 +17,19 @@ const createCourse = async (req, res) => {
     return res.send('succeed to create course')
 }
 
+//getAllLessonsOfThisCourse
+const getAllLessonAccordingCourse=async(req,res)=>{
+    const {_id}=req.params
+    if(!_id)
+        return res.status(400).send('error in getAllLessonAccordingCourse')
+    const course=await Course.findById(_id)
+    if(!course)
+        return res.status(400).send('error in getAllLessonAccordingCourse')
+    const lessons=await Lesson.find({course:_id})
+    if(!lessons)
+        return res.status(400).send('error in getAllLessonAccordingCourse')
+res.json(lessons)
+}
 //update
 const updateCourse = async (req, res) => {
     const { name, information } = req.body
@@ -101,4 +114,4 @@ const deleteCourse = async (req, res) => {
 
 
 
-module.exports = { createCourse, updateCourse, getAllCourses, deleteCourse, getCourse, getSpeakerInformationByCoursId }
+module.exports = { createCourse, updateCourse, getAllCourses, deleteCourse, getCourse, getSpeakerInformationByCoursId ,getAllLessonAccordingCourse}
