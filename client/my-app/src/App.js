@@ -13,6 +13,10 @@ import CourseIntroduce from './components/CourseIntroduce';
 import Lesson from './components/Lesson';
 import { useState } from 'react';
 import TemplateDemo from './components/Menubar';
+import IntroduceUsers from './components/forIntroduceUsers';
+import CourseCard from './components/fixedCardsPage';
+import CourseModuleList from './components/pageListLessons';
+import Task from './components/taskPage';
 
 // import IntroduceLesson from './components/forIntroduceLesson';
 
@@ -23,14 +27,17 @@ function App() {
       {/* <Home/> */}
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
-      <div className='card'>
         <TemplateDemo/>
-      </div>
+
+       {/* <IntroduceUsers/> //for users!!*/}
+       {/* <CourseCard/> for the page of all the courses and not take the fixed */}
+       {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />
         <Route path='/Lesson' element={<Lesson />} />
         <Route path='/Login' element={<Login />} />
+        <Route path='/Task'element={<Task/>}/>
       </Routes>
     </div>
   );

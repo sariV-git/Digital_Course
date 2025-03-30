@@ -3,7 +3,8 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import tokenReducer from './reducer/tokenSlice';
 import courseReducer from "./reducer/courseSlice"
-
+import lessonReducer from './reducer/lessonSlice'
+import taskReducer from './reducer/taskSlice'
 const persistConfig = {
   key: 'root',
   storage,
@@ -11,11 +12,14 @@ const persistConfig = {
 
 const persistedTokenReducer = persistReducer(persistConfig, tokenReducer);
 const persistedCourseReducer = persistReducer(persistConfig, courseReducer);
-
+const persistLessonReducer=persistReducer(persistConfig,lessonReducer)
+const persistTaskReducer=persistReducer(persistConfig,taskReducer)
 const store = configureStore({
   reducer: {
     token: persistedTokenReducer, // Persisted token reducer
     course: persistedCourseReducer, // Persisted course reducer
+    lesson:persistLessonReducer,
+    task:persistTaskReducer
   },
 });
 

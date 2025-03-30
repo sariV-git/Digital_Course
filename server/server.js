@@ -34,14 +34,13 @@ app.use('/task',require('./routes/taskRoute'))
 app.use('/userCourse',require('./routes/userCourseRouter'))
 app.use('/userTask',require('./routes/userTaskRoute'))
 // app.use('/task',require('./routes/taskRoute'))
-
 //login and register
 app.use('/auth',require('./routes/authRoutes'))
-
+  
 //for files:
 app.use('/upload',express.static(__dirname+'/public/upload'))
 
-
+  
 //to get the video of the specific lesson
 app.get('/upload/:fileName',(req,res)=>{
     const{fileName}=req.params

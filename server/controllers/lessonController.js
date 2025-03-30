@@ -18,9 +18,6 @@ const createLesson = async (req, res) => {
     return res.status(201).send('new lesson video created')
 }
 
-
-
-
 //update
 const updatLesson = async (req, res) => {
     //to check how delete the old video
@@ -74,7 +71,9 @@ const getAllLessons = async (req, res) => {
     const lessons = await Lesson.find()
     if (!lessons)
         return res.status(404).send('error with getAll Lesson')
-    res.json(lessons)
+console.log(lessons);
+
+    return res.json(lessons)
 }
 
 //getAllLessonAccordingCourse

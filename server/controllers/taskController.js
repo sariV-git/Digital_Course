@@ -82,4 +82,17 @@ const getAlltasks=async(req,res)=>{
 return res.json(tasks)
 }
 
-module.exports = { deleteTask, funcDeleteTask,updateLesson,createTask,getAlltasks,getByIdTask }
+//getTaskAccordingLesson
+const getTaskAccordingLesson=async(req,res)=>{
+    console.log("hhhhhhhhhh");
+    
+    const {_id}=req.params
+    if(!_id)
+        return res.status(400).send('error in getAllLessonAccordingCourse')
+    const task=await Task.findOne({lesson:_id})
+    if(!task)
+        return res.status(400).send('error in getAllLessonAccordingCourse')
+return res.json(task)
+}
+
+module.exports = { deleteTask, funcDeleteTask,updateLesson,createTask,getAlltasks,getByIdTask,getTaskAccordingLesson }

@@ -11,20 +11,8 @@ export default function TemplateDemo() {
     const items = [{
         label: 'Login',
         icon: 'pi pi-user',
-        command: () => { navigate('./Login') }
+        command: () => {navigate('./Login') }
     }]
-    // {
-    //     label: 'Posts',
-    //     icon: 'pi pi-file',
-    //     command: () => { navigate('./posts') }
-    // },
-    // {
-    //     label: 'Todos',
-    //     icon: 'pi pi-list-check',
-    //     command: () => { navigate('./todos') }
-    // }
-    
-    
         return(
           <div>
             {/* <Menubar model={items} style={{ borderRadius: '3rem', backgroundImage: 'linear-gradient(to right, var(--bluegray-200 ), var(--bluegray-500))' }}/> */}
