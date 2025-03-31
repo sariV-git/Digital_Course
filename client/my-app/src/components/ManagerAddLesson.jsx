@@ -5,14 +5,13 @@ import axios from "axios";
 import { InputText } from 'primereact/inputtext'
 import { useSelector } from "react-redux";
 import { FileUpload } from 'primereact/fileupload';
+import { useNavigate } from "react-router-dom";
 
 const ManagerAddLesson = () => {
-
+    const navigate=useNavigate();
     const currentCourse = useSelector(state => state.course.course)
     const token = useSelector(state => state.token.token)
 
-    // const[pathFlag,setFlagPath]=useState(false)
-    // const [path, setPath] = useState(null)
     const [file, setFile] = useState(null)
     const [visible, setVisible] = useState(false);
     const name = useRef('')
@@ -30,11 +29,8 @@ const ManagerAddLesson = () => {
         formData.append('name', name.current.value)
         formData.append('numOfLesson', numOfLesson.current.value)
         formData.append('path', file)
-        formData.append('course',currentCourse._id)
-        // const newLesson = {
-        //     name: name.current.value,
-        //     numOfLesson: numOfLesson.current.value
-        // }
+        formData.append('course', currentCourse._id)
+
         try {
             const res = await axios.post('http://localhost:5000/lesson', formData, {
                 headers: {
@@ -43,28 +39,15 @@ const ManagerAddLesson = () => {
                 }
             })
             console.log('Lesson created successfully:', res.data);
+            const lesson=res.data
+            navigate('/ManagerAddTask',{state:{
+                lesson:lesson
+            }})
         }
         catch (e) {
             console.error('There was an error uploading the lesson:', e);
         }
     }
-
-    //for choose the path of the video:
-    // const customBase64Uploader = async (event) => {
-    //     // convert file to base64 encoded
-    //     const file = event.files[0];
-    //     console.log(file);
-    //     setPath(file.name)
-    //     setFlagPath(true)
-    //     const reader = new FileReader();
-    //     let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
-
-    //     reader.readAsDataURL(blob);
-
-    //     reader.onloadend = function () {
-    //         const base64data = reader.result;
-    //     };
-    // };
 
     return (
         <div className="card flex justify-content-center">
@@ -89,7 +72,7 @@ const ManagerAddLesson = () => {
                             </label>
                             <InputText id="password" ref={numOfLesson} label="text" className="bg-white-alpha-20 border-none p-3 text-primary-50" type="text"></InputText>
                         </div>
-                        <FileUpload  accept='video/mp4' maxFileSize={500000000}name='video' mode="basic"  url="/api/upload"  customUpload uploadHandler={onFileUpload} chooseLabel="Upload Your Video"
+                        <FileUpload accept='video/mp4' maxFileSize={500000000} name='video' mode="basic" url="/api/upload" customUpload uploadHandler={onFileUpload} chooseLabel="Upload Your Video"
                         />
 
                         <div className="flex align-items-center gap-2">

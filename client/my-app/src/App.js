@@ -20,6 +20,8 @@ import Task from './components/taskPage';
 import CoursesPage from './components/CoursesPage';
 import ManagerAddLesson from './components/ManagerAddLesson';
 import ChooseVideo from './components/forChooseVideo';
+import ManagerAddTask from './components/ManagerAddTask';
+import ManagerAddQuestions from './components/ManagerAddQuestions';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -29,21 +31,23 @@ function App() {
       {/* <Home/> */}
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
-        <TemplateDemo/>
-        {/* <ChooseVideo/> */}
-        {/* <CoursesPage/---put in the menubar */}
-       {/* <IntroduceUsers/> //for users!!*/}
-       {/* <CourseCard/> for the page of all the courses and not take the fixed */}
-       {/* <CourseModuleList/> for the page of all the lessons*/}
+      <TemplateDemo />
+      {/* <ChooseVideo/> */}
+      {/* <CoursesPage/---put in the menubar */}
+      {/* <IntroduceUsers/> //for users!!*/}
+      {/* <CourseCard/> for the page of all the courses and not take the fixed */}
+      {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />
         <Route path='/Lesson' element={<Lesson />} />
         <Route path='/Login' element={<Login />} />
-        <Route path='/Task'element={<Task/>}/>
-        <Route path='/IntroduceCourse'element={<CourseIntroduce/>}/>
-        <Route path='/CoursesPage'element={<CoursesPage/>}/>
-        <Route path='/ManagerAddLesson' element={<ManagerAddLesson/>}/>
+        <Route path='/Task' element={<Task />} />
+        <Route path='/IntroduceCourse' element={<CourseIntroduce />} />
+        <Route path='/CoursesPage' element={<CoursesPage />} />
+        <Route path='/ManagerAddLesson' element={<ManagerAddLesson />} />
+        <Route path='/ManagerAddTask' element={<ManagerAddTask />} />
+        <Route path='/ManagerAddQuestions' element={<ManagerAddQuestions />} />
       </Routes>
     </div>
   );

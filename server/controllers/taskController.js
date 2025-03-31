@@ -46,7 +46,7 @@ const createTask=async(req,res)=>{
     const task=await Task.create({title,lesson})
     if(!task)
         return res.status(400).send('error in create task')
-   return res.send('succeed create task')
+   return res.status(200).json(task)
 }
 
 //update

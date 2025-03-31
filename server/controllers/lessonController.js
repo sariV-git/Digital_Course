@@ -15,7 +15,7 @@ const createLesson = async (req, res) => {
     const lesson =await Lesson.create({name, course, path, numOfLesson })
     if (!lesson)
         return res.status(400).send('error in create lesson video')
-    return res.status(201).send('new lesson video created')
+    return res.status(200).json(lesson)
 }
 
 //update
