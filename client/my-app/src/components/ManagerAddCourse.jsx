@@ -7,45 +7,46 @@ import { useSelector } from "react-redux";
 import { FileUpload } from 'primereact/fileupload';
 import { useNavigate } from "react-router-dom";
 
-const ManagerAddLesson = () => {
-    const navigate=useNavigate();
+const ManagerAddCourse = () => {
     const [visible, setVisible] = useState(false);
-
-    const currentCourse = useSelector(state => state.course.course)
     const token = useSelector(state => state.token.token)
-
-    const [file, setFile] = useState(null)
+    const navigate = useNavigate()
     const name = useRef('')
-    const numOfLesson = useRef('')
+    const usernameSpeeker = useRef('')
+    const information = useRef('')
+    const [videoTriler, setVideoTriler] = useState(null)
 
     const onFileUpload = (e) => {
         console.log('upload the file', e.files[0]);
-        setFile(e.files[0])
+        setVideoTriler(e.files[0])
     }
 
-    //create
-    const CreateLesson = async () => {
+    const createCourse = async () => {
         const formData = new FormData()
         formData.append('name', name.current.value)
-        formData.append('numOfLesson', numOfLesson.current.value)
-        formData.append('path', file)
-        formData.append('course', currentCourse._id)
-
+        formData.append('information', information.current.value)
+        formData.append('pathTriler', videoTriler)
+        const usernamespeeker = usernameSpeeker.current.value
         try {
-            const res = await axios.post('http://localhost:5000/lesson', formData, {
+            const resSpeeker = await axios.get(`http://localhost:5000/user/byUserName/${usernamespeeker}`, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log('Lesson created successfully:', res.data);
-            const lesson=res.data
-            navigate('/ManagerAddTask',{state:{
-                lesson:lesson
-            }})
-        }
-        catch (e) {
-            console.error('There was an error uploading the lesson:', e);
+            console.log('speeker', resSpeeker.data);
+            formData.append('speeker', resSpeeker.data._id)
+            const resCourse = await axios.post('http://localhost:5000/course', formData,
+                {
+                    headers:{
+                        Authorization:`Bearer ${token}`
+                    }
+                }
+            )
+            console.log('succeed create course,', resCourse.data);
+
+            navigate('/CoursesPage')
+        } catch (error) {
+
         }
     }
 
@@ -68,15 +69,21 @@ const ManagerAddLesson = () => {
                         </div>
                         <div className="inline-flex flex-column gap-2">
                             <label htmlFor="username" className="text-primary-50 font-semibold">
-                                numOfLesson
+                                usernameSpeeker
                             </label>
-                            <InputText id="password" ref={numOfLesson} label="text" className="bg-white-alpha-20 border-none p-3 text-primary-50" type="text"></InputText>
+                            <InputText id="password" ref={usernameSpeeker} label="text" className="bg-white-alpha-20 border-none p-3 text-primary-50" type="text"></InputText>
+                        </div>
+                        <div className="inline-flex flex-column gap-2">
+                            <label htmlFor="username" className="text-primary-50 font-semibold">
+                                information
+                            </label>
+                            <InputText ref={information} id="username" label="Username" className="bg-white-alpha-20 border-none p-3 text-primary-50"></InputText>
                         </div>
                         <FileUpload accept='video/mp4' maxFileSize={500000000} name='video' mode="basic" url="/api/upload" customUpload uploadHandler={onFileUpload} chooseLabel="Upload Your Video"
                         />
 
                         <div className="flex align-items-center gap-2">
-                            <Button label="Create" onClick={(e) => { hide(e); CreateLesson() }} text className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
+                            <Button label="Create" onClick={(e) => { hide(e); createCourse() }} text className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
                             <Button label="Cancel" onClick={(e) => hide(e)} text className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"></Button>
                         </div>
 
@@ -87,9 +94,4 @@ const ManagerAddLesson = () => {
     )
 }
 
-
-export default ManagerAddLesson
-
-
-
-
+export default ManagerAddCourse

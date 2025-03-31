@@ -44,7 +44,9 @@ const Login = () => {
         //write the users in a global file
         dispatch(setIsManager)
         //i want insert for the menubar some option that only manager can do
-        dispatch(setItemsInTheMenubar({newItems:[{label:'Edit Lessons',icon:'pi pi user',to:'/ManagerAddLesson'}]}))
+        dispatch(setItemsInTheMenubar({newItems:[{label:'Edit Lessons',icon:'pi pi user',to:'/ManagerAddLesson'},
+          {label:'Edit Course',icon:'pi pi-user',to:'/ManagerAddCourse'}
+        ]}))
       }
     }
     catch (e) {

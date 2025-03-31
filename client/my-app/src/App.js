@@ -22,6 +22,7 @@ import ManagerAddLesson from './components/ManagerAddLesson';
 import ChooseVideo from './components/forChooseVideo';
 import ManagerAddTask from './components/ManagerAddTask';
 import ManagerAddQuestions from './components/ManagerAddQuestions';
+import ManagerAddCourse from './components/ManagerAddCourse';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
         <Route path='/ManagerAddLesson' element={<ManagerAddLesson />} />
         <Route path='/ManagerAddTask' element={<ManagerAddTask />} />
         <Route path='/ManagerAddQuestions' element={<ManagerAddQuestions />} />
+        <Route path='/ManagerAddCourse' element={<ManagerAddCourse />} />
       </Routes>
     </div>
   );
