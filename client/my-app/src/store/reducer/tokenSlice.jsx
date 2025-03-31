@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
-      token: null
+      token: null,
+      isManager:false
     },
     reducers: {
       setToken: (state,action) => {
@@ -15,11 +16,14 @@ export const tokenSlice = createSlice({
         
   
         state.token = null;
+      },
+      setIsManager:(state,action)=>{
+        state.isManager=action.payload
       }
     }
   })
   
   // Action creators are generated for each case reducer function
-  export const { setToken,logOut } = tokenSlice.actions
+  export const { setToken,logOut ,setIsManager} = tokenSlice.actions
   
   export default tokenSlice.reducer

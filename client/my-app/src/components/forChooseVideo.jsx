@@ -6,6 +6,9 @@ export default function ChooseVideo() {
     const customBase64Uploader = async (event) => {
         // convert file to base64 encoded
         const file = event.files[0];
+        console.log(file);
+        
+        const path=file.name
         const reader = new FileReader();
         let blob = await fetch(file.objectURL).then((r) => r.blob()); //blob:url
 

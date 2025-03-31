@@ -9,7 +9,7 @@ const createLesson = async (req, res) => {
     
     const { name, course, numOfLesson } = req.body
     const path = req.file.filename
-    if (!name || !course || !path)
+    if (!name || !course || !path||!numOfLesson)
         return res.status(400).send('error in create lesson video')
     // console.log({name, course, path, numOfLesson });
     const lesson =await Lesson.create({name, course, path, numOfLesson })

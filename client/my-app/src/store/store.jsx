@@ -5,6 +5,7 @@ import tokenReducer from './reducer/tokenSlice';
 import courseReducer from "./reducer/courseSlice"
 import lessonReducer from './reducer/lessonSlice'
 import taskReducer from './reducer/taskSlice'
+import itemsInTheMenubarReducer from './reducer/itemsInTheMenubarSlice'
 const persistConfig = {
   key: 'root',
   storage,
@@ -19,7 +20,8 @@ const store = configureStore({
     token: persistedTokenReducer, // Persisted token reducer
     course: persistedCourseReducer, // Persisted course reducer
     lesson:persistLessonReducer,
-    task:persistTaskReducer
+    task:persistTaskReducer,
+    itemsInTheMenubar:itemsInTheMenubarReducer
   },
 });
 

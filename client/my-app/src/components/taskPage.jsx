@@ -5,6 +5,7 @@ import { setTask } from "../store/reducer/taskSlice"
 import { useLocation } from "react-router-dom"
 import { Card } from "primereact/card"
 import { InputText } from "primereact/inputtext"
+import { MultiSelect } from 'primereact/multiselect';
 
 
 const Task = () => {
@@ -36,7 +37,7 @@ const Task = () => {
     loadDataQuestion()
   }, [])
 
-
+  
 
   return (<>
     {load ? <>Loading...</> : <>
@@ -44,7 +45,8 @@ const Task = () => {
         return<Card>
           <h1>num:{question.numOfQuestion}</h1>
           <p>{question.text}</p>
-          <InputText type="text" className="p-inputtext-lg" placeholder="your answer" />
+          {question.type=='American'?<></>:
+          <InputText type="text" className="p-inputtext-lg" placeholder="your answer" />}
         </Card>
       })}
       </>}
@@ -53,4 +55,18 @@ const Task = () => {
 }
 
 export default Task
+////////////////
 
+// import React, { useState } from "react";
+
+// export default function BasicDemo() {
+   
+
+//     return (
+//         <div className="card flex justify-content-center">
+//             <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" 
+//                 placeholder="Select Cities" maxSelectedLabels={3} className="w-full md:w-20rem" />
+//         </div>
+//     );
+// }
+        

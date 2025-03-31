@@ -27,6 +27,10 @@ const LessonList = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
+            console.log('response.status, ',response.status);
+            
+            if(response.status!=200)
+                navigate('/Login')
             const results = response.data
             setState({
                 ...state, loading: false,

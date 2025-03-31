@@ -7,7 +7,7 @@ import Register from './Register';
 import { setCourse } from "../store/reducer/courseSlice"
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const CourseIntroduce = (props) => {
+const CourseIntroduce = () => {
     const navigate=useNavigate();
     // const course = props.course
     const dispatch = useDispatch()
@@ -38,6 +38,8 @@ const CourseIntroduce = (props) => {
                     setSpeakerInformation(speaker)
                 }
             }
+            else
+            navigate('/Login')
         } catch (err) {
             console.log(err)
         }
