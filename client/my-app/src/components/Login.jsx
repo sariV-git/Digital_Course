@@ -11,46 +11,47 @@ import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
 // navigate('/Login', { state: { course: course } })
 
 const Login = () => {
-  const location=useLocation()
-  const course=location.state.course
-  const navigate=useNavigate();
-  const token = useSelector(state => state.token.token)  
+  const location = useLocation()
+  const course = location.state.course
+  const navigate = useNavigate();
+  const token = useSelector(state => state.token.token)
   const dispatch = useDispatch()
+
   const loginUser = async (data) => {
+
     const username = data.username
     const password = data.password
-    console.log('before try');
-    
     try {
-      const res = await axios.post('http://localhost:5000/auth/login', { username, password, course: '67e84081175d3491a880e394' })
+      const res = await axios.post('http://localhost:5000/auth/login', { username, password,course: course._id })
+      console.log('success', res.data);
+
       if (res.status !== 200)//didnt succeed to login
       {
-        console.log('you cant login')
+        navigate('/Register')
       }
       console.log(res.data.accessToken);
       dispatch(setToken(res.data))
-      const token=res.data.accessToken
-
-      const response=await axios.get('http://localhost:5000/user',{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
-      })
-      if(response.status==200)
-      {
-        console.log('you are manager!',response.data);
+      const token = res.data.accessToken
+      
+      if (res.data.role == 'Admin') {
         //write the users in a global file
         dispatch(setIsManager(true))
         //i want insert for the menubar some option that only manager can do
-        dispatch(setItemsInTheMenubar({newItems:[{label:'Edit Lessons',icon:'pi pi user',to:'/ManagerAddLesson'},
-          {label:'Edit Course',icon:'pi pi-user',to:'/ManagerAddCourse'}
-        ]}))
+        dispatch(setItemsInTheMenubar({
+          newItems: [{ label: 'Edit Lessons', icon: 'pi pi user', to: '/ManagerAddLesson' },
+          { label: 'Edit Course', icon: 'pi pi-user', to: '/ManagerAddCourse' },{
+            label:'Users Page',icon:'pi pi-user',to:'/ManagerUsersPage'
+          }
+          ]
+        }))
       }
-      console.log('after');
-      
+
     }
     catch (e) {
+      dispatch(setCourse({newCourse:course}))
+      navigate('/Register')
       console.log(e);
+      dispatch(setIsManager(false))
     }
 
   }
@@ -65,11 +66,11 @@ const Login = () => {
   const onSumbit = (data) => {
     console.log(data);
     //keep the course which the user enter to
-    dispatch(setCourse({newCourse:course}))
+    dispatch(setCourse({ newCourse: course }))
     loginUser(data);
     //check if this user is already find in this course
-    
-    navigate('/CourseIntroduce',{state:{course:course}})
+
+    navigate('/CourseIntroduce', { state: { course: course } })
     // navigate('/CourseIntroduce',{state:{course:{_id:"67e84081175d3491a880e394",
     //   name:"FirstCouorse",description:"financialCourse",speeker:"67e83ac7c16a3f8030913e28"
     // }}})

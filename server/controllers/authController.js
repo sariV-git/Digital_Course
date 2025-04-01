@@ -2,15 +2,15 @@ const bcrypt = require('bcrypt')
 const User = require('../models/User')
 const UserCourse = require('../models/UserCourse')
 const jwt = require('jsonwebtoken')
-const {funcCreateUserCourse} = require('./userCourseController')
+const { funcCreateUserCourse } = require('./userCourseController')
 
 //register
 const register = async (req, res) => {
-    const { username, password, firstName,lastName, email, phone, course} = req.body
-                
+    const { username, password, firstName, lastName, email, phone, course } = req.body
+
     if (!firstName || !username || !password || !email || !course)
         return res.status(400).send('all field are required')
-debugger
+    debugger
     const duplicate = await User.findOne({ username: username })
 
     if (duplicate)//i need check his password and if she incorrect don't allow him register 
@@ -24,7 +24,7 @@ debugger
         if (alreadyRegistered)
             return res.status(401).send('you already regestered for this course')
 
-        const usercourse_id =await funcCreateUserCourse({ user: duplicate._id, course: course })
+        const usercourse_id = await funcCreateUserCourse({ user: duplicate._id, course: course })
         if (!usercourse_id)
             return res.status(400).send('failed in create usercourse in register')
 
@@ -35,9 +35,9 @@ debugger
 
     const hashedPwd = await bcrypt.hash(password, 10)
 
-    const user = await User.create({ username, password: hashedPwd, name:{firstName:firstName,lastName:lastName}, email, phone })
+    const user = await User.create({ username, password: hashedPwd, name: { firstName: firstName, lastName: lastName }, email, phone })
     if (user) {
-        const usercourse_id = funcCreateUserCourse({ user: user._id, course: course})
+        const usercourse_id = funcCreateUserCourse({ user: user._id, course: course })
         if (!usercourse_id)
             return res.status(400).send('failed in create usercourse in register')
         return res.status(200).send('new user created')
@@ -50,49 +50,50 @@ debugger
 
 const login = async (req, res) => {
 
-    const { username, password, course} = req.body
-     console.log({username,password,course})
+    const { username, password, course } = req.body
+    console.log({ username, password, course })
     if (!username || !password)
-        return res.status(400).send('all field are required')
+        return res.status(400).json({ success: false })
 
     const foundUser = await User.findOne({ username }).lean()//we found the user 
 
 
     if (!foundUser)
-        return res.status(401).send('unauthorized')
+        return res.status(401).json({ success: false })
 
 
     const match = await bcrypt.compare(password, foundUser.password)
     if (!match)
-        return res.status(401).send('unauthorized')
+        return res.status(401).json({ success: false })
 
     //we need check if this user is already find in this specific course and his active equal true
 
     //to check if the course is exist in this user:
-
-    const userscourses = await UserCourse.find({ user: foundUser._id })
-    const course_i = userscourses.filter(uc =>
-        uc.course_i== course && uc.active
-    )
-
-    if (!course_i)
-        return res.status(401).send('you need register for this course')
-
+    if (foundUser.role == 'User') {
+        const userscourses = await UserCourse.find({ user: foundUser._id })
+        const course_i = userscourses.filter(uc =>
+            uc.course == course && uc.active
+        )
+        if (course_i.length == 0)
+            return res.status(401).json({ success: false })
+    }
     //relate to the token
+
     const userInfo = { _id: foundUser._id, name: foundUser.name, role: foundUser.role, username: foundUser.username, email: foundUser.email, phone: foundUser.phone }
+
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
-    res.json({ accessToken: accessToken })
+    return res.json({ accessToken: accessToken, success: true, role: foundUser.role })
 }
 
 
 const loginManager = async (req, res) => {
-    const { username, password} = req.body
+    const { username, password } = req.body
 
     if (!username || !password)
         return res.status(400).send('all field are required')
 
     const foundUser = await User.findOne({ username }).lean()//we found the user 
-console.log(foundUser);
+    console.log(foundUser);
 
     if (!foundUser)
         return res.status(401).send('unauthorized')
@@ -107,4 +108,4 @@ console.log(foundUser);
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
     res.json({ accessToken: accessToken })
 }
-module.exports = { login, register,loginManager }
+module.exports = { login, register, loginManager }

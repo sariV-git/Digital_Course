@@ -3,6 +3,9 @@ const { funcDeleteLesson } = require('./lessonController')
 const Lesson = require('../models/Lesson')
 const { funcdDeleteUserCourse } = require('./userCourseController')
 const Task = require('../models/Task')
+const fs = require('fs');//for delete the video
+const path=require('path')
+
 
 //create
 const createCourse = async (req, res) => {
@@ -108,7 +111,17 @@ const deleteCourse = async (req, res) => {
         return res.status(401).send('error in deleteCourse')
     if (!userTasks || !lessons)
         return res.status(401).send('error in deleteCourse')
-    return res.send('succeed delete course')
+//to delete the video of a  course
+    const absolatePath=path.join(__dirname,'../public/ upload',course.pathTriler)
+   fs.unlink(absolatePath,(err)=>{
+    if(err)
+    {
+        console.log('error in delete video in course',err);
+        res.status(500).send('error in delete video in course')
+        
+    }
+   })
+    return res.status(200).send('succeed delete course')
 }
 
 

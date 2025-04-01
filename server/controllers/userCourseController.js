@@ -43,8 +43,23 @@ const getUserCourseAccordingUser=async(req,res)=>{
         return res.status(404).send('error in getUserCourseAccordingUser of usercourse')
 return res.json(usercourses)
 }
+//get users according a specific courses
+const getUsersAccordingCourse=async(req,res)=>{
+    const{_id}=req.params//the id of the course
+    if(!_id)
+        return res.status(404).send('error in getUsersAccordingCourse of usercourse')
+    //  const usersFound=await UserCourse.find({course:_id}).populate('user',{firstName:1, lastName:1, email:1, username:1, phone:1, _id:1})
+    const usersFound = await UserCourse.find({ course: _id })
+  .populate('user'); // Populate 'user' field with the full User document
 
+// Now extract only the user data from each userCourse
+const users = usersFound.map(userCourse => userCourse.user);
 
+console.log('Users:', users); // Log the user data
+    if(!usersFound) 
+        return res.status(404).send('error in getUsersAccordingCourse of usercourse')
+    res.json(users)
+}
 //update
 const updateUserCourse=async(req,res)=>{
     const {_id,active,numLesson}=req.body
@@ -80,4 +95,4 @@ const deleteUserCourse=async(_id)=>{
         return res.status(404).send('error in deleteUserCourse of usercourse')
 return res.send('succeed delete usercourse')
 }
-module.exports = {getAllUserCourses,getAllUserCourses,getByIdUserCourse,getUserCourseAccordingUser,funcCreateUserCourse,funcDeleteUseCourse,deleteUserCourse,updateUserCourse}
+module.exports = {getUsersAccordingCourse,getAllUserCourses,getAllUserCourses,getByIdUserCourse,getUserCourseAccordingUser,funcCreateUserCourse,funcDeleteUseCourse,deleteUserCourse,updateUserCourse}

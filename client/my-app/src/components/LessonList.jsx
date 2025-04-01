@@ -23,6 +23,8 @@ const LessonList = () => {
     const token = useSelector(state => state.token.token)
 
     const loadData = async () => {
+        console.log('isManager',isManager);
+        
         try {
             setState({ ...state, loading: true })
             const response = await axios.get(`http://localhost:5000/course/allLessonsAccordingCourse/${course._id}`, {

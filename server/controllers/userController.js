@@ -80,10 +80,8 @@ const getUserById = async (req, res) => {
         return res.send('error in getuserbyid').status(400)
     res.json(user)
 }
-//check if i need it
-const createUser=async(req,res)=>[
 
-]
+
 
 module.exports = {
     deleteUser, getUserByUserName, updateUser, getAllUsers, getUserById
