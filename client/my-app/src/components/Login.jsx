@@ -14,14 +14,12 @@ const Login = () => {
   const location=useLocation()
   const course=location.state.course
   const navigate=useNavigate();
-  const token = useSelector(state => state.token.token)
-  console.log("hhere",token);
-  
+  const token = useSelector(state => state.token.token)  
   const dispatch = useDispatch()
-
   const loginUser = async (data) => {
     const username = data.username
     const password = data.password
+    console.log('before try');
     
     try {
       const res = await axios.post('http://localhost:5000/auth/login', { username, password, course: '67e84081175d3491a880e394' })
@@ -42,12 +40,14 @@ const Login = () => {
       {
         console.log('you are manager!',response.data);
         //write the users in a global file
-        dispatch(setIsManager)
+        dispatch(setIsManager(true))
         //i want insert for the menubar some option that only manager can do
         dispatch(setItemsInTheMenubar({newItems:[{label:'Edit Lessons',icon:'pi pi user',to:'/ManagerAddLesson'},
           {label:'Edit Course',icon:'pi pi-user',to:'/ManagerAddCourse'}
         ]}))
       }
+      console.log('after');
+      
     }
     catch (e) {
       console.log(e);

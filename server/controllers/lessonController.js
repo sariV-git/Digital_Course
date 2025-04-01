@@ -36,7 +36,7 @@ const updatLesson = async (req, res) => {
     const update = await lesson.save()
     if (!update)
         return res.status(400).send('error in update lesson')
-    return res.status(201).send('new lesson video updated')
+    return res.status(200).json(lesson)
 }
 
 //delete
