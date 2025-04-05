@@ -7,7 +7,7 @@ const {funcDeleteUserTask}=require('../models/UserTask')
 const funcDeleteTask = async (_id) => {
     const task = await Task.findById(_id)
     if (!task)
-        return false
+        return true//there is no task
     const questions = await Question.find({ task: _id })
     if (questions)
         questions.forEach(async q => {
@@ -16,6 +16,13 @@ const funcDeleteTask = async (_id) => {
                 return false
         })
     const userTasks=await UserTask.find({task:_id})
+    if(userTasks)
+    {
+        userTasks.forEach(userTask=>{
+            if(!funcDeleteUserTask(userTask._id))
+                return false
+        })
+    }
     const deleted = await task.deleteOne()
     if (deleted.deleteCount != 1)
         return false
@@ -47,7 +54,7 @@ const createTask=async(req,res)=>{
     if(!task)
         return res.status(400).send('error in create task')
    return res.status(200).json(task)
-}
+}  
 
 //update
 const updateLesson=async(req,res)=>{

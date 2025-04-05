@@ -43,12 +43,12 @@ const ManagerAddQuestions = () => {
                 task: task._id,
                 numOfQuestion: numOfQuestion.current.value,
                 options: options.current.value ? (options.current.value).split(',') : null,
-                type: options.current.value ? 'American' : 'Regular'
+                type: options.current.value ? 'American' : 'Free'
             }
             console.log(question);
             setFlagOptions(false)
             const res = axios.post('http://localhost:5000/question', question, {
-                headers: {
+                headers: {  
                     Authorization: `Bearer ${token}`
                 }
             })

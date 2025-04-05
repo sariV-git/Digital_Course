@@ -1,14 +1,16 @@
 import { Button } from "primereact/button"
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Dialog } from 'primereact/dialog';
 import axios from "axios";
 import { InputText } from 'primereact/inputtext'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FileUpload } from 'primereact/fileupload';
 import { useNavigate } from "react-router-dom";
+import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
 
 const ManagerAddLesson = () => {
-    const navigate=useNavigate();
+    const dispatch=useDispatch();
+    const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
 
     const currentCourse = useSelector(state => state.course.course)
@@ -39,17 +41,28 @@ const ManagerAddLesson = () => {
                 }
             })
             console.log('Lesson created successfully:', res.data);
-            const lesson=res.data
-            navigate('/ManagerAddTask',{state:{
-                lesson:lesson
-            }})
+            const lesson = res.data
+            navigate('/ManagerAddTask', {
+                state: {
+                    lesson: lesson
+                }
+            })
         }
         catch (e) {
             console.error('There was an error uploading the lesson:', e);
         }
     }
 
-    return (
+    useEffect(()=>{dispatch(setItemsInTheMenubar({
+        newItems:[{ label: 'Edit Lessons', icon: 'pi pi user', to: '/ManagerAddLesson' },
+            { label: 'Edit Course', icon: 'pi pi-user', to: '/ManagerAddCourse' }, {
+                label: 'Users Page', icon: 'pi pi-user', to: '/ManagerUsersPage'},
+            {label:'Lessons List',icon:'pi pi-user',to:'/LessonsList'}]
+    }))},[])
+        
+
+
+return (
         <div className="card flex justify-content-center">
             <h2>create a new lesson</h2>
             <Button label="Create" onClick={() => setVisible(true)} />

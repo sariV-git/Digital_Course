@@ -1,0 +1,101 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+  }
+  
+  /* Container for the courses */
+  .course-page {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  /* Wrapper for the course cards */
+  .courses-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  /* Course Card Styling */
+  .course-card {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; /* Prevent repeating the image */
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .course-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .course-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+  }
+  
+  .course-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    margin-bottom: 20px;
+  }
+  
+  /* Black Ruler Styling */
+  .ruler-container {
+    position: absolute;
+    top: 50%; /* Position the ruler vertically in the center */
+    left: 0; /* Align ruler to the left side of the card */
+    width: 100%; /* Make the ruler stretch across the entire width of the card */
+    text-align: center;
+    z-index: 1; /* Ensure it's above the background image */
+  }
+  
+  .black-ruler {
+    width: 100%;
+    height: 20px; /* Increase height for a thicker, more visible ruler */
+    background-color: #4f4e4e; /* Darker color for the ruler */
+    display: flex;
+    /* add shkifut */
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* Optional rounded corners for a cleaner look */
+  }
+  
+  .ruler-text {
+    color: white;
+    font-size: 20px; /* Make the text larger */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px; /* Add some space between the letters for better readability */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .courses-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .course-card {
+      width: 90%;
+      height: auto; /* Make sure the height adjusts for smaller screens */
+    }
+  }
+  

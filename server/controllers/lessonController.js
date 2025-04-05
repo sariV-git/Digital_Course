@@ -46,16 +46,18 @@ const funcDeleteLesson = async (_id) => {
     const lesson = await Lesson.findById(_id)
     if (!lesson)
         return false
-    const task = await Task.find({ lesson: _id })
-    if (!task)
-        return false
-    if (!funcDeleteTask(task._id))
-        return false
+    const tasks = await Task.find({ lesson: _id })
+    if (!tasks)
+        return true
+    tasks.forEach(task=>{
+        if (!funcDeleteTask(task._id))
+            return false
+    })
     const absolatePath = path.join(__dirname, '../public/upload', lesson.path)
     console.log('the path', absolatePath);
     fs.unlink(absolatePath, (err) => {
         if (err) {
-            console.log('error in delete video file', err);
+              console.log('error in delete video file', err);
                  return false
         }
     })
@@ -72,7 +74,7 @@ const deleteLesson = async (req, res) => {
     if (!_id)
         return res.status(404).send('error with deleteLesson')
     if (!funcDeleteLesson(_id))
-        return res.status(404).send('error with deleteLesson')
+        return res.status(404).send('there are any lesson or some mistakes')
 
     return res.send('succeed delete lesson')
 }
@@ -114,4 +116,4 @@ const getTaskAccordingLesson = async (req, res) => {
     return res.json(task)
 }
 
-module.exports = { createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson, getTaskAccordingLesson }
+module.exports = { createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson,funcDeleteLesson, getTaskAccordingLesson }

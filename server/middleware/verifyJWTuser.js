@@ -10,8 +10,11 @@ const verifyJWT=(req,res,next)=>{
         const token=authHeader.split(' ')[1]
     jwt.verify(token,process.env.ACCESS_TOKEN,(err,decoded)=>{
         if(err)
-            return res.status(403).json({message :'Forbidden'})
-    
+            {
+                console.log('token',token);
+                
+                return res.status(403).json({message :'Forbidden',token:token})
+            }
     req.userMiddleware=decoded
     if(decoded.role!='User'&&decoded.role!='Admin'&&decoded.role!='Speeker')
           return res.status(403).json({message :'Forbidden'})

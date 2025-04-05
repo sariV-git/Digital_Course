@@ -1,94 +1,125 @@
 import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import Register from './Register';
 import { setCourse } from "../store/reducer/courseSlice"
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
 
 const CourseIntroduce = () => {
-    const navigate=useNavigate();
-    // const course = props.course
-    const dispatch = useDispatch()
+try {
+    
+} catch (error) {
+    
+}
+    const isManager = useSelector(state => state.token.isManager)
     const location = useLocation()
-    const[loading,setLoading]=useState(true)
-    const [token,setToken]=useState(useSelector(state=>state.token.token))
-    const [course,setCourseState]=useState(useSelector(state=>state.course.course))
-//   const { course } = location.state || {}
-//     dispatch(setCourse(props.course))//you can do it in the courses page when the user press on one course
-
-
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true)
+    const user = useSelector(state => state.user.user)
+    const belongToTheCourses = useSelector(state => state.user.belongToTheCourses)
+    const token = useSelector(state => state.token.token)
+   
+    const course = location.state.course
     const [speakerInformation, setSpeakerInformation] = useState(null);
-    const [register, setRegister] = useState(false);
-    const getSpeakerInformation = async () => {
-        
-        try {
-            console.log('token',token)
-            const res = await axios.get(`http://localhost:5000/course/getSpeakerInformation/${location.state.course._id}`,{
-                headers:{
-                    Authorization:`Bearer ${token})}`
-                }
-            })
-            if (res.status == 200) {
-                {
-                    console.log("-----------------", res.data);
-                    const speaker = res.data
-                    setSpeakerInformation(speaker)
-                }
-            }
-            else
-            navigate('/Login')
-        } catch (err) {
-            console.log(err)
-        }
+    const [userActiveInThisCourse, setUserActiveInThisCourse] = useState(false)
+
+   
+
+    //if the user need to login:
+    const handleLogInAction = () => {
+        dispatch(setItemsInTheMenubar({ newItems: [{ label: 'HomePage', to: '/CoursesPage' }, { label: 'LogIn', to: '/Login' }] }))
+    }
+    //if the user already logined
+    const handleLogOutAction = () => {
+        dispatch(setItemsInTheMenubar({ newItems: [{ label: 'HoemPage', to: '/CoursesPage' }, { label: 'LogOut', to: '/Logout' }] }))
     }
 
 
-    // const header = (
-    //     <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
-    // );
-    const footer = (
-        <>
-            <Button label="רישום לקורס" icon="pi pi-check" onClick={() => setRegister(true)} />
-            <Button label="כניסה לקורס" severity="secondary" icon="pi pi-times" style={{ marginLeft: '0.5em' }}
-            onClick={navigate('/LessonsList')} />
-        </>
+    const footer = (<>
+        {course && <>
+            {userActiveInThisCourse || isManager ? <><Link to="/LessonsList">pass to the lesson</Link>{handleLogOutAction()}</> : <>{handleLogInAction()}</>}
+            {/* to check if the user is already registered to this course then bring him to enter else to register */}
+
+        </>}
+    </>
     );
 
-   const loadSpeeker=async()=>{
-    const newCourse=location.state.course
-    dispatch(setCourse({newCourse}))
-    await getSpeakerInformation();
-    setLoading(false)
-   }
+    const getSpeakerInformation = async () => {
+        try {
+            const res = await axios.get(`http://localhost:5000/course/getSpeakerInformation/${course._id}`)
+            setSpeakerInformation(res.data)
+        } catch (err) {
+            console.log('error with get speekerInformation', err)
+        }
+    }
+    const loadSpeeker = async () => {
+        await getSpeakerInformation();
+        setLoading(false)
+    }
+
+    const checkIfUserActive = () => {
+        if (belongToTheCourses) {
+            console.log('belongToTheCourses',belongToTheCourses);
+            
+            const specificCourse = belongToTheCourses.filter(courseId => {
+                return course._id == courseId
+            })
+            if (specificCourse.length != 0)//the user already did login to this course
+                setUserActiveInThisCourse(true)
+        }
+        else// the user didnt do login
+            console.log('belongToTheCourses is undefign');
+
+    }
+
+    const optionForManager = () => {
+
+        dispatch(setItemsInTheMenubar({
+            newItems: [{ label: 'Edit Lessons', icon: 'pi pi user', to: '/ManagerAddLesson' },
+            { label: 'Edit Course', icon: 'pi pi-user', to: '/ManagerAddCourse' }, {
+                label: 'Users Page', icon: 'pi pi-user', to: '/ManagerUsersPage'
+            },{label:'DeleteCourse',to:"/ManagerDeleteCourse"},{label:'LogOut',to:'/LogOut'}
+            ]
+        }))
+    }
+
     useEffect(() => {
+        if(!course)navigate('/PageNotFound')//------check how can i do it
+        dispatch(setCourse({ newCourse: course }))
         loadSpeeker()
+        if (user) {
+            checkIfUserActive()
+        }
+        console.log('isuseractive?', user, userActiveInThisCourse);
+
     }, [])
 
 
 
     return (
         <>
-          {/* <div className="card flex justify-content-center"> */}
-          {loading?<>Loading...</>:
-            <Card title={course.name} subTitle={course.information} footer={footer} /*header={header}*/ className="md:w-20rem">
-                <br></br>
-                {/* {console.log("getSpeakerInformation().informationOnSpeaker")} */}
-                <h2>
-               {speakerInformation.name.firstName+" "+speakerInformation.name.lastName}
-                </h2>
-                {/* {console.log(speakerInformation)} */}
-                {/* <h2>{speakerInformation.name.firstName+" "+speakerInformation.name.lastName}</h2> */}
-                <p>information:{speakerInformation.information}</p>
-
-            </Card>}
-            {/* </div> */}
-
-            {register ? <Register /> : ""}
-
+            {isManager && optionForManager()}
+            {user && user.name.firstName}
+            {/* {do here something important} */}
+            {!userActiveInThisCourse && checkIfUserActive()}
+            {course &&
+                <Card title={course.name} subTitle={course.information} footer={footer}
+                    className="p-shadow-4">
+                    <h2>
+                        {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}
+                    </h2>
+                    about the course:{course.information}
+                    {speakerInformation && <p>information:{speakerInformation.information}</p>}
+                    <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >see the triler</Link></Card>}
+            {/* {userActiveInThisCourse ? <Link to={'/LessonsList'}>see the lessons</Link> : <>nothing</>} */}
+            {/* // setItemsInTheMenubar({newItems:[{ label: 'LogIn' },{label:'HomePage'}]})} */}
         </>
     )
 }
 export default CourseIntroduce
+
+
+
+

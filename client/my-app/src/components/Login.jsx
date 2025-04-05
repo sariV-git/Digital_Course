@@ -8,52 +8,62 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { setCourse } from '../store/reducer/courseSlice';
 import { setIsManager } from '../store/reducer/tokenSlice';
 import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
-// navigate('/Login', { state: { course: course } })
+import { setBelongToTheCourses, setUser } from '../store/reducer/userSlice';
+
 
 const Login = () => {
   const location = useLocation()
-  const course = location.state.course
+  const course = useSelector(state => state.course.course)
   const navigate = useNavigate();
   const token = useSelector(state => state.token.token)
   const dispatch = useDispatch()
 
+let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id of the courses which the user belong to.
+  const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/userCourse/accordingUser/${user._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`//because only user can get all the courseuser by user
+        }
+      })
+      console.log('usercourse of the user--see in the data',res);
+      
+      const usercourses = res.data
+      if (usercourses) {
+         arrayWithIdOfCoursesUserBelong = usercourses.map(usercourse => {
+          return usercourse.course
+        })
+      }
+      else
+        console.log('usercourses', usercourses);
+      dispatch(setBelongToTheCourses({ newItems: arrayWithIdOfCoursesUserBelong }))
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
   const loginUser = async (data) => {
 
     const username = data.username
     const password = data.password
-    try {
-      const res = await axios.post('http://localhost:5000/auth/login', { username, password,course: course._id })
-      console.log('success', res.data);
 
-      if (res.status !== 200)//didnt succeed to login
-      {
-        navigate('/Register')
-      }
-      console.log(res.data.accessToken);
+    try {
+      const res = await axios.post('http://localhost:5000/auth/login', { username, password,course:course?course._id:null})
+      if (res.data.role != 'Admin')
+        fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
+      dispatch(setUser({ newUser: res.data.user }))
       dispatch(setToken(res.data))
-      const token = res.data.accessToken
-      
       if (res.data.role == 'Admin') {
-        //write the users in a global file
+        console.log('you are a manager!!!');
         dispatch(setIsManager(true))
         //i want insert for the menubar some option that only manager can do
-        dispatch(setItemsInTheMenubar({
-          newItems: [{ label: 'Edit Lessons', icon: 'pi pi user', to: '/ManagerAddLesson' },
-          { label: 'Edit Course', icon: 'pi pi-user', to: '/ManagerAddCourse' },{
-            label:'Users Page',icon:'pi pi-user',to:'/ManagerUsersPage'
-          }
-          ]
-        }))
       }
-
+      //  navigate('/IntroduceCourse',{state:{course:course}})
     }
     catch (e) {
-      dispatch(setCourse({newCourse:course}))
       navigate('/Register')
-      console.log(e);
-      dispatch(setIsManager(false))
+      console.log('error in login user', e); 
     }
-
+ 
   }
   const {
     register,
@@ -66,18 +76,10 @@ const Login = () => {
   const onSumbit = (data) => {
     console.log(data);
     //keep the course which the user enter to
-    dispatch(setCourse({ newCourse: course }))
     loginUser(data);
     //check if this user is already find in this course
 
     navigate('/CourseIntroduce', { state: { course: course } })
-    // navigate('/CourseIntroduce',{state:{course:{_id:"67e84081175d3491a880e394",
-    //   name:"FirstCouorse",description:"financialCourse",speeker:"67e83ac7c16a3f8030913e28"
-    // }}})
-
-    // return(<>
-    //    {navigate('/CourseIntroduce')} 
-    //     </>)
   }
 
 

@@ -9,5 +9,5 @@ router.delete('/:_id',verifyJWTmanager,userCourseController.deleteUserCourse)
 router.get('/:_id',verifyJWTuser,userCourseController.getByIdUserCourse)
 router.get('/',verifyJWTuser,userCourseController.getByIdUserCourse)
 router.get('/accordingUser/:_id',verifyJWTuser,userCourseController.getUserCourseAccordingUser)//to send the id of the user
-router.get('/getUsersAccordingCourse/:_id',verifyJWTmanager,userCourseController.getUsersAccordingCourse)
-module.exports=router
+router.get('/getUsersAccordingCourse/:_id',verifyJWTuser,userCourseController.getUsersAccordingCourse)
+module.exports=router         

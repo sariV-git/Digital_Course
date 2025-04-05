@@ -1,26 +1,49 @@
 const User = require('../models/User')
 const UserCourse = require('../models/UserCourse')
 const { funcDeleteUserCourse } = require('./userCourseController')
+//get by username
+// const getUserByUserName= async (req, res) => {
+//     const { username } = req.params
+//     if (!username )
+//         return res.status(400).send('error in getUserByUserNameAndPassword')
+//     const foundUser = await User.findOne({ username:username })//we found the user 
+//     if (!foundUser)
+//         return res.status(401).send('not found user like this username')
+//     // if(foundUser.role=='User')
+//     // foundUser.role='Speeker'
+// // const updated=await foundUser.save()
+// // if(!updated)
+// //     return res.status(401).send('unauthorized')
+// console.log('succeed arive to here',foundUser);
 
-//create
-const getUserByUserName= async (req, res) => {
-    const { username } = req.params
-    if (!username )
-        return res.status(400).send('error in getUserByUserNameAndPassword')
-    const foundUser = await User.findOne({ username })//we found the user 
-    if (!foundUser)
-        return res.status(401).send('unauthorized')
-    if(foundUser.role=='User')
-    foundUser.role='Speeker'
-const updated=await foundUser.save()
-if(!updated)
-    return res.status(401).send('unauthorized')
-return res.status(200).json(foundUser)
-}
+// return res.json(foundUser)
+// }
 
 //update
-const updateUser = async (req, res) => {
+const getUserByUserName = async (req, res) => {
+        const { username } = req.params;
 
+        if (!username) {
+            return res.status(400).send('error in getUserByUserNameAndPassword');
+        }
+
+        const foundUser = await User.findOne({ username });
+
+        if (!foundUser) {
+            return res.status(401).send('not found user like this username');
+        }
+
+        console.log('headersSent',res.headersSent);
+        
+        if (!res.headersSent) {
+            console.log('succeed arive to here', foundUser);
+            return res.json(foundUser);
+          }
+   
+};
+
+const updateUser = async (req, res) => {
+ 
     const { phone, email, firstName, lastName, _id } = req.body
     const user = User.findById(_id)
     user.name.firstName = firstName ? firstName : user.firstName

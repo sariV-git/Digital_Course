@@ -16,6 +16,9 @@ const courseSchema=new mongoose.Schema({
     speaker:{
         type:mongoose.Types.ObjectId,
         ref:'User'
+    },
+    backgroundImage:{
+       type:String
     }
 
 },{timestamps:true})

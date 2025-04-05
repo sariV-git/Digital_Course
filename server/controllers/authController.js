@@ -82,7 +82,7 @@ const login = async (req, res) => {
     const userInfo = { _id: foundUser._id, name: foundUser.name, role: foundUser.role, username: foundUser.username, email: foundUser.email, phone: foundUser.phone }
 
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
-    return res.json({ accessToken: accessToken, success: true, role: foundUser.role })
+    return res.json({ accessToken: accessToken, success: true, role: foundUser.role ,user:foundUser})
 }
 
 

@@ -13,8 +13,6 @@ export const tokenSlice = createSlice({
         state.token = accessToken;
       },
       logOut: (state,action) => {
-        
-  
         state.token = null;
       },
       setIsManager:(state,action)=>{

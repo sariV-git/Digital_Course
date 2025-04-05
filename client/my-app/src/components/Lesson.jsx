@@ -34,7 +34,7 @@ const Lesson=()=>{
     
     return(<>
     <h2>Lesson:{lesson.name}</h2>
-    <LessonVideo/>
+    <LessonVideo path={lesson.path}/>
     <Button onClick={()=>{goToTask()}}>do the task</Button>
     </>)
 }

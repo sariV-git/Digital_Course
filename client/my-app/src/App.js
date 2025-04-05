@@ -25,6 +25,10 @@ import ManagerAddQuestions from './components/ManagerAddQuestions';
 import ManagerAddCourse from './components/ManagerAddCourse';
 import Register from './components/Register';
 import ManagerUsersPage from './components/ManagerUsersPAge';
+import TryIt from './components/TryIt';
+import LessonVideo from './components/LessonVideo';
+import LogOut from './components/LogOut';
+import ManagerDeleteCourse from './components/ManagerDeleteCourse';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -32,15 +36,18 @@ function App() {
   return (
     <div >
       {/* <Home/> */}
+      {/* <TryIt/> */}
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
-      <TemplateDemo />
+      {/* <TryIt/> */}
+       <TemplateDemo />
       {/* <ChooseVideo/> */}
       {/* <CoursesPage/---put in the menubar */}
       {/* <IntroduceUsers/> //for users!!*/}
       {/* <CourseCard/> for the page of all the courses and not take the fixed */}
       {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
+        <Route path='/LessonVideo'element={<LessonVideo/>}/>
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />
         <Route path='/Lesson' element={<Lesson />} />
@@ -54,6 +61,8 @@ function App() {
         <Route path='/ManagerAddQuestions' element={<ManagerAddQuestions />} />
         <Route path='/ManagerAddCourse' element={<ManagerAddCourse />} />
         <Route path='/ManagerUsersPage' element={<ManagerUsersPage/>}/>
+        <Route path='/ManagerDeleteCourse'element={<ManagerDeleteCourse/>}/>
+      <Route path='/LogOut'element={<LogOut/>}/>
       </Routes>
     </div>
   );
