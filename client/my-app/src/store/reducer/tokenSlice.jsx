@@ -14,6 +14,7 @@ export const tokenSlice = createSlice({
       },
       logOut: (state,action) => {
         state.token = null;
+        state.isManager=false
       },
       setIsManager:(state,action)=>{
         state.isManager=action.payload

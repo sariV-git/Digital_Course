@@ -1,5 +1,5 @@
 const Answer=require('../models/Answer')
-
+   
 //create 
 const createAnswer=async(req,res)=>{
     const{text,question,user}=req.body
@@ -16,7 +16,7 @@ const updateAnswer=async(req,res)=>{
     const{_id,text,question,user}=req.body
     if(!_id)
         return res.status(400).send('error in update answer')
-    const answer=await Answer.findById(_id)
+    const answer=await Answer.create(_id)
     if(!answer)
         return res.status(400).send('error in update answer')
     answer.text=text?text:answer.text

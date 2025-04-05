@@ -157,7 +157,7 @@ const LessonList = () => {
     const [loading, setLoading] = useState(true)
     const token = useSelector((state) => state.token.token);
     const isManager = useSelector((state) => state.token.isManager);
-    const course = useSelector((state) => state.course.course);
+    const course = useSelector(state => state.course.course);
     const navigate = useNavigate();
     const toast = useRef(null); // For showing Toast messages
 

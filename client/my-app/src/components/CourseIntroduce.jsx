@@ -7,11 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
 
 const CourseIntroduce = () => {
-try {
-    
-} catch (error) {
-    
-}
+
     const isManager = useSelector(state => state.token.isManager)
     const location = useLocation()
     const navigate = useNavigate();
@@ -20,12 +16,12 @@ try {
     const user = useSelector(state => state.user.user)
     const belongToTheCourses = useSelector(state => state.user.belongToTheCourses)
     const token = useSelector(state => state.token.token)
-   
+
     const course = location.state.course
     const [speakerInformation, setSpeakerInformation] = useState(null);
     const [userActiveInThisCourse, setUserActiveInThisCourse] = useState(false)
 
-   
+
 
     //if the user need to login:
     const handleLogInAction = () => {
@@ -61,8 +57,8 @@ try {
 
     const checkIfUserActive = () => {
         if (belongToTheCourses) {
-            console.log('belongToTheCourses',belongToTheCourses);
-            
+            console.log('belongToTheCourses', belongToTheCourses);
+
             const specificCourse = belongToTheCourses.filter(courseId => {
                 return course._id == courseId
             })
@@ -80,13 +76,15 @@ try {
             newItems: [{ label: 'Edit Lessons', icon: 'pi pi user', to: '/ManagerAddLesson' },
             { label: 'Edit Course', icon: 'pi pi-user', to: '/ManagerAddCourse' }, {
                 label: 'Users Page', icon: 'pi pi-user', to: '/ManagerUsersPage'
-            },{label:'DeleteCourse',to:"/ManagerDeleteCourse"},{label:'LogOut',to:'/LogOut'}
+            }, { label: 'DeleteCourse', to: "/ManagerDeleteCourse" }, { label: 'LogOut', to: '/LogOut' }
             ]
         }))
     }
 
     useEffect(() => {
-        if(!course)navigate('/PageNotFound')//------check how can i do it
+        console.log('uuuser in intr..course', user)
+
+        if (!course) navigate('/PageNotFound')//------check how can i do it
         dispatch(setCourse({ newCourse: course }))
         loadSpeeker()
         if (user) {

@@ -17,7 +17,7 @@ const verifyJWT=(req,res,next)=>{
         {
         //    console.log(req.userMiddleware.role);
             return res.status(401).send('Unauthorized')
-
+   
         }
 })
 next()

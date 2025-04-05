@@ -27,6 +27,7 @@ const ManagerAddQuestions = () => {
 
     const finishWriteQuestions = () => {
         alert('succeed to create full lesson succeffully--!!--')
+        navigate('/LessonsList')
     }
 
     const handleInputChange = (e) => {

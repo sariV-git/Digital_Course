@@ -51,6 +51,8 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
       if (res.data.role != 'Admin')
         fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
       dispatch(setUser({ newUser: res.data.user }))
+      console.log('uuuuser in login',res.data.user);
+      
       dispatch(setToken(res.data))
       if (res.data.role == 'Admin') {
         console.log('you are a manager!!!');
@@ -58,6 +60,8 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
         //i want insert for the menubar some option that only manager can do
       }
       //  navigate('/IntroduceCourse',{state:{course:course}})
+    navigate('/CourseIntroduce', { state: { course: course } })
+
     }
     catch (e) {
       navigate('/Register')
@@ -79,7 +83,6 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
     loginUser(data);
     //check if this user is already find in this course
 
-    navigate('/CourseIntroduce', { state: { course: course } })
   }
 
 

@@ -11,6 +11,8 @@ export const userSlice=createSlice({
         setUser:(state,action)=>{
             const {newUser}=action.payload
             state.user=newUser
+            console.log('in userslice',state.user);
+            
         },
         setOneBelongToTheCourses:(state,action)=>{
             const {newIdOfCourse}=action.payload
