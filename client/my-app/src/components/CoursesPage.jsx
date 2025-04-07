@@ -5,11 +5,9 @@ import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { setItemsInTheMenubar } from "../store/reducer/itemsInTheMenubarSlice"
-// import './CoursePage.css'; // Import the CSS file for styling??????????
 import './TryIt.css'
 const CoursesPage = () => {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const [courses, setCourses] = useState(null)
 
     const loadDataCourses = async () => {
@@ -22,16 +20,10 @@ const CoursesPage = () => {
         }
     }
 
-    //-----------------------------------------
-    //i think that this function relate to the introduceCoursePage
-    // const goToLoginBeforeIntroduceCourse = (course) => [
-    //     navigate('/Login', { state: { course: course } })
-    // ]
 
     useEffect(() => {
-       dispatch(setItemsInTheMenubar({newItems:[]})) 
-        console.log('in course page');
-        loadDataCourses()
+       dispatch(setItemsInTheMenubar({newItems:[]}))         
+       loadDataCourses()
     }, [])
 
 

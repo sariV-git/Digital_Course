@@ -28,15 +28,18 @@ const createCourse = async (req, res) => {
 
 //getAllLessonsOfThisCourse
 const getAllLessonAccordingCourse=async(req,res)=>{
+
     const {_id}=req.params
+    console.log("_id: ", _id);
+    
     if(!_id)
-        return res.status(400).send('error in getAllLessonAccordingCourse')
+        return res.status(400).send('error in getAllLessonAccordingCourse missing an id of course')
     const course=await Course.findById(_id)
     if(!course)
-        return res.status(400).send('error in getAllLessonAccordingCourse')
+        return res.status(400).send('error in getAllLessonAccordingCourse there is no this course like this _id ')
     const lessons=await Lesson.find({course:_id})
     if(!lessons)
-        return res.status(400).send('error in getAllLessonAccordingCourse')
+        return res.status(400).send('error in getAllLessonAccordingCourse dont succeed find lessons')
 res.json(lessons)
 }
 //update

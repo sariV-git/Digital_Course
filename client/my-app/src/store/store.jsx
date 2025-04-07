@@ -10,7 +10,9 @@ import userReducer from './reducer/userSlice'
 const persistConfig = {
   key: 'root',
   storage,
+  debug:true
 };
+
 
 const persistedTokenReducer = persistReducer(persistConfig, tokenReducer);
 const persistedCourseReducer = persistReducer(persistConfig, courseReducer);

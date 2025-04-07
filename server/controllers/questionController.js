@@ -70,7 +70,7 @@ return res.status(200).send('question deleted!')
 }
 
 //getQuestion According task
-const getQuestionsAccordingTask=async(req,res)=>{   
+const getQuestionsAccordingTask=async(req,res)=>{       
     const{_id}=req.params
     if(!_id)
         return res.status(400).send('error in getQuestion According task')
@@ -79,6 +79,6 @@ const getQuestionsAccordingTask=async(req,res)=>{
         return res.status(400).send('error in getQuestion According task')
     res.json(questions)
 }
-
+   
 
 module.exports={funcDeleteQuestion,createQuestion,updateQuestion,deleteQuestion,getQuestionsAccordingTask}

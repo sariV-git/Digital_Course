@@ -29,6 +29,7 @@ import TryIt from './components/TryIt';
 import LessonVideo from './components/LessonVideo';
 import LogOut from './components/LogOut';
 import ManagerDeleteCourse from './components/ManagerDeleteCourse';
+import ManagerUsersAnswers from './components/ManagerUsersAnswers';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -40,14 +41,15 @@ function App() {
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
       {/* <TryIt/> */}
-       <TemplateDemo />
+      {/* <TryIt/> */}
+      <TemplateDemo />
       {/* <ChooseVideo/> */}
       {/* <CoursesPage/---put in the menubar */}
       {/* <IntroduceUsers/> //for users!!*/}
       {/* <CourseCard/> for the page of all the courses and not take the fixed */}
       {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
-        <Route path='/LessonVideo'element={<LessonVideo/>}/>
+        <Route path='/LessonVideo' element={<LessonVideo />} />
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />
         <Route path='/Lesson' element={<Lesson />} />
@@ -60,9 +62,10 @@ function App() {
         <Route path='/ManagerAddTask' element={<ManagerAddTask />} />
         <Route path='/ManagerAddQuestions' element={<ManagerAddQuestions />} />
         <Route path='/ManagerAddCourse' element={<ManagerAddCourse />} />
-        <Route path='/ManagerUsersPage' element={<ManagerUsersPage/>}/>
-        <Route path='/ManagerDeleteCourse'element={<ManagerDeleteCourse/>}/>
-      <Route path='/LogOut'element={<LogOut/>}/>
+        <Route path='/ManagerUsersPage' element={<ManagerUsersPage />} />
+        <Route path='/ManagerDeleteCourse' element={<ManagerDeleteCourse />} />
+        <Route path='/LogOut' element={<LogOut />} />
+        <Route path='/ManagerUsersAnswers' element={<ManagerUsersAnswers />} />
       </Routes>
     </div>
   );

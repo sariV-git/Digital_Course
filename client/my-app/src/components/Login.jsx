@@ -4,12 +4,12 @@ import '../App.css';
 import { useForm } from "react-hook-form"
 import axios from 'axios';
 import { setToken, logOut } from '../store/reducer/tokenSlice'
+import { setUser } from '../store/reducer/userSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { setCourse } from '../store/reducer/courseSlice';
 import { setIsManager } from '../store/reducer/tokenSlice';
 import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
-import { setBelongToTheCourses, setUser } from '../store/reducer/userSlice';
-
+import { setBelongToTheCourses} from '../store/reducer/userSlice';
 
 const Login = () => {
   const location = useLocation()
@@ -17,7 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const token = useSelector(state => state.token.token)
   const dispatch = useDispatch()
-
+  
 let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id of the courses which the user belong to.
   const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
     try {
@@ -50,15 +50,19 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
       const res = await axios.post('http://localhost:5000/auth/login', { username, password,course:course?course._id:null})
       if (res.data.role != 'Admin')
         fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
-      dispatch(setUser({ newUser: res.data.user }))
-      console.log('uuuuser in login',res.data.user);
+      
+      
       
       dispatch(setToken(res.data))
+//to cancel the option that the login return user      
       if (res.data.role == 'Admin') {
         console.log('you are a manager!!!');
         dispatch(setIsManager(true))
         //i want insert for the menubar some option that only manager can do
       }
+      else
+      dispatch(setIsManager(false))//can remove it??
+
       //  navigate('/IntroduceCourse',{state:{course:course}})
     navigate('/CourseIntroduce', { state: { course: course } })
 

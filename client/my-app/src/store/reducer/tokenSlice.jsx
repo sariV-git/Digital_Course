@@ -4,7 +4,8 @@ export const tokenSlice = createSlice({
     name: 'token',
     initialState: {
       token: null,
-      isManager:false
+      isManager:false,
+      user:null
     },
     reducers: {
       setToken: (state,action) => {

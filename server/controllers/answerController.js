@@ -2,13 +2,16 @@ const Answer=require('../models/Answer')
    
 //create 
 const createAnswer=async(req,res)=>{
+
     const{text,question,user}=req.body
+    console.log({text,question,user});
+    
     if(!text||!question||!user)
         return res.status(400).send('error in create answer')
   const answer=await Answer.create({text,question,user});
   if(!answer)
     return res.status(400).send('error in create answer')
-  return res.status(200).send('answer created!')
+  return res.status(200).json({_id:answer._id,message:'created answer!'})
 }
 
 //update

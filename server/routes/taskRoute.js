@@ -11,5 +11,4 @@ router.delete('/:_id',verifyJWTspeeker,taskController.deleteTask)
 router.get('/:_id',verifyJWTuser,taskController.getByIdTask)
 router.get('/',verifyJWTuser,taskController.getAlltasks)
 router.get('/AccordingLesson/:_id',verifyJWTuser,taskController.getTaskAccordingLesson)
-
 module.exports=router

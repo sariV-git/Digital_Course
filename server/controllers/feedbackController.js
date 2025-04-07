@@ -9,7 +9,7 @@ const createFeadback = async (req, res) => {
     const feedback = await Feedback.create({ userTask, text })
     if (!feedback)
         return res.status(400).send('error in createFeadback')
-    return res.status(400).send('create feedback!')
+    return res.status(200).send('create feedback!')
 }
 const funcDeleteFeedback = async (_id) => {
     const feedback = await Feedback.findById(_id)

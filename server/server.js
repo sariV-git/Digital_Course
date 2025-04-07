@@ -33,6 +33,7 @@ app.use('/respond',require('./routes/respondRoute'))
 app.use('/task',require('./routes/taskRoute'))
 app.use('/userCourse',require('./routes/userCourseRouter'))
 app.use('/userTask',require('./routes/userTaskRoute'))
+app.use('/feedback',require('./routes/feedbackRouter'))
 // app.use('/task',require('./routes/taskRoute'))
 //login and register
 app.use('/auth',require('./routes/authRoutes'))

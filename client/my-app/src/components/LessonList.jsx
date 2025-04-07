@@ -150,10 +150,6 @@ const LessonList = () => {
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [lessons, setLessons] = useState([]);
-    //   const [state, setState] = useState({
-    //     loading: true,
-    //     errorMessage: null,
-    //   });
     const [loading, setLoading] = useState(true)
     const token = useSelector((state) => state.token.token);
     const isManager = useSelector((state) => state.token.isManager);
@@ -169,7 +165,7 @@ const LessonList = () => {
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                    },
+                    }
                 }
             );
             const results = response.data;

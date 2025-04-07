@@ -20,7 +20,6 @@ const ManagerAddCourse = () => {
     const [videoTrilerName, setVideoTrilerName] = useState('')
     const [backgroundImageName, setBackgroundImageName] = useState('')
 
-
     const unUploadBackgroundImage = (e) => {
         
         if (e.files[0]) {

@@ -13,8 +13,8 @@ const CourseIntroduce = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true)
-    const user = useSelector(state => state.user.user)
-    const belongToTheCourses = useSelector(state => state.user.belongToTheCourses)
+    const [user, setUser] = useState(null)
+    const belongToTheCourses = useSelector(state => state.user.belongToTheCourses)//??treat at this??
     const token = useSelector(state => state.token.token)
 
     const course = location.state.course
@@ -42,18 +42,8 @@ const CourseIntroduce = () => {
     </>
     );
 
-    const getSpeakerInformation = async () => {
-        try {
-            const res = await axios.get(`http://localhost:5000/course/getSpeakerInformation/${course._id}`)
-            setSpeakerInformation(res.data)
-        } catch (err) {
-            console.log('error with get speekerInformation', err)
-        }
-    }
-    const loadSpeeker = async () => {
-        await getSpeakerInformation();
-        setLoading(false)
-    }
+
+
 
     const checkIfUserActive = () => {
         if (belongToTheCourses) {
@@ -62,11 +52,13 @@ const CourseIntroduce = () => {
             const specificCourse = belongToTheCourses.filter(courseId => {
                 return course._id == courseId
             })
+            console.log('specificCourse',specificCourse);
+            
             if (specificCourse.length != 0)//the user already did login to this course
                 setUserActiveInThisCourse(true)
         }
         else// the user didnt do login
-            console.log('belongToTheCourses is undefign');
+            console.log('belongToTheCourses is ', belongToTheCourses);
 
     }
 
@@ -82,11 +74,29 @@ const CourseIntroduce = () => {
     }
 
     useEffect(() => {
-        console.log('uuuser in intr..course', user)
 
+
+        const loadUserAndSpeeker = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5000/course/getSpeakerInformation/${course._id}`)
+                setSpeakerInformation(res.data)
+                const userResponse = await axios.get('http://localhost:5000/user/byToken', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setUser(userResponse.data)
+                console.log('uuuser in intr..course', userResponse.data)
+
+            } catch (error) {
+                console.log('error in get user', error);
+            }
+            setLoading(false)
+        }
+        loadUserAndSpeeker()
+        
         if (!course) navigate('/PageNotFound')//------check how can i do it
         dispatch(setCourse({ newCourse: course }))
-        loadSpeeker()
         if (user) {
             checkIfUserActive()
         }
@@ -98,22 +108,23 @@ const CourseIntroduce = () => {
 
     return (
         <>
-            {isManager && optionForManager()}
-            {user && user.name.firstName}
-            {/* {do here something important} */}
-            {!userActiveInThisCourse && checkIfUserActive()}
-            {course &&
-                <Card title={course.name} subTitle={course.information} footer={footer}
-                    className="p-shadow-4">
-                    <h2>
-                        {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}
-                    </h2>
-                    about the course:{course.information}
-                    {speakerInformation && <p>information:{speakerInformation.information}</p>}
-                    <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >see the triler</Link></Card>}
-            {/* {userActiveInThisCourse ? <Link to={'/LessonsList'}>see the lessons</Link> : <>nothing</>} */}
-            {/* // setItemsInTheMenubar({newItems:[{ label: 'LogIn' },{label:'HomePage'}]})} */}
-        </>
+            {loading ? <>Loading...</> : <>
+                {isManager && optionForManager()}
+                {user && user.name.firstName}
+                {/* {do here something important} */}
+                {!userActiveInThisCourse && checkIfUserActive()}
+                {course &&
+                    <Card title={course.name} subTitle={course.information} footer={footer}
+                        className="p-shadow-4">
+                        <h2>
+                            {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}
+                        </h2>
+                        about the course:{course.information}
+                        {speakerInformation && <p>information:{speakerInformation.information}</p>}
+                        <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >see the triler</Link></Card>}
+                {/* {userActiveInThisCourse ? <Link to={'/LessonsList'}>see the lessons</Link> : <>nothing</>} */}
+                {/* // setItemsInTheMenubar({newItems:[{ label: 'LogIn' },{label:'HomePage'}]})} */}
+            </>}</>
     )
 }
 export default CourseIntroduce

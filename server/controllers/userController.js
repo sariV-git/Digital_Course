@@ -20,6 +20,7 @@ const { funcDeleteUserCourse } = require('./userCourseController')
 // }
 
 //update
+
 const getUserByUserName = async (req, res) => {
         const { username } = req.params;
 
@@ -42,8 +43,16 @@ const getUserByUserName = async (req, res) => {
    
 };
 
+const getUserByToken=(req,res)=>{
+    if(!req.userMiddleware)
+        return res.status(400).send('error in get userbytoken')
+    console.log('in get user by token');
+    const user=req.userMiddleware
+    return res.json(user).status(200)
+}
+
 const updateUser = async (req, res) => {
- 
+    
     const { phone, email, firstName, lastName, _id } = req.body
     const user = User.findById(_id)
     user.name.firstName = firstName ? firstName : user.firstName
@@ -107,7 +116,7 @@ const getUserById = async (req, res) => {
 
 
 module.exports = {
-    deleteUser, getUserByUserName, updateUser, getAllUsers, getUserById
+    deleteUser, getUserByUserName, updateUser, getAllUsers, getUserById,getUserByToken
 }
 
 //  const getAllUsersWithCourses = async (req, res) => {
