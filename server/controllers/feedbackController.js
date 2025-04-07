@@ -49,9 +49,11 @@ const getFeedbackAccordingUserTask = async (req, res) => {
     const { _id } = req.params
     if (!_id)
         return res.status(400).send('error in getFeedbackAccordingUserTask')
-    const feedback = await Feedback.find({ userTask: _id })
+    const feedback = await Feedback.findOne({ userTask: _id })
     if (!feedback)
         return res.status(400).send('error in getFeedbackAccordingUserTask')
     return res.json(feedback)
 }
+
+//get feedback AccordingUserTaskAndUser
 module.exports = { funcDeleteFeedback,getFeedbackAccordingUserTask, updateFeedback, createFeadback, deleteFeedback }

@@ -67,6 +67,8 @@ const keepFeedback=async(userTask_id)=>{
         }
     })
     console.log('feedbackResponse: ',feedbackResponse);
+    FeedBackText.current.value=""
+    setShowInputFeedback(false)
     alert('your feedback keeped!')
  } catch (error) {
     console.log('error in saving feedback',error);
