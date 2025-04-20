@@ -41,9 +41,7 @@ const ManagerAddCourse = () => {
             setVideoTrilerName(e.files[0].name)
         }
 
-        const createCourse = async () => {
-            console.log('iiiiiiiiiimageeeeee:',backgroundImage);
-            
+        const createCourse = async () => {            
             const formData = new FormData()
             formData.append('name', name.current.value)
             formData.append('information', information.current.value)
@@ -57,14 +55,15 @@ const ManagerAddCourse = () => {
                     }
                 })
                 console.log('speeker', resSpeeker.data);
-                formData.append('speeker', resSpeeker.data._id)
+                formData.append('speaker', resSpeeker.data._id)
+
                 const resCourse = await axios.post('http://localhost:5000/course', formData,
                     {
                         headers: {
                             'Content-Type':'multipart/form-data',
                              Authorization: `Bearer ${token}`
                         }
-                    }
+                    }  
                 )
                 console.log('succeed create course,', resCourse.data);
 

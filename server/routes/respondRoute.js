@@ -10,7 +10,7 @@ const respondController=require('../controllers/respondController')
 router.post('/',verifyJWTuser,respondController.createRespond)
 router.put('/',verifyJWTuser,respondController.updateRespond)
 router.delete('/:_id',verifyJWTmanager,respondController.deleteRespond)
-router.get('/getAccordingIntroduce',verifyJWTuser,respondController.getAccordingIntroduce)
-router.get('/',verifyJWTmanager,respondController.getAllResponds)
+router.get('/getAccordingIntroduceAndCourse/:course',respondController.getAccordingIntroduce)
+router.get('/accordingCourse/:course',verifyJWTmanager,respondController.getAllRespondsAccordingCourse)
 
-module.exports=router
+module.exports=router  

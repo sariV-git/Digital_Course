@@ -40,40 +40,102 @@
 // export default CoursePage;
 
 
-import React, { useState } from 'react';
-import { Accordion, AccordionTab } from 'primereact/accordion';
+// import React, { useState } from 'react';
+// import { Accordion, AccordionTab } from 'primereact/accordion';
 
-export default function DynamicDemo() {
-    const [tabs] = useState([
-        {
-            header: 'Title I',
-            children: <p className="m-0">Content 1</p>
-        },
-        {
-            header: 'Title II',
-            children: <p className="m-0">Content 2 </p>
-        },
-        {
-            header: 'Title III',
-            children: <p className="m-0">Content 3 </p>
-        }
-    ]);
+// export default function DynamicDemo() {
+//     const [tabs] = useState([
+//         {
+//             header: 'Title I',
+//             children: <p className="m-0">Content 1</p>
+//         },
+//         {
+//             header: 'Title II',
+//             children: <p className="m-0">Content 2 </p>
+//         },
+//         {
+//             header: 'Title III',
+//             children: <p className="m-0">Content 3 </p>
+//         }
+//     ]);
 
-    const createDynamicTabs = () => {
-        return tabs.map((tab, i) => {
-            return (
-                // what is??  after the header disabled={tab.disabled}
-                <AccordionTab key={tab.header} header={tab.header} >
-                    {tab.children}
-                </AccordionTab>
-            );
-        });
-    };
+//     const createDynamicTabs = () => {
+//         return tabs.map((tab, i) => {
+//             return (
+//                 // what is??  after the header disabled={tab.disabled}
+//                 <AccordionTab key={tab.header} header={tab.header} >
+//                     {tab.children}
+//                 </AccordionTab>
+//             );
+//         });
+//     };
 
-    return (
-        <div className="card">
-             <Accordion>{createDynamicTabs()}</Accordion>
-        </div>
-    )
-}
+//     return (
+//         <div className="card">
+//              <Accordion>{createDynamicTabs()}</Accordion>
+//         </div>
+//     )
+// }
         
+// import React from 'react';
+// import { Card } from 'primereact/card';
+// import { Button } from 'primereact/button';
+
+// const CourseIntro = () => {
+//   return (
+//     <div className="flex h-screen w-screen bg-gray-100">
+//       {/* Left side - Video */}
+//       <div className="w-1/3 h-full">
+//         <video
+//           className="object-cover w-full h-full"
+//           src="https://www.w3schools.com/html/mov_bbb.mp4" // Replace with your trailer link
+//           controls
+//         />
+//       </div>
+
+//       {/* Right side - Course Info */}
+//       <div className="w-2/3 p-10 flex items-center justify-center">
+//         <Card
+//           title="🚀 Mastering React: From Zero to Hero"
+//           subTitle="Level up your frontend skills"
+//           className="w-full max-w-3xl shadow-2xl"
+//         >
+//           <p className="text-gray-700 mb-4">
+//             This course covers everything you need to know about modern React development — including hooks, state management, performance optimization, and best practices.
+//           </p>
+//           <ul className="list-disc ml-5 mb-4 text-gray-600">
+//             <li>35+ Hours of Video Content</li>
+//             <li>Real-world Projects</li>
+//             <li>Certificate of Completion</li>
+//             <li>Access to Private Discord</li>
+//           </ul>
+//           <Button label="Enroll Now" icon="pi pi-check" className="p-button-success" />
+//         </Card>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CourseIntro;
+import React, { useState } from 'react';
+import { Button } from 'primereact/button';
+
+const TryIt = () => {
+  const [clicked, setClicked] = useState(false);
+
+  const handleClick = () => {
+    setClicked(!clicked);
+  };
+
+  return (
+    <Button
+      label={clicked ? 'Clicked!' : 'Click Me'}
+      className={clicked ? 'p-button-success' : 'p-button-primary'}
+      onClick={handleClick}
+    />
+  );
+};
+
+export default TryIt;
+
+

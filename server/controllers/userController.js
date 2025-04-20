@@ -94,15 +94,17 @@ const deleteUser = async (req, res) => {
 
 //getAll 
 const getAllUsers = async (req, res) => {
+    console.log('iiiiiiiiin');
+    
     const users = await User.find({}, { password: 0, username: 0 })
-    //  console.log("users",users);
+     console.log("users",users);
     if (!users)
         return res.status(400).send('failed in getAllUsers')
     return res.json(users)
 }
 
-
-//getById
+  
+//getById 
 const getUserById = async (req, res) => {
     const { _id } = req.params
     if (!_id)

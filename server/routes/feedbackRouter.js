@@ -10,6 +10,6 @@ const feedbackController=require('../controllers/feedbackController')
 router.post('/',verifyJWTmanager,feedbackController.createFeadback)
 router.put('/',verifyJWTmanager,feedbackController.updateFeedback)
 router.delete('/:_id',verifyJWTmanager,feedbackController.deleteFeedback)
-router.get('/AccordingUserTask/:_id',verifyJWTmanager,feedbackController.getFeedbackAccordingUserTask)
+router.get('/AccordingUserTask/:_id',verifyJWTuser,feedbackController.getFeedbackAccordingUserTask)
 
-module.exports=router
+module.exports=router 

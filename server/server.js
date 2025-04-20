@@ -13,7 +13,7 @@ const PORT=process.env.PORT||7001
 const app=express()
 
 connectDB()
-
+          
 app.get('/',(req,res)=>{
     res.send('home page')
 })
@@ -41,7 +41,7 @@ app.use('/auth',require('./routes/authRoutes'))
 //for files:
 app.use('/upload',express.static(__dirname+'/public/upload'))
 
-  
+          
 //to get the video of the specific lesson
 app.get('/upload/:fileName',(req,res)=>{
     const{fileName}=req.params

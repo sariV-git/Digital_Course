@@ -1,9 +1,10 @@
 // const Lesson = require('../models/Lesson')
 const Lesson = require('../models/Lesson')
-const Task = require('../models/Task')
+const Task = require('../models/Task');
+const UserTask = require('../models/UserTask');
 const { funcDeleteTask } = require('./taskController')
 const fs = require('fs');//for delete the video
-const path=require('path')
+const path = require('path')
 
 //create
 const createLesson = async (req, res) => {
@@ -49,7 +50,7 @@ const funcDeleteLesson = async (_id) => {
     const tasks = await Task.find({ lesson: _id })
     if (!tasks)
         return true
-    tasks.forEach(task=>{
+    tasks.forEach(task => {
         if (!funcDeleteTask(task._id))
             return false
     })
@@ -57,8 +58,8 @@ const funcDeleteLesson = async (_id) => {
     console.log('the path', absolatePath);
     fs.unlink(absolatePath, (err) => {
         if (err) {
-              console.log('error in delete video file', err);
-                 return false
+            console.log('error in delete video file', err);
+            return false
         }
     })
 
@@ -116,4 +117,63 @@ const getTaskAccordingLesson = async (req, res) => {
     return res.json(task)
 }
 
-module.exports = { createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson,funcDeleteLesson, getTaskAccordingLesson }
+//getLessonForUserAccordingCourse
+const getLessonForUserAccordingCourse = async (req, res) => {
+    let matchLessons = []; // the lessons that match for this specific user
+    const { user, course } = req.params;
+
+    if (!user || !course)
+        return res.status(400).send('Error: Missing user or course');
+
+    try {
+        const allLessons = await Lesson.find({ course: course }); // Get all lessons for the course
+        if (allLessons.length === 0) {
+            return res.status(400).send('No lessons found for this course');
+        }
+
+        // Fetch all tasks for the lessons in the course in parallel
+        const tasksArray = await Task.find({ lesson: { $in: allLessons.map(lesson => lesson._id) } });
+        
+        // Fetch all user tasks in parallel
+        const userTasks = await UserTask.find({ user: user, task: { $in: tasksArray.map(task => task._id) } });
+
+        // Get the lessons that the user has already completed
+        const completedLessons = userTasks.map(userTask => {
+            const task = tasksArray.find(task => task._id.toString() === userTask.task.toString());
+            return allLessons.find(lesson => lesson._id.toString() === task.lesson.toString());
+        });
+
+        // Find the last completed lesson (the one with the highest numOfLesson)
+        const lastLesson = completedLessons.reduce((max, lesson) => {
+            return lesson.numOfLesson > max.numOfLesson ? lesson : max;
+        }, { numOfLesson: -1 }); // Initialize with a numOfLesson that can't be beaten
+
+        // If the user hasn't completed any lesson
+        if (!lastLesson.numOfLesson) {
+            const firstLesson = await Lesson.findOne({ numOfLesson: 1, course: course });
+            if (!firstLesson) {
+                return res.status(400).send('No lessons available in this course');
+            }
+            matchLessons = [firstLesson];
+            return res.status(200).json({ lessons: matchLessons, finish: false });
+        }
+
+        // Find the next lesson (next numOfLesson)
+        const nextLesson = await Lesson.findOne({ numOfLesson: lastLesson.numOfLesson + 1, course: course });
+        
+        if (!nextLesson) {
+            return res.json({ lessons: allLessons, text: 'You have completed all the lessons and tasks', finish: true });
+        }
+
+        // Return the completed lessons and the next lesson
+        matchLessons = [...completedLessons, nextLesson];
+        return res.json({ lessons: matchLessons, finish: false });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Internal server error');
+    }
+};
+
+
+module.exports = { getLessonForUserAccordingCourse,createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson, funcDeleteLesson, getTaskAccordingLesson }

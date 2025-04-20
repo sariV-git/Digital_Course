@@ -4,18 +4,21 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { setLesson } from '../store/reducer/lessonSlice';
 import ManagerUpdateLesson from "./ManagerUpdateLesson";
 import TryIt from "./TryIt";
 import { useEffect, useState, useRef } from "react";
 import { Toast } from 'primereact/toast';
+import RespondUser from "./respondUser";
 
 const LessonList = () => {
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true)
+    const [finishCourse, setFinishCourse] = useState(false)
+    const [user,setUser]=useState()//??avoid all the request by params??
     const token = useSelector((state) => state.token.token);
     const isManager = useSelector((state) => state.token.isManager);
     const course = useSelector(state => state.course.course);
@@ -48,22 +51,29 @@ const LessonList = () => {
                 })
                 console.log('respondUserTask', respondUserTask);
 
-                if (respondUserTask.data)//before all to check that in the server it findone
+                if (respondUserTask.data.userTask)//before all to check that in the server it findone
                 {
-                    const feedbackResponse = await axios.get(`http://localhost:5000/feedback/AccordingUserTask/${respondUserTask.data.userTask._id}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    })
-                    console.log('feedbackResponse', feedbackResponse);
-
-                    if (feedbackResponse.data) {
+                    try {
+                        const feedbackResponse = await axios.get(`http://localhost:5000/feedback/AccordingUserTask/${respondUserTask.data.userTask._id}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
                         console.log('feedbackResponse', feedbackResponse);
 
-                        feedbacks[lesson._id] = feedbackResponse.data.text || 'no text'
+                        if (feedbackResponse.data) {
+                            console.log('feedbackResponse', feedbackResponse);
+
+                            feedbacks[lesson._id] = feedbackResponse.data.text || 'no text'
+                        }
+                        else {
+                            feedbacks[lesson._id] = 'no feedback'
+                        }
                     }
-                    else {
-                        feedbacks[lesson._id] = 'no feedback'
+                    catch (error) {
+                        console.log('error in getfeedback', error);
+
+                        feedbacks[lesson._id] = "no feedback"
                     }
                 }
                 else {
@@ -80,19 +90,27 @@ const LessonList = () => {
 
     const loadData = async () => {
         try {
+            const userResponse = await axios.get('http://localhost:5000/user/byToken', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setUser(userResponse.data) 
             const response = await axios.get(
-                `http://localhost:5000/course/allLessonsAccordingCourse/${course._id}`,
+                `http://localhost:5000/lesson/getForUserAccordingCourse/${userResponse.data._id}/${course._id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 }
             );
-            setLessons(response.data);
-            if (response.data.length > 0) {
-                console.log('go to fetchfeedback');
+            console.log('the lessons from the new router: ', response.data);
 
-                fetchFeedbacks(response.data)
+            setLessons(response.data.lessons);
+            setFinishCourse(response.data.finish)//to know if i need intoduce an respond of user
+            if (response.data.lessons.length > 0) {
+                console.log('go to fetchfeedback');
+                fetchFeedbacks(response.data.lessons)
             }
 
         } catch (error) {
@@ -155,12 +173,18 @@ const LessonList = () => {
     }
     return (
         <>
+            <Routes>
+                {/* ??//??check how do it */}
+                {/* <Route path='/respondUser' element={<RespondUser />} /> */}
+            </Routes>
+
             <Toast ref={toast} />
             {loading ? (
                 <div style={styles.loadingContainer}>
                     <h2>Loading Lessons...</h2>
                 </div>
-            ) : (
+            ) : (<>
+
                 <div style={styles.lessonListContainer}>
                     <DataTable value={lessons} paginator rows={5} rowsPerPageOptions={[5, 10, 25]} className="p-datatable-customers" style={styles.dataTable}>
                         <Column header="Number" field="numOfLesson" sortable />
@@ -180,6 +204,9 @@ const LessonList = () => {
                         />
                     )}
                 </div>
+                {finishCourse && <Button onClick={() => { navigate('/respondUser',{state:{user:user._id,course:course._id}})}}>your respond</Button>}
+
+            </>
             )}
         </>
     );
