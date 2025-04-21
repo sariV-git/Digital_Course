@@ -3,13 +3,13 @@ const funcDeleteAnswer=require('./answerController')
 const funcGetByQuestionAnswers=require('./answerController')
 
 //create
-const createQuestion=async(req,res)=>{
+const createQuestion=async(req,res)=>{   
     const{text,type,options,task,numOfQuestion}=req.body
    console.log({text,type,options,task,numOfQuestion});
    
     if(!text||!type||!task||!numOfQuestion)
         return res.status(400).send('error in create question')
-    if(type==='American')
+    if(type==='American')                            
         {
           if(!options)
             return res.status(400).send('error in create question')
@@ -20,12 +20,12 @@ if(!question)
 return res.status(200).send('question created')
 }
 
-//update
+//update                                                                                  
 const updateQuestion=async(req,res)=>{
     const{text,options,numOfQuestion,_id}=req.body
 if(!id)
     return res.status(400).send('error in update question')
-    const question=await Question.findById(_id)
+    const question=await Question.findById(_id)                                                     
     if(!question)
         return res.status(400).send('error in update question')
      question.text=text?text:question.text

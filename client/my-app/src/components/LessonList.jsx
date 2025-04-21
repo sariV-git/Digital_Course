@@ -28,7 +28,6 @@ const LessonList = () => {
 
     const fetchFeedbacks = async (lessonsFromLoad) => {
         try {
-            console.log('hhhhhere!!!');
             const userResponse = await axios.get('http://localhost:5000/user/byToken', {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -105,7 +104,6 @@ const LessonList = () => {
                 }
             );
             console.log('the lessons from the new router: ', response.data);
-
             setLessons(response.data.lessons);
             setFinishCourse(response.data.finish)//to know if i need intoduce an respond of user
             if (response.data.lessons.length > 0) {

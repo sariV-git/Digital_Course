@@ -76,7 +76,8 @@ const CourseIntroduce = () => {
 
     useEffect(() => {
 
-
+        // if(!token)
+        //     navigate('/Login')
         const loadUserAndSpeeker = async () => {
             try {
                 const speekerResponse = await axios.get(`http://localhost:5000/course/getSpeakerInformation/${course._id}`)
