@@ -7,7 +7,9 @@ import { Card } from "primereact/card"
 import { InputText } from "primereact/inputtext"
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from "primereact/button"
-import { RadioButton } from 'primereact/radiobutton';
+
+import { RadioButton } from "primereact/radiobutton";
+
 const Task = () => {
   const [index, setIndex] = useState(0)
   const answer = useRef(null)//the current answer
@@ -22,8 +24,10 @@ const Task = () => {
   const [load, setLoad] = useState(true)
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [answers, setAnswers] = useState([])
-  const [options, setOptions] = useState([])
-  const [initOptions, setInitOptions] = useState(false)//for the options of the american
+
+  const [selectedOption, setSelectedOption] = useState({})//??to see how can i intialize it
+
+  // const newArrayAnswers=[]
   const navigate = useNavigate()
 
 
@@ -62,10 +66,20 @@ const Task = () => {
   }, [])
 
 
+  //??need it??
+  useEffect(() => {
+    if (currentQuestion && currentQuestion.type == 'American' && currentQuestion.option) { setSelectedOption({ option: currentQuestion.option[0], key: 0 }) }
+  }, [currentQuestion])
+
+
+  //keep the answer
   const keepAnswer = async () => {
-    if (answer.current) {//if there is a answer i keep it
+
+    if (answer.current || currentQuestion.type == 'American')//if the question is regular 
+    {
+      console.log('the answersssss...', selectedOption);
       const currentAnswer = {
-        text: answer.current.value,
+        text: currentQuestion.type == 'American' ? selectedOption.option : answer.current.value,
         question: questions[index]._id,
         user: user._id
       };
@@ -79,27 +93,23 @@ const Task = () => {
 
         setAnswers(prevAnswers => {
           const newAnswers = [...prevAnswers, respond.data._id];
-          console.log('Updated Answers: ', newAnswers); // Now logs the updated state
           return newAnswers;
         });
 
         // setAnswers(prevAnswers=>[...prevAnswers,respond.data._id])
         // console.log('Answer saved: ', respond.data);
-          const nextIndex = index + 1;
 
+        const nextIndex = index + 1;
         // Check if there are more questions
         if (nextIndex <= lastIndex) {
           setIndex(nextIndex); // Update the index to the next one
           setCurrentQuestion(questions[nextIndex]); // Set the next question
         } else {
 
-          console.log('ffffffffffinal answersBefore: ',answers);
-          console.log('ffffffffffinal answersAfter: ',[...answers,respond.data._id]);
-
-          const userTask={
-            user:user._id,
-            task:task._id,
-            answers:[...answers,respond.data._id]
+          const userTask = {
+            user: user._id,
+            task: task._id,
+            answers: [...answers, respond.data._id]
           }
           const userTaskrespond = await axios.post(`http://localhost:5000/userTask`, userTask, {
             headers: {
@@ -114,27 +124,46 @@ const Task = () => {
       } catch (error) {
         console.log('Error saving answer: ', error);
       }
-    } else {
-      alert('Please provide an answer');
+    }//there is no answer 
+    else {
+
+      alert('Please provide an answer');//---or this is an american question
     }
     console.log('Index:', index, ' Last Index:', lastIndex);
+    // answer.current.value = "";//??--??
   };
 
 
-  //init the array if the question is american
-  const initializationOptionsArray = () => {
-    let numOfOption = -1;
-    const array = currentQuestion.options.map((option) => {
-      numOfOption++
-      return { option: option, key: numOfOption }
-    })
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", array)
-    setOptions(array);
-    console.log("?????????????????", options)
-    setInitOptions(true)
-  }
-  const [selectedOPtion, setSelectedOPtion] = useState(options.length<0?options[0]:null);
 
+  const showAmericanQuestion = (options) => {
+    //want to insert the options to the shape of option and key:
+    const arrayOptions = options.map((option, index) => ({
+      option: option,
+      key: index
+    }))
+    console.log('arrayOptions', arrayOptions);
+    // const [selectedOption,setSelectedOption]=useState(arrayOptions[1])
+    // setSelectedOption(arrayOptions[1])/////////---------=========???need it???
+    return (<>
+      <div className="card flex justify-content-center">
+        <div className="flex flex-column gap-3">
+          {arrayOptions && arrayOptions.map((option) => {
+            return (
+              <div key={option.key} className="flex align-items-center">
+                {console.log('option', option)}
+                <RadioButton inputId={option.key} name="category" value={option} onChange={(e) => setSelectedOption(e.value)} checked={selectedOption.key === option.key} />
+                <label htmlFor={option.key} className="ml-2">{option.option}</label>
+              </div>
+            );
+          })}
+        </div>
+      </div></>
+    );
+    // return(<>{options.map(option=>{
+    //     return(<> option: {option}</>)
+    //   })}</>) 
+
+  }
 
   return (
     <>
@@ -145,26 +174,18 @@ const Task = () => {
             <Card>
 
               <p>{currentQuestion.text}</p>
-              {currentQuestion.type === 'American' ? <>
-                {//this function intial an array of the options and their keys and insert it to options
-                  initializationOptionsArray()}
-                
-                  {<div className="card flex justify-content-center">
-                    <div className="flex flex-column gap-3">
-                    {options.length != 0 && options.map((option) => {
-                        return (
-                          <div key={option.key} className="flex align-items-center">{console.log('oooooooooption', option)}
-                            <RadioButton inputId={option.key} name="options" value={option} onChange={(e) => setSelectedOPtion(e.value)} checked={selectedOPtion.key === option.key} />
-                            <label htmlFor={option.key} className="ml-2">{option.name}</label>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>}
-              </> :
-                <InputText ref={answer} type="text" className="p-inputtext-lg" placeholder="your answer" />}
-              <Button onClick={() => { keepAnswer() }}>keep</Button>
 
+              {
+                currentQuestion.type == 'American' ? <>choose the correct answer:
+                  {
+                    showAmericanQuestion(currentQuestion.options)
+                  }
+                  <Button onClick={keepAnswer}>keep american answer</Button>
+                </> : <>
+
+                  <InputText ref={answer} type="text" className="p-inputtext-lg" placeholder="your answer" />
+                  {!currentQuestion.type == 'American' && <Button onClick={() => { keepAnswer() }}>keep</Button>}</>}
+              <></>
             </Card>
           }
         </>}

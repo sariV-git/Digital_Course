@@ -5,7 +5,7 @@ const UserTask=()=>{
     const location=useLocation()
     const {questions,answers}=location.state
     // const {answers,questions}=location.state
-    
+
     console.log('in userTask state: ',location.state);
     return (
         <div>
@@ -25,5 +25,5 @@ const UserTask=()=>{
     };
     
 export default UserTask
-
+  
 //////////
