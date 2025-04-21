@@ -121,21 +121,28 @@ const CourseIntroduce = () => {
                 {/* {do here something important} */}
                 {!userActiveInThisCourse && checkIfUserActive()}
                 {course &&
-                    <div className='flex h-screen w-screen bg-gray-100'>
+                    <div className='flex h-screen w-screen bg-gray-100'  style={{ textAlign: 'right', display: 'flex',
+                        justifyContent: 'center',
+                        //alignItems: 'center',
+                        //height: '100vh' // Full viewport height}} ,{{
+                        }}>
                         <div className="w-1/3 h-full">
-                            <LessonVideo path={course.pathTriler} />
+                            {/* <LessonVideo path={course.pathTriler} /> */}
                         </div>
                         <div className="w-2/3 p-10 flex items-center justify-center">
 
                             <Card title={course.name} subTitle={course.information} footer={footer}
                                 className="w-full max-w-3xl shadow-2xl">
                                 <p className="text-gray-700 mb-4">
-                                    name of speeker:  {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}
+                                     {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName} :מרצה
                                 </p>
-                                about the course:{course.information}
+                                {/* about the course:{course.information} */}
                                 {speakerInformation && <p>information:{speakerInformation.information}</p>}
-                                <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >see the triler</Link>
-                                <>responds of the other users about this course:</>
+                                {<br></br>}
+                                <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >לצפיה בטרילר</Link>
+                                {<br></br>}
+                                <h5>:תגובות של משתתפים בקורס</h5>
+                                {<br></br>}
                                 <RespondsAccordingCourse course={course} />
                             </Card>
                         </div>

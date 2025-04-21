@@ -51,5 +51,5 @@ app.get('/upload/:fileName',(req,res)=>{
 
 mongoose.connection.once('open',()=>{console.log('connected to mongoDB')
     app.listen(PORT,()=>{console.log(`server running on port ${PORT}`)})})
-
+   
 mongoose.connection.on('error',err=>console.log(`error with the connection to mongodb ${err}`))

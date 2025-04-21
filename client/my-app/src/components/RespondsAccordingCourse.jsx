@@ -1,6 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import React from 'react'; 
+import { Card } from 'primereact/card';
 
 const RespondsAccordingCourse = (props) => {
     const [load, setLoad] = useState(true)
@@ -23,10 +25,17 @@ const RespondsAccordingCourse = (props) => {
         , [])
     return (<>
         {load ? <>Loading...</> : <>
-            { responds.map(respond=>{
-                return(<>
-                name:{respond.username}
-                respond:{respond.text}
+            {responds.map(respond => {
+                return (<>
+
+                    <div className="card">
+                        <Card >
+                            <h4>{respond.username} :שם</h4>
+                            <p className="m-0">
+                            {respond.text} :תגובה
+                            </p>
+                        </Card>
+                    </div>
                 </>)
             })}
         </>}
