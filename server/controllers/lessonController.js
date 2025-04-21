@@ -142,14 +142,14 @@ const getLessonForUserAccordingCourse = async (req, res) => {
             const task = tasksArray.find(task => task._id.toString() === userTask.task.toString());
             return allLessons.find(lesson => lesson._id.toString() === task.lesson.toString());
         });
-
+console.log('completedLesson -the lesson which the user already saw and did task for him: ',completedLessons);
         // Find the last completed lesson (the one with the highest numOfLesson)
-        const lastLesson = completedLessons.reduce((max, lesson) => {
+        const lastLesson = completedLessons.reduce((max, lesson) => { 
             return lesson.numOfLesson > max.numOfLesson ? lesson : max;
         }, { numOfLesson: -1 }); // Initialize with a numOfLesson that can't be beaten
-
+console.log('lastLesson---',lastLesson);
         // If the user hasn't completed any lesson
-        if (!lastLesson.numOfLesson) {
+        if (lastLesson.numOfLesson===-1) {
             const firstLesson = await Lesson.findOne({ numOfLesson: 1, course: course });
             if (!firstLesson) {
                 return res.status(400).send('No lessons available in this course');

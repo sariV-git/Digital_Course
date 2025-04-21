@@ -31,7 +31,7 @@ const getUserByUserName = async (req, res) => {
         const foundUser = await User.findOne({ username });
 
         if (!foundUser) {
-            return res.status(401).send('not found user like this username');
+            return res.status(400).send('not found user like this username');
         }
 
         console.log('headersSent',res.headersSent);

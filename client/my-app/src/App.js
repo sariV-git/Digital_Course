@@ -32,6 +32,7 @@ import ManagerDeleteCourse from './components/ManagerDeleteCourse';
 import ManagerUsersAnswers from './components/ManagerUsersAnswers';
 import RespondUser from './components/respondUser';
 import ManagerSetResponds from './components/ManagerSetResponds';
+import UserTask from './components/UserTask'
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
         <Route path='/ManagerUsersAnswers' element={<ManagerUsersAnswers />} />
         <Route path='/respondUser' element={<RespondUser />} />
         <Route path='/ManagerSetResponds' element={<ManagerSetResponds />} />
+        <Route path='/UserTask'element={<UserTask/>}/>
       </Routes>
     </div>
   );

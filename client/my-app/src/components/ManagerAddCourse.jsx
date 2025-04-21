@@ -76,7 +76,7 @@ const ManagerAddCourse = () => {
 
         return (
             <div className="card flex justify-content-center">
-                <h2>create a new lesson</h2>
+                <h2>create a new course</h2>
                 <Button label="Create" onClick={() => setVisible(true)} />
                 <Dialog
                     visible={visible}

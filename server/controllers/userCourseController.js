@@ -100,4 +100,6 @@ const deleteUserCourse = async (_id) => {
         return res.status(404).send('error in deleteUserCourse of usercourse')
     return res.send('succeed delete usercourse')
 }
+
+
 module.exports = { getUsersAccordingCourse, getAllUserCourses, getAllUserCourses, getByIdUserCourse, getUserCourseAccordingUser, funcCreateUserCourse, funcDeleteUseCourse, deleteUserCourse, updateUserCourse }

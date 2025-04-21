@@ -27,6 +27,7 @@ const Task = () => {
   const navigate = useNavigate()
 
 
+  
   useEffect(() => {
 
     const loadDataQuestion = async () => {
@@ -75,18 +76,30 @@ const Task = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        setAnswers([...answers, respond.data._id])
-        console.log('Answer saved: ', respond.data);
-        const nextIndex = index + 1;
+
+        setAnswers(prevAnswers => {
+          const newAnswers = [...prevAnswers, respond.data._id];
+          console.log('Updated Answers: ', newAnswers); // Now logs the updated state
+          return newAnswers;
+        });
+
+        // setAnswers(prevAnswers=>[...prevAnswers,respond.data._id])
+        // console.log('Answer saved: ', respond.data);
+          const nextIndex = index + 1;
+
         // Check if there are more questions
         if (nextIndex <= lastIndex) {
           setIndex(nextIndex); // Update the index to the next one
           setCurrentQuestion(questions[nextIndex]); // Set the next question
         } else {
-          const userTask = {
-            user: user._id,
-            task: task._id,
-            answers: answers
+
+          console.log('ffffffffffinal answersBefore: ',answers);
+          console.log('ffffffffffinal answersAfter: ',[...answers,respond.data._id]);
+
+          const userTask={
+            user:user._id,
+            task:task._id,
+            answers:[...answers,respond.data._id]
           }
           const userTaskrespond = await axios.post(`http://localhost:5000/userTask`, userTask, {
             headers: {
