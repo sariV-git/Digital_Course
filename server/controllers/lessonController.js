@@ -153,7 +153,7 @@ console.log('lastLesson---',lastLesson);
             const firstLesson = await Lesson.findOne({ numOfLesson: 1, course: course });
             if (!firstLesson) {
                 return res.status(400).send('No lessons available in this course');
-            }
+            }                       
             matchLessons = [firstLesson];
             return res.status(200).json({ lessons: matchLessons, finish: false });
         }
@@ -174,6 +174,6 @@ console.log('lastLesson---',lastLesson);
         return res.status(500).send('Internal server error');
     }
 };
-
+               
 
 module.exports = { getLessonForUserAccordingCourse,createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson, funcDeleteLesson, getTaskAccordingLesson }

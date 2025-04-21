@@ -117,25 +117,56 @@
 // };
 
 // export default CourseIntro;
-import React, { useState } from 'react';
-import { Button } from 'primereact/button';
+// import React, { useState } from 'react';
+// import { Button } from 'primereact/button';
 
-const TryIt = () => {
-  const [clicked, setClicked] = useState(false);
+// const TryIt = () => {
+//   const [clicked, setClicked] = useState(false);
 
-  const handleClick = () => {
-    setClicked(!clicked);
-  };
+//   const handleClick = () => {
+//     setClicked(!clicked);
+//   };
 
-  return (
-    <Button
-      label={clicked ? 'Clicked!' : 'Click Me'}
-      className={clicked ? 'p-button-success' : 'p-button-primary'}
-      onClick={handleClick}
-    />
-  );
-};
+//   return (
+//     <Button
+//       label={clicked ? 'Clicked!' : 'Click Me'}
+//       className={clicked ? 'p-button-success' : 'p-button-primary'}
+//       onClick={handleClick}
+//     />
+//   );
+// };
 
-export default TryIt;
+// export default TryIt;
 
+
+        
+
+import React, { useState } from "react";
+import { RadioButton } from "primereact/radiobutton";
+
+export default function DynamicDemo() {
+    const categories = [
+        { name: 'Accounting', key: 'A' },
+        { name: 'Marketing', key: 'M' },
+        { name: 'Production', key: 'P' },
+        { name: 'Research', key: 'R' }
+    ];
+    const [selectedCategory, setSelectedCategory] = useState(categories[1]);
+
+    return (
+        <div className="card flex justify-content-center">
+            <div className="flex flex-column gap-3">
+                {categories.map((category) => {
+                    return (
+                        <div key={category.key} className="flex align-items-center">
+                            <RadioButton inputId={category.key} name="category" value={category} onChange={(e) => setSelectedCategory(e.value)} checked={selectedCategory.key === category.key} />
+                            <label htmlFor={category.key} className="ml-2">{category.name}</label>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+        
 
