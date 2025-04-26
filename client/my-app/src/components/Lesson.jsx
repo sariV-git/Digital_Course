@@ -100,7 +100,6 @@ const Lesson = () => {
 
   return (<>
     <h2>Lesson:{lesson.name}</h2>
-
     <LessonVideo path={lesson.path} />
     {task && task.title}
     {(showTask && task) ? <Button onClick={() => { goToTask() }}>do the task</Button> : <Button onClick={() => seeTheTask()}>see your task</Button>}

@@ -49,6 +49,7 @@ function App() {
       {/* <CourseCard/> for the page of all the courses and not take the fixed */}
       {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
+    {/* need do a homepage??--if there is only one course automally it pass to this course and if there is more automally he go to the many courses--coursePage */}
         <Route path='/LessonVideo' element={<LessonVideo />} />
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />

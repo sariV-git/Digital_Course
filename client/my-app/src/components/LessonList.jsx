@@ -18,7 +18,7 @@ const LessonList = () => {
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true)
     const [finishCourse, setFinishCourse] = useState(false)
-    const [user,setUser]=useState()//??avoid all the request by params??
+    const [user, setUser] = useState()//??avoid all the request by params??
     const token = useSelector((state) => state.token.token);
     const isManager = useSelector((state) => state.token.isManager);
     const course = useSelector(state => state.course.course);
@@ -52,6 +52,7 @@ const LessonList = () => {
 
                 if (respondUserTask.data.userTask)//before all to check that in the server it findone
                 {
+                    //get the feedback of this task of this user
                     try {
                         const feedbackResponse = await axios.get(`http://localhost:5000/feedback/AccordingUserTask/${respondUserTask.data.userTask._id}`, {
                             headers: {
@@ -63,7 +64,7 @@ const LessonList = () => {
                         if (feedbackResponse.data) {
                             console.log('feedbackResponse', feedbackResponse);
 
-                            feedbacks[lesson._id] = feedbackResponse.data.text || 'no text'
+                            feedbacks[lesson._id] = feedbackResponse.data.text || 'no feedback'
                         }
                         else {
                             feedbacks[lesson._id] = 'no feedback'
@@ -71,7 +72,6 @@ const LessonList = () => {
                     }
                     catch (error) {
                         console.log('error in getfeedback', error);
-
                         feedbacks[lesson._id] = "no feedback"
                     }
                 }
@@ -94,7 +94,7 @@ const LessonList = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
-            setUser(userResponse.data) 
+            setUser(userResponse.data)
             const response = await axios.get(
                 `http://localhost:5000/lesson/getForUserAccordingCourse/${userResponse.data._id}/${course._id}`,
                 {
@@ -202,7 +202,7 @@ const LessonList = () => {
                         />
                     )}
                 </div>
-                {finishCourse && <Button onClick={() => { navigate('/respondUser',{state:{user:user._id,course:course._id}})}}>your respond</Button>}
+                {finishCourse && <Button onClick={() => { navigate('/respondUser', { state: { user: user._id, course: course._id } }) }}>your respond</Button>}
 
             </>
             )}

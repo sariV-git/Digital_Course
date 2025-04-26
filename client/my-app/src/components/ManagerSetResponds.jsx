@@ -12,6 +12,8 @@ const ManagerSetResponds = () => {
 
     useEffect(() => {
         const loadResponds = async () => {
+            console.log('the _id of the course which you want load the responds: ',course);
+            
             const resResponds = await axios.get(`http://localhost:5000/respond/accordingCourse/${course._id}`, {//get all the responds according a specific course
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -83,7 +85,7 @@ const ManagerSetResponds = () => {
 
     return (<>{loadData ? <>Loading...</> :
         <> {responds.map(respond => {
-            return (<Card><p>respond: {respond.text}</p>
+            return (<Card key={respond._id}><p>respond: {respond.text}</p>
                 <p>username: {respond.username}</p>
                 <>{respond.introduce ? <Button key={respond._id} label="don't show me" severity="danger" onClick={() => { hideRespond(respond) }} /> : <Button severity="success" label="show me" onClick={() => showRespond(respond)} />}</>
             </Card>)

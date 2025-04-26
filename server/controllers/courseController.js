@@ -83,7 +83,7 @@ const getSpeakerInformationByCoursId = async (req,res) => {
     if (!_id) {
         return res.status(400).send('id is required')
     }
-    const course = await Course.findById(_id).populate('speaker');
+    const course = await Course.findById(_id).populate('speaker',{name:1,informationOnSpeaker:1}).lean();
     if (!course) {
         return res.status(400).send('Course not found')
     }

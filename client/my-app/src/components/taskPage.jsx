@@ -184,7 +184,7 @@ const Task = () => {
                 </> : <>
 
                   <InputText ref={answer} type="text" className="p-inputtext-lg" placeholder="your answer" />
-                  {!currentQuestion.type == 'American' && <Button onClick={() => { keepAnswer() }}>keep</Button>}</>}
+                  {<Button onClick={() => { keepAnswer() }}>keep</Button>}</>}
               <></>
             </Card>
           }

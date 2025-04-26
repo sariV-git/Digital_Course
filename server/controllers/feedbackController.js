@@ -48,10 +48,10 @@ const updateFeedback = async (req, res) => {
 const getFeedbackAccordingUserTask = async (req, res) => {
     const { _id } = req.params
     if (!_id)
-        return res.status(400).send('error in getFeedbackAccordingUserTask')
+        return res.status(400).send('error in getFeedbackAccordingUserTask--missing _id')
     const feedback = await Feedback.findOne({ userTask: _id })
     if (!feedback)
-        return res.status(400).send('error in getFeedbackAccordingUserTask')
+        return res.status(200).send('there is no feedback')
     return res.json(feedback)
 }
 

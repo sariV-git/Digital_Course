@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import tokenReducer from './reducer/tokenSlice';
@@ -28,6 +29,13 @@ const store = configureStore({
     itemsInTheMenubar:itemsInTheMenubarReducer,
     user:persistUserReducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredActionPaths: ['register', 'rehydrate'],
+      },
+  })
 });
 
 const persistor = persistStore(store);
