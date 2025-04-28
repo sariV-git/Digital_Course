@@ -47,7 +47,7 @@ app.get('/upload/:fileName',(req,res)=>{
     const{fileName}=req.params
     const videoPath=path.join(__dirname,'public/upload',fileName)
     res.sendFile(videoPath)
-})
+})             
 
 mongoose.connection.once('open',()=>{console.log('connected to mongoDB')
     app.listen(PORT,()=>{console.log(`server running on port ${PORT}`)})})
