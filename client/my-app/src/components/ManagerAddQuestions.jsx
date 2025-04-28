@@ -7,12 +7,6 @@ import { useRef } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-
-
-
-
-
-
 const ManagerAddQuestions = () => {
     const token = useSelector(state => state.token.token)
     const text = useRef('')
@@ -43,8 +37,8 @@ const ManagerAddQuestions = () => {
                 text: text.current.value,
                 task: task._id,
                 numOfQuestion: numOfQuestion.current.value,
-                options: options.current.value ? (options.current.value).split(',') : null,
-                type: options.current.value ? 'American' : 'Free'
+                options: type.current.value.toLowerCase()=="american"? (options.current.value).split(',') : null,
+                type:type.current.value.toLowerCase()=="american"? 'American' : 'Free'
             }
             console.log(question);
             setFlagOptions(false)

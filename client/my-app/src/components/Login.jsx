@@ -18,8 +18,8 @@ const Login = () => {
   const token = useSelector(state => state.token.token)
   const dispatch = useDispatch()
   
-let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id of the courses which the user belong to.
-  const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
+ 
+const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
     try {
       const res = await axios.get(`http://localhost:5000/userCourse/accordingUser/${user._id}`, {
         headers: {
@@ -29,18 +29,20 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
       console.log('usercourse of the user--see in the data',res);
       
       const usercourses = res.data
-      if (usercourses) {
-         arrayWithIdOfCoursesUserBelong = usercourses.map(usercourse => {
+      if (usercourses) {//all the courses which the user belong to
+         const arrayWithIdOfCoursesUserBelong = usercourses.map(usercourse => {
           return usercourse.course
         })
+        console.log('arrayWithIdOfCoursesUserBelong',arrayWithIdOfCoursesUserBelong);
+        dispatch(setBelongToTheCourses({ newItems: arrayWithIdOfCoursesUserBelong }))
       }
       else
         console.log('usercourses', usercourses);
-      dispatch(setBelongToTheCourses({ newItems: arrayWithIdOfCoursesUserBelong }))
     } catch (error) {
       console.log('error', error);
     }
   }
+
   const loginUser = async (data) => {
 
     const username = data.username
@@ -51,10 +53,8 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
       if (res.data.role != 'Admin')
         fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
       
-      
-      
       dispatch(setToken(res.data))
-//to cancel the option that the login return user      
+      //to cancel the option that the login return user      
       if (res.data.role == 'Admin') {
         console.log('you are a manager!!!');
         dispatch(setIsManager(true))
@@ -70,8 +70,9 @@ let arrayWithIdOfCoursesUserBelong=[]//at this array i want to fill all the id o
     catch (e) {
       navigate('/Register')
       console.log('error in login user', e); 
+
+      //mabye do here belongtothecourse = null??
     }
- 
   }
   const {
     register,

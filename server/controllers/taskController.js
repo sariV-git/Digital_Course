@@ -22,7 +22,7 @@ const funcDeleteTask = async (_id) => {
             if(!funcDeleteUserTask(userTask._id))
                 return false
         })
-    }
+    }      
     const deleted = await task.deleteOne()
     if (deleted.deleteCount != 1)
         return false

@@ -33,6 +33,7 @@ import ManagerUsersAnswers from './components/ManagerUsersAnswers';
 import RespondUser from './components/respondUser';
 import ManagerSetResponds from './components/ManagerSetResponds';
 import UserTask from './components/UserTask'
+import UserTasks from './components/UserTasks';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
         <Route path='/respondUser' element={<RespondUser />} />
         <Route path='/ManagerSetResponds' element={<ManagerSetResponds />} />
         <Route path='/UserTask'element={<UserTask/>}/>
+        <Route path='/UserTasks'element={<UserTasks/>}/>
       </Routes>
     </div>
   );

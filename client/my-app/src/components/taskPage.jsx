@@ -16,7 +16,6 @@ const Task = () => {
   const [lastIndex, setLastIndex] = useState(0)
   const location = useLocation()
   const task = location.state.task
-  const dispatch = useDispatch()
   const token = useSelector(state => state.token.token)
   const [user, setUser] = useState(null);
   const lesson = useSelector(state => state.lesson.lesson)
@@ -164,7 +163,6 @@ const Task = () => {
     //   })}</>) 
 
   }
-
   return (
     <>
       {load ?

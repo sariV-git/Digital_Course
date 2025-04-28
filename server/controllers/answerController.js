@@ -42,7 +42,7 @@ const getAnswerById = async (req, res) => {
     return res.status(200).json(answer)
 }
 
-//delete one answer
+//delete one answer                    
 const funcDeleteAnswer = async (_id) => {
     const answer = await Answer.findById(_id)
     if (!answer)

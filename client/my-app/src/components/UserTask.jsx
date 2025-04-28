@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom"
 
 
 const UserTask=()=>{
+    
     const location=useLocation()
     const {questions,answers}=location.state
     // const {answers,questions}=location.state

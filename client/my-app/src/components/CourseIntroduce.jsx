@@ -35,7 +35,7 @@ const CourseIntroduce = () => {
     //??put him more down at the code
     const footer = (<>
         {course && <>
-            {userActiveInThisCourse || isManager && <><Link to="/LessonsList">pass to the lesson</Link></>}
+            {(userActiveInThisCourse || isManager) && <><Link to="/LessonsList">pass to the lesson</Link></>}
             {/* to check if the user is already registered to this course then bring him to enter else to register */}
         </>}
     </>
@@ -51,7 +51,11 @@ const CourseIntroduce = () => {
             )
             console.log('specificCourse', specificCourse);
             if (specificCourse)//the user already did login to this course
-                setUserActiveInThisCourse(true)
+                {
+                    console.log('this user active it this course');
+                    
+                    setUserActiveInThisCourse(true)
+                }
             else// the user didnt do login
             {
 
@@ -61,6 +65,8 @@ const CourseIntroduce = () => {
         else {
             console.log('you didnt do login');
         }
+        setLoading(false)
+
     }
 
     const optionForManager = async () => {//here do all the options for manager--??try do the option of adding course also in the course page
@@ -73,12 +79,14 @@ const CourseIntroduce = () => {
             }, { label: 'DeleteCourse', to: "/ManagerDeleteCourse" }, { label: 'ManagerSetResponds', to: '/ManagerSetResponds' }, { label: 'LogOut', to: '/LogOut' }
             ]
         }))
+        setLoading(false)
+
     }
 
 
     useEffect(() => {
-        console.log('course _id in start of courseIntroduce: ',course);        
-            dispatch(setCourse({newCourse:course}))
+        console.log('the user belong to the courses: ',belongToTheCourses);
+        dispatch(setCourse({newCourse:course}))
         //here need to use with useSelector to update the course
         const loadSpeeker = async () => {//????i think to load the user in the login and then put him at the store
             try {
@@ -88,13 +96,13 @@ const CourseIntroduce = () => {
             } catch (error) {
                 console.log('error in get speeker information', error);
             }
-            setLoading(false)
         }
         const loadAll = async () => {
             loadSpeeker();//load the speaker
 
             if (isManager) {
                 optionForManager()
+
             }
             else {
                 checkIfUserActive()//check if the user active

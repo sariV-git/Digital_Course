@@ -58,18 +58,30 @@ const getUserTaskByUserAndTask = async (req, res) => {
    return res.json({ userTask, found }).status(200)
 }
 
-//get usersTask by task
+//get usersTask by task--??mabye can to erase it becauase ->
 const getByTask = async (req, res) => {
    const { task } = req.params
    if (!task)
       return res.status(400).send('error in getBytask in user task--missing task ')
    const usersTask = await UserTask.find({ task: task }).populate('user').populate('answers')
    console.log('in usertask after the populate: ', usersTask);
-     
+
    return res.json({ usersTask }).status(200)
 
 }
-  
+//-->
+//get all usertasks according user
+const allUserTasksAccordingUser = async (req, res) => {
+   const { user } = req.params
+   if (!user)
+      return res.status(400).send('error in allUserTasksAccordingUser in user task--missing task ')
+   const usersTask = await UserTask.find({ user: user }).populate('user')
+   console.log('the usersTask: ', usersTask);
+   if (!usersTask)
+      return res.status(200).send('there is no usertask for this user')
+   return res.json({ usersTask }).status(200)
+}
+
 
 // const getByTask = async (req, res) => {
 //    const { task } = req.params;
@@ -97,4 +109,4 @@ const getByTask = async (req, res) => {
 //    }
 // };
 
-module.exports = { getByTask, getUserTaskByUserAndTask, deleteUserTask, funcDeleteUserTask, createUserTask }
+module.exports = { allUserTasksAccordingUser,getByTask, getUserTaskByUserAndTask, deleteUserTask, funcDeleteUserTask, createUserTask }

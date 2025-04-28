@@ -43,7 +43,7 @@ const getUserByUserName = async (req, res) => {
    
 };
 
-const getUserByToken=(req,res)=>{
+const getUserByToken=(req,res)=>{               
     if(!req.userMiddleware)
         return res.status(400).send('error in get userbytoken')
     console.log('in get user by token');

@@ -13,8 +13,6 @@ const persistConfig = {
   storage,
   debug:true
 };
-
-
 const persistedTokenReducer = persistReducer(persistConfig, tokenReducer);
 const persistedCourseReducer = persistReducer(persistConfig, courseReducer);
 const persistLessonReducer=persistReducer(persistConfig,lessonReducer)
