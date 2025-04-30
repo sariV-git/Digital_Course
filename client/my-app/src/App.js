@@ -29,11 +29,11 @@ import TryIt from './components/TryIt';
 import LessonVideo from './components/LessonVideo';
 import LogOut from './components/LogOut';
 import ManagerDeleteCourse from './components/ManagerDeleteCourse';
-import ManagerUsersAnswers from './components/ManagerUsersAnswers';
 import RespondUser from './components/respondUser';
 import ManagerSetResponds from './components/ManagerSetResponds';
 import UserTask from './components/UserTask'
 import UserTasks from './components/UserTasks';
+import FileExample from './components/File';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -44,6 +44,7 @@ function App() {
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
       <TemplateDemo />
+      {/* <FileExample/> */}
       {/* <ChooseVideo/> */}
       {/* <CoursesPage/---put in the menubar */}
       {/* <IntroduceUsers/> //for users!!*/}
@@ -67,7 +68,6 @@ function App() {
         <Route path='/ManagerUsersPage' element={<ManagerUsersPage />} />
         <Route path='/ManagerDeleteCourse' element={<ManagerDeleteCourse />} />
         <Route path='/LogOut' element={<LogOut />} />
-        <Route path='/ManagerUsersAnswers' element={<ManagerUsersAnswers />} />
         <Route path='/respondUser' element={<RespondUser />} />
         <Route path='/ManagerSetResponds' element={<ManagerSetResponds />} />
         <Route path='/UserTask'element={<UserTask/>}/>

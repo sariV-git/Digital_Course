@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux"
 import { setBelongToTheCourses, setUser } from "../store/reducer/userSlice"
 import { setCourse } from "../store/reducer/courseSlice"
 import { useNavigate } from "react-router-dom"
-import { setTask } from "../store/reducer/taskSlice"
 import { setLesson } from "../store/reducer/lessonSlice"
 
 const LogOut = () => {
@@ -16,7 +15,6 @@ const LogOut = () => {
         dispatch(setBelongToTheCourses({ newItems: [] }))
         dispatch(logOut())
         dispatch(setIsManager(false))
-        dispatch(setTask({newTask:null}))
         dispatch(setLesson({newLesson:null}))
         dispatch(setCourse({newCourse:null}))
     }

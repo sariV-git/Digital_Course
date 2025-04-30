@@ -1,7 +1,6 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setTask } from "../store/reducer/taskSlice"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Card } from "primereact/card"
 import { InputText } from "primereact/inputtext"

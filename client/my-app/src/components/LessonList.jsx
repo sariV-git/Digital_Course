@@ -24,6 +24,7 @@ const LessonList = () => {
     const course = useSelector(state => state.course.course);
     const navigate = useNavigate();
     const toast = useRef(null); // For showing Toast messages
+    const [showTask, setShowTask] = useState(false)
     const [feedbackMap, setFeedbackMap] = useState({})
 
     const fetchFeedbacks = async (lessonsFromLoad) => {
@@ -104,12 +105,16 @@ const LessonList = () => {
                 }
             );
             console.log('the lessons from the new router: ', response.data);
-            setLessons(response.data.lessons);
+            setLessons(response.data.lessons);//to set another lessons
             setFinishCourse(response.data.finish)//to know if i need intoduce an respond of user
             if (response.data.lessons.length > 0) {
                 console.log('go to fetchfeedback');
                 fetchFeedbacks(response.data.lessons)
             }
+
+
+
+
 
         } catch (error) {
             console.log('error in lessonlist', error);
@@ -117,7 +122,6 @@ const LessonList = () => {
             toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to load lessons', life: 3000 });
         }
     };
-
 
     useEffect(() => {
         loadData();
@@ -147,7 +151,78 @@ const LessonList = () => {
         }
     };
 
-    const updateLesson = (rowData) => {
+
+    const goToTask = async (lesson) => {
+        try {
+            //load the data about the task
+            const taskResponse = await axios.get(`http://localhost:5000/task/AccordingLesson/${lesson._id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            //load the data about the user
+            const userResponse = await axios.get('http://localhost:5000/user/byToken', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log('userResponse', userResponse);
+
+            console.log('task', taskResponse.data)
+            //load this data to check if already the user did this task
+            const respondUserTask = await axios.get(`http://localhost:5000/userTask/ByUserAndTask/${userResponse.data._id}/${taskResponse.data._id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log('respondUserTask', respondUserTask.data);
+
+            if (!respondUserTask.data.userTask) {
+                setShowTask(true)//navigate to see the task???can delete it??
+                navigate('/Task', { state: { task: taskResponse.data } })//??mabye need to pass also the user
+
+            }
+            else {
+                let arrayAnswers = []
+                console.log('in see the task');
+                // let QuestionsAnswersArray=[]//the array of objects every object look like :{questionText:"  ",answerText:"  "}
+                const answers = respondUserTask.data.userTask.answers//an array of id of the answers of the user
+                console.log('answers Before: ', answers);
+                try {
+                    answers.forEach(async answer => {
+                        const resAnswer = await axios.get(`http://localhost:5000/answer/${answer}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        console.log('resAnswer', resAnswer.data);
+                        arrayAnswers.push(resAnswer.data)
+                        return (resAnswer.data)
+                    })
+                    const taskQuestions = await axios.get(`http://localhost:5000/question/AccordingTask/${taskResponse.data._id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    console.log("anssssswers: ", arrayAnswers, 'qqqqqquestion', taskQuestions);
+
+                    navigate('/UserTask', { state: { questions: taskQuestions.data, answers: arrayAnswers } })
+
+                } catch (error) {
+                    console.log('an error in see all the answers', error);
+                }
+
+            }
+            //    setUserTask(respondUserTask.data.userTask)//navigate to do the task
+        } catch (error) {
+            console.log('error in loaddata in lessonpage', error);
+        }
+    }
+
+    const showTaskButton = (rowData) => {
+        return <Button label="Task" onClick={() => { goToTask(rowData) }} className="p-button-rounded p-button-outlined"></Button>
+    }
+    const updateLesson = (rowData) => {//to fix this function that she will realy update
         dispatch(setLesson({ newLesson: rowData }));
         setVisible(true);
     };
@@ -191,6 +266,7 @@ const LessonList = () => {
                         {isManager && <Column header="Update" body={updateButton} />}
                         {isManager && <Column header="Delete" body={deleteButton} />}
                         <Column header="Feedback" body={showFeedback} />
+                        <Column header='Task' body={showTaskButton} />
                     </DataTable>
 
                     {visible && (

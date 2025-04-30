@@ -8,18 +8,22 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Accordion, AccordionTab } from "primereact/accordion"
 import { InputText } from "primereact/inputtext"
+import FileExample from "./File"
 //introduce all the tasks of one User
 const UserTasks = () => {
 
     const location = useLocation()
     const user_id = location.state.user_id
+    const userName=location.state.userName//the name of the user
     const token = useSelector(state => state.token.token)
     const [loading, setLoading] = useState(true)
     const [tabsTask, setTabsTask] = useState([])
     const [showInputFeedback, setShowInputFeedback] = useState(false)
     const feedbackText = useRef(null)
+    const [contentFile,setContentFile]=useState([])
 
     useEffect(() => {
+
         const loadTasksUserData = async () => {//get the _id of the user
             try {
                 const resUsersTask = await axios.get(`http://localhost:5000/userTask/AllUserTasksAccordingUser/${user_id}`, {
@@ -28,6 +32,7 @@ const UserTasks = () => {
                     }
                 }
                 )
+
                 const dataTabs = await Promise.all(resUsersTask.data.usersTask.map(async userTask => {//pass on all the tasks of the user
                     try {
                         const taskRespond = await axios.get(`http://localhost:5000/task/${userTask.task}`, {
@@ -62,6 +67,8 @@ const UserTasks = () => {
                             answers: fullAnswers,
                             feedback: feedbackRespond.data.text ? { _id: feedbackRespond.data._id, text: feedbackRespond.data.text } : null
                         }
+
+                       
                     } catch (error) {
                         console.log('error in the loop map of usersTask', error)
                     }
@@ -76,7 +83,7 @@ const UserTasks = () => {
             }
         }
         loadTasksUserData()
-    }, [])
+    }, [showInputFeedback])
 
     const keepFeedback = async (userTask_id) => {
         const newFeedback = {
@@ -109,44 +116,45 @@ const UserTasks = () => {
             }
         })
         console.log('feedbackUpdateRespond', feedbackUpdateRespond);
-
+        setShowInputFeedback(false)
     }
 
-    if(loading)
-        return(<>Loading...</>)
-    
-    return (<> 
-    <div className="card">
-        <Accordion>
-            {tabsTask.map((tabTask, index) => {
-                return (
-                    <AccordionTab key={index} header={tabTask.task}>
-                        {
-                            tabTask.questions.map(question => {
-                                const matchAnswer = tabTask.answers.find(answer => answer.question === question._id)
-                                return (<div key={question._id}>
-                                    <p>quesiton:{question.text}</p>
-                                    {matchAnswer && <p>Answer:{matchAnswer.text}</p>}
-                                </div>)
-                            })
-                        }
-                        {/* if there is no feedback */}
-                        {!tabTask.feedback ? (<> <Button onClick={() => setShowInputFeedback(true)}>FeedBack</Button>
-                            {showInputFeedback && <InputText ref={feedbackText} placeholder="your feedback..."></InputText>}
-                            {showInputFeedback && <Button onClick={() => { feedbackText.current.value && keepFeedback(tabTask.userTask_id) }}>
-                                keep</Button>}</> ): (<>
-                            <Button onClick={() => setShowInputFeedback(true)}>update FeedBack</Button>
-                            {/* ??to change the placeholder to realy place */}
-                            {showInputFeedback && <InputText ref={feedbackText} placeholder={`${tabTask.feedback.text}`}></InputText>}
-                            {showInputFeedback && <Button onClick={() => { feedbackText.current.value && updateFeedback(tabTask.feedback._id) }}>
-                                update</Button>}
-                        </>)}
-                    </AccordionTab>)
-            }
-            )}
-        </Accordion>
-    </div>
-</>)
+    if (loading)
+        return (<>Loading...</>)
+
+    return (<>
+        <div className="card">
+            <Accordion>
+                {tabsTask.map((tabTask, index) => {
+                    return (
+                        <AccordionTab key={index} header={tabTask.task}>
+                            {
+                                tabTask.questions.map(question => {
+                                    const matchAnswer = tabTask.answers.find(answer => answer.question === question._id)
+                                    return (<div key={question._id}>
+                                        <p>quesiton:{question.text}</p>
+                                        {matchAnswer && <p>Answer:{matchAnswer.text}</p>}
+                                    </div>)
+                                })
+                            }
+                            {/* if there is no feedback */}
+                            {!tabTask.feedback ? (<> <Button onClick={() => setShowInputFeedback(true)}>FeedBack</Button>
+                                {showInputFeedback && <InputText ref={feedbackText} placeholder="your feedback..."></InputText>}
+                                {showInputFeedback && <Button onClick={() => { feedbackText.current.value && keepFeedback(tabTask.userTask_id) }}>
+                                    keep</Button>}</>) : (<>
+                                        <Button onClick={() => setShowInputFeedback(true)}>update FeedBack</Button>
+                                        {/* ??to change the placeholder to realy place */}
+                                        {showInputFeedback && <InputText ref={feedbackText} placeholder={`${tabTask.feedback.text}`}></InputText>}
+                                        {showInputFeedback && <Button onClick={() => { feedbackText.current.value && updateFeedback(tabTask.feedback._id) }}>
+                                            update</Button>}
+                                    </>)}
+                        </AccordionTab>)
+                }
+                )}
+            </Accordion>
+            <FileExample contentFile={tabsTask} userName={userName}/>
+        </div>
+    </>)
 }
 
 

@@ -22,14 +22,14 @@ app.get('/',(req,res)=>{
 app.use(cors(corsOptions))             
 app.use(express.json())
 app.use(express.static('public'))
-
+              
 //user
 app.use('/user',require('./routes/userRoute'))
 app.use('/course',require('./routes/courseRoute'))
 app.use('/lesson',require('./routes/lessonRoute'))
 app.use('/answer',require('./routes/answerRoute'))
 app.use('/question',require('./routes/questionRoute'))
-app.use('/respond',require('./routes/respondRoute'))
+app.use('/respond',require('./routes/respondRoute'))         
 app.use('/task',require('./routes/taskRoute'))
 app.use('/userCourse',require('./routes/userCourseRouter'))
 app.use('/userTask',require('./routes/userTaskRoute'))

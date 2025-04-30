@@ -35,7 +35,8 @@ const ManagerUsersPage = () => {
 
     const showButtonTasks = (userData) => {
         return <Button label="showTasks" onClick={() =>{navigate('/UserTasks',{state:{
-            user_id:userData._id
+            user_id:userData._id,
+            userName:`${userData.name.firstName} ${userData.name.lastName}`
         }})}}></Button>
     }
     return (<div >

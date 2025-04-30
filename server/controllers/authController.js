@@ -32,7 +32,6 @@ const register = async (req, res) => {
         return res.status(200).send('you succeed register for addition course')
 
     }
-
     const hashedPwd = await bcrypt.hash(password, 10)
 
     const user = await User.create({ username, password: hashedPwd, name: { firstName: firstName, lastName: lastName }, email, phone })
@@ -46,7 +45,18 @@ const register = async (req, res) => {
     else
         return res.status(400).send('invalid user recieved')
 }
+const registerManager=async(req,res)=>{
+    const { username, password, firstName, lastName, email, phone } = req.body
+    const hashedPwd = await bcrypt.hash(password, 10)
 
+    const user = await User.create({ username, password: hashedPwd, name: { firstName: firstName, lastName: lastName }, email, phone })
+    if (user) {    
+        return res.status(200).send('new user created')
+    }
+
+    else
+        return res.status(400).send('invalid user recieved')
+}
 
 const login = async (req, res) => {
 
@@ -108,4 +118,4 @@ const loginManager = async (req, res) => {
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
     res.json({ accessToken: accessToken })
 }
-module.exports = { login, register, loginManager }
+module.exports = { login, register, loginManager,registerManager }
