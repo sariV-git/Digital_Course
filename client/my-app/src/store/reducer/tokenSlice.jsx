@@ -10,10 +10,11 @@ export const tokenSlice = createSlice({
     reducers: {
       setToken: (state,action) => {
         const {accessToken}=action.payload;
-        console.log(accessToken);
+        console.log("the token in the store: ",accessToken);
         state.token = accessToken;
       },
-      logOut: (state,action) => {
+      logOut: (state) => {
+        console.log("clean the token");       
         state.token = null;
         state.isManager=false
       },

@@ -11,7 +11,7 @@ import LessonList from './components/LessonList';
 import { Route, Routes } from 'react-router-dom';
 import CourseIntroduce from './components/CourseIntroduce';
 import Lesson from './components/Lesson';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TemplateDemo from './components/Menubar';
 import IntroduceUsers from './components/forIntroduceUsers';
 import CourseCard from './components/fixedCardsPage';
@@ -34,9 +34,16 @@ import ManagerSetResponds from './components/ManagerSetResponds';
 import UserTask from './components/UserTask'
 import UserTasks from './components/UserTasks';
 import FileExample from './components/File';
+import { useSelector } from 'react-redux';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
+  const token = useSelector((state) => state.token.token);
+
+  useEffect(() => {
+    console.log('Token after rehydration:', token); // Debug log
+  }, [token]);
+ 
 
   return (
     <div >
