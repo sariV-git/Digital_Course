@@ -23,18 +23,21 @@ const RespondsAccordingCourse = (props) => {
     useEffect(
         () => { loadResponds() }
         , [])
+        
     return (<>
         {load ? <>Loading...</> : <>
             {responds.map(respond => {
                 return (
 
-                    <div key={respond._id} className="card">
+                    <div key={respond._id} className="card" style={{ width: '50%', marginBottom: '10px' }}>
+                        <div className="card-header" style={{ backgroundColor: '#f8f9fa' }}>
                         <Card>
-                            <h4>{respond.username} :שם</h4>
+                            <h4> שם: {respond.username}</h4>
                             <p className="m-0">
-                                {respond.text} :תגובה
+                                {respond.text} 
                             </p>
                         </Card>
+                    </div>
                     </div>
                 )
             })}
