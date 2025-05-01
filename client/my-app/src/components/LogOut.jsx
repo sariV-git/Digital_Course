@@ -20,10 +20,9 @@ const LogOut = () => {
         dispatch(setLesson({newLesson:null}))
         dispatch(setCourse({newCourse:null}))
    const persistor=persistStore(store)
-   await persistor.purge()
+   await persistor.purge()//??realy need it??
    await persistor.flush()
-   localStorage.clear()
-
+   localStorage.clear()//??can remove it ??
     }
 
     useEffect(() => {

@@ -45,6 +45,7 @@ const CourseIntroduce = () => {
     //this function check if the user is already did login and relate to this specific course
     const checkIfUserActive = async () => {//only for user
         if (belongToTheCourses) {
+            
             console.log('the id of the courses which this user is registered', belongToTheCourses);
             const specificCourse = belongToTheCourses.find(courseId =>
                 course._id == courseId
@@ -99,7 +100,6 @@ const CourseIntroduce = () => {
         }
         const loadAll = async () => {
             loadSpeeker();//load the speaker
-
             if (isManager) {
                 optionForManager()
 
@@ -112,6 +112,8 @@ const CourseIntroduce = () => {
     }, [])
 
     useEffect(() => {
+        console.log("at the second useEffect --userActiveInThisCourse ",userActiveInThisCourse);
+        
         if (userActiveInThisCourse) {
             handleLogOutAction()
         }
