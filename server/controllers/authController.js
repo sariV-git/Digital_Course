@@ -81,7 +81,7 @@ const login = async (req, res) => {
     //to check if the course is exist in this user:
     if (foundUser.role == 'User') {
         const userscourses = await UserCourse.find({ user: foundUser._id })
-        const course_i = userscourses.filter(uc =>
+        const course_i = userscourses.filter(uc =>   
             uc.course == course && uc.active
         )
         if (course_i.length == 0)
@@ -92,10 +92,10 @@ const login = async (req, res) => {
     const userInfo = { _id: foundUser._id, name: foundUser.name, role: foundUser.role, username: foundUser.username, email: foundUser.email, phone: foundUser.phone }
 
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
-    return res.json({ accessToken: accessToken, success: true, role: foundUser.role ,user:foundUser})
+    return res.json({ accessToken: accessToken, success: true, role: foundUser.role ,user:userInfo})
 }
 
-
+//??can remove this function??
 const loginManager = async (req, res) => {
     const { username, password } = req.body
 

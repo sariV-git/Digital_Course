@@ -72,4 +72,15 @@ const getAccordingIntroduce=async(req,res)=>{
 return res.json(responds)
 }
 
-module.exports={createRespond,updateRespond,deleteRespond,getAccordingIntroduce,getAllRespondsAccordingCourse}
+
+const getAccordingUserAndCourse=async(req,res)=>{
+    const {course_id,user_id}=req.params
+    if(!course_id||!user_id)
+        return res.status(400).send('missing course_id or user_id in get accordingUserAndCourse')
+    const respond=await Respond.findOne({course:course_id,user:user_id})
+    if(!respond)
+        return res.status(400).send('there is no match respond in get accordingUserAndCourse')
+    return res.json(respond).status(200)//if there is respond add the option of updating the respond??
+}
+
+module.exports={getAccordingUserAndCourse,createRespond,updateRespond,deleteRespond,getAccordingIntroduce,getAllRespondsAccordingCourse}

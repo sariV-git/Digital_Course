@@ -6,7 +6,7 @@ import { Card } from "primereact/card"
 import { InputText } from "primereact/inputtext"
 import { MultiSelect } from 'primereact/multiselect';
 import { Button } from "primereact/button"
-
+// import '../DisignPages/TaskPage.css'
 import { RadioButton } from "primereact/radiobutton";
 
 const Task = () => {
@@ -162,32 +162,115 @@ const Task = () => {
     //   })}</>) 
 
   }
+  // return (
+  //   <>
+  //     {load ?
+  //       (<>Loading...</>) : <>
+
+  //         {currentQuestion &&
+  //           <Card>
+
+  //             <p>{currentQuestion.text}</p>
+
+  //             {
+  //               currentQuestion.type == 'American' ? <>choose the correct answer:
+  //                 {
+  //                   showAmericanQuestion(currentQuestion.options)
+  //                 }
+  //                 <Button onClick={keepAnswer}>keep american answer</Button>
+  //               </> : <>
+
+  //                 <InputText ref={answer} type="text" className="p-inputtext-lg" placeholder="your answer" />
+  //                 {<Button onClick={() => { keepAnswer() }}>keep</Button>}</>}
+  //             <></>
+  //           </Card>
+  //         }
+  //       </>}
+
+  //   </>)
+
+  // const handleKeyPress = async(event) => {
+  //   if (event.key === "Enter") {
+  //    await keepAnswer();
+  //   }
+  
   return (
-    <>
-      {load ?
-        (<>Loading...</>) : <>
+    <div>
+    <div className="flex justify-content-center align-items-center h-screen bg-light-purple">
+      {load ? (
+        <>Loading...</>
+      ) : (
+        <>
+          {currentQuestion && (
+            <Card
+              className="p-4 shadow-3"
+              style={{
+                width: "40rem",
+                borderRadius: "10px",
+                border: "1px solid #D8BFD8",
+                textAlign: "center",
+              }}
+            >
+              {/* Question Text */}
+              <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#8B008B" }}>
+                {currentQuestion.text}
+              </p>
 
-          {currentQuestion &&
-            <Card>
-
-              <p>{currentQuestion.text}</p>
-
-              {
-                currentQuestion.type == 'American' ? <>choose the correct answer:
-                  {
-                    showAmericanQuestion(currentQuestion.options)
-                  }
-                  <Button onClick={keepAnswer}>keep american answer</Button>
-                </> : <>
-
-                  <InputText ref={answer} type="text" className="p-inputtext-lg" placeholder="your answer" />
-                  {<Button onClick={() => { keepAnswer() }}>keep</Button>}</>}
-              <></>
+              {/* American Question Options */}
+              {currentQuestion.type === "American" ? (
+                <>
+                  <p style={{ fontSize: "1.2rem", color: "#8B008B" }}>
+                    Choose the correct answer:
+                  </p>
+                  <div className="options-container">{showAmericanQuestion(currentQuestion.options)}</div>
+                  <Button
+                   onClick={keepAnswer}
+                    label="Keep American Answer"
+                    style={{
+                      backgroundColor: "#8B008B",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      marginTop: "1rem",
+                    }}
+                  />
+                </>
+              ) : (
+                // Regular Question Input
+                <>
+                  <InputText
+                    ref={answer}
+                    type="text"
+                    className="p-inputtext-lg"
+                    placeholder="Your answer"
+                    style={{
+                      borderColor: "#D8BFD8",
+                      borderRadius: "8px",
+                      width: "100%",
+                      marginBottom: "1rem",
+                    }}
+                  //  onKeyDown={handleKeyPress} // Automatically trigger on Enter
+                  />
+                  <Button
+                    label="Keep"
+                    onClick={keepAnswer}
+                    style={{
+                      backgroundColor: "#8B008B",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      width: "100%",
+                    }}
+                  />
+                </>
+              )}
             </Card>
-          }
-        </>}
-
-    </>)
+          )}
+        </>
+      )}
+      </div>
+    </div>
+  );
 }
 
 export default Task

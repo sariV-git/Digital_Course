@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
@@ -11,6 +10,7 @@ import TryIt from "./TryIt";
 import { useEffect, useState, useRef } from "react";
 import { Toast } from 'primereact/toast';
 import RespondUser from "./respondUser";
+import { setUser } from "../store/reducer/userSlice";
 
 const LessonList = () => {
     const dispatch = useDispatch();
@@ -18,7 +18,8 @@ const LessonList = () => {
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true)
     const [finishCourse, setFinishCourse] = useState(false)
-    const [user, setUser] = useState()//??avoid all the request by params??
+    const user=useSelector(state=>state.user.user)
+    // const [user, setUser] = useState()//??avoid all the request by params??
     const token = useSelector((state) => state.token.token);
     const isManager = useSelector((state) => state.token.isManager);
     const course = useSelector(state => state.course.course);
@@ -26,6 +27,7 @@ const LessonList = () => {
     const toast = useRef(null); // For showing Toast messages
     const [showTask, setShowTask] = useState(false)
     const [feedbackMap, setFeedbackMap] = useState({})
+   const [createdRespond,setCreatedRespond]=useState(false)
 
     const fetchFeedbacks = async (lessonsFromLoad) => {
         try {
@@ -60,11 +62,8 @@ const LessonList = () => {
                                 Authorization: `Bearer ${token}`
                             }
                         })
-                        console.log('feedbackResponse', feedbackResponse);
 
                         if (feedbackResponse.data) {
-                            console.log('feedbackResponse', feedbackResponse);
-
                             feedbacks[lesson._id] = feedbackResponse.data.text || 'no feedback'
                         }
                         else {
@@ -108,11 +107,25 @@ const LessonList = () => {
             setLessons(response.data.lessons);//to set another lessons
             setFinishCourse(response.data.finish)//to know if i need intoduce an respond of user
             if (response.data.lessons.length > 0) {
-                console.log('go to fetchfeedback');
+               
+               
                 fetchFeedbacks(response.data.lessons)
             }
 
+            if(response.data.finish)//if the user already see all the lesson
+            {
+                try {
+                   const respondUser=await axios.get(`http://localhost:5000/respond/accordingCourseAndUser/${course._id}/${user._id}`,{headers:{
+                    Authorization:`Bearer ${token}`
+                }}) 
 
+                console.log("there is already respond ",respondUser.data);
+                setCreatedRespond(true)
+                
+                } catch (error) {
+                    console.log("the user didnt create respond",error);                  
+                }
+            }
 
 
 
@@ -124,6 +137,8 @@ const LessonList = () => {
     };
 
     useEffect(() => {
+        console.log("user from the store in lessons list: ",user, "and course : ",course);
+        
         loadData();
     }, []);
 
@@ -240,8 +255,6 @@ const LessonList = () => {
     };
 
     const showFeedback = (rowData) => {
-        console.log('feedbackMap', feedbackMap);
-
         return <span>{feedbackMap[rowData._id] || 'Loading...'}</span>
     }
     return (
@@ -278,8 +291,7 @@ const LessonList = () => {
                         />
                     )}
                 </div>
-                {finishCourse && <Button onClick={() => { navigate('/respondUser', { state: { user: user._id, course: course._id } }) }}>your respond</Button>}
-
+                {(finishCourse&&!createdRespond) && <Button onClick={() => { navigate('/Respond') }}>your respond</Button>}
             </>
             )}
         </>

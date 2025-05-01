@@ -12,5 +12,6 @@ router.put('/',verifyJWTuser,respondController.updateRespond)
 router.delete('/:_id',verifyJWTmanager,respondController.deleteRespond)
 router.get('/getAccordingIntroduceAndCourse/:course',respondController.getAccordingIntroduce)
 router.get('/accordingCourse/:course',verifyJWTmanager,respondController.getAllRespondsAccordingCourse)
+router.get('/accordingCourseAndUser/:course_id/:user_id',verifyJWTuser,respondController.getAccordingUserAndCourse)
 
 module.exports=router  

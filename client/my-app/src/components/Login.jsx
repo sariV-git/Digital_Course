@@ -50,6 +50,8 @@ const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
 
     try {
       const res = await axios.post('http://localhost:5000/auth/login', { username, password,course:course?course._id:null})
+      console.log("the user after do the login: ",res.data.user);
+      dispatch(setUser({newUser:res.data.user}))
       if (res.data.role != 'Admin')
         fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
       
@@ -70,7 +72,6 @@ const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
     catch (e) {
       navigate('/Register')
       console.log('error in login user', e); 
-
       //mabye do here belongtothecourse = null??
     }
   }

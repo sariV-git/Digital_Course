@@ -6,18 +6,18 @@ const FileExample = (props) => {
     const[contentFileReady,setContentFileReady]=useState("")
     const[loading,setLoading]=useState(true)
     useEffect(() => {
-
+          console.log("the content of the file: ",contentFile);
+          
         const readyContent = contentFile.map(userTask => {
             // console.log('the name of the task: \n',userTask.task);
             let sentence =""
-            const line=userTask.questions.map(question => {
+            userTask.questions.forEach(question => {
                 sentence += `question-${question.text}? \n`
                 const matchAnswer = userTask.answers.find(answer => answer.question === question._id)
                 sentence += `answer-${matchAnswer?.text}\n\n`
                 // console.log("the question and the answer:  \n",sentence);
-                return sentence
             })
-            return `the name of the task:'${userTask.task}\n\n`+line
+            return `the name of the task:'${userTask.task}\n\n`+sentence
         })
 
         console.log('the array: ', readyContent);

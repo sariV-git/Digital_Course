@@ -12,7 +12,7 @@ const LogOut = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const  actionsDoInLogOut = async() => {
+    const  actionsDoInLogOut = () => {
         dispatch(setUser({ newUser: null }))
         dispatch(setBelongToTheCourses({ newItems: [] }))
         dispatch(logOut())
@@ -20,9 +20,7 @@ const LogOut = () => {
         dispatch(setLesson({newLesson:null}))
         dispatch(setCourse({newCourse:null}))
    const persistor=persistStore(store)
-   await persistor.purge()//??realy need it??
-   await persistor.flush()
-   localStorage.clear()//??can remove it ??
+
     }
 
     useEffect(() => {

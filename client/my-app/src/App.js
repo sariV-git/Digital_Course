@@ -35,6 +35,7 @@ import UserTask from './components/UserTask'
 import UserTasks from './components/UserTasks';
 import FileExample from './components/File';
 import { useSelector } from 'react-redux';
+import Respond from './components/Respond';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
         <Route path='/ManagerSetResponds' element={<ManagerSetResponds />} />
         <Route path='/UserTask'element={<UserTask/>}/>
         <Route path='/UserTasks'element={<UserTasks/>}/>
+        <Route path='/Respond'element={<Respond/>}/>
       </Routes>
     </div>
   );
