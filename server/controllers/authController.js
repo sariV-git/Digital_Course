@@ -59,9 +59,9 @@ const registerManager=async(req,res)=>{
 }
 
 const login = async (req, res) => {
-
-    const { username, password, course } = req.body
-    console.log({ username, password, course })
+//here i want to return for the user all the courses which he belong to
+    const { username, password } = req.body
+    console.log({ username, password })
     if (!username || !password)
         return res.status(400).json({ success: false })
 
@@ -70,7 +70,7 @@ const login = async (req, res) => {
 
     if (!foundUser)
         return res.status(401).json({ success: false })
-
+                     
 
     const match = await bcrypt.compare(password, foundUser.password)
     if (!match)
@@ -79,24 +79,26 @@ const login = async (req, res) => {
     //we need check if this user is already find in this specific course and his active equal true
 
     //to check if the course is exist in this user:
-    if (foundUser.role == 'User') {
         const userscourses = await UserCourse.find({ user: foundUser._id })
-        const course_i = userscourses.filter(uc =>   
-            uc.course == course && uc.active
-        )
-        if (course_i.length == 0)
-            return res.status(401).json({ success: false })
-    }
+
+        const belongToTheCourses=userscourses.map(userCourse=>userCourse.course)
+        // const course_i = userscourses.filter(uc =>   
+        //     uc.course == course && uc.active
+        // )
+    //     if (course_i.length == 0)
+    //         return res.status(401).json({ success: false })//can remove it meyutar???
+    
     //relate to the token
 
     const userInfo = { _id: foundUser._id, name: foundUser.name, role: foundUser.role, username: foundUser.username, email: foundUser.email, phone: foundUser.phone }
 
     const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN)
-    return res.json({ accessToken: accessToken, success: true, role: foundUser.role ,user:userInfo})
-}
+    return res.json({ accessToken: accessToken, success: true, role: foundUser.role ,user:userInfo,belongToTheCourses:belongToTheCourses})//treat at it??
 
+}
 //??can remove this function??
 const loginManager = async (req, res) => {
+    
     const { username, password } = req.body
 
     if (!username || !password)

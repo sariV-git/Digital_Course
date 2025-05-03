@@ -15,33 +15,33 @@ const Login = () => {
   const location = useLocation()
   const course = useSelector(state => state.course.course)
   const navigate = useNavigate();
-  const token = useSelector(state => state.token.token)
+  // const token = useSelector(state => state.token.token)
   const dispatch = useDispatch()
   
  
-const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
-    try {
-      const res = await axios.get(`http://localhost:5000/userCourse/accordingUser/${user._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`//because only user can get all the courseuser by user
-        }
-      })
-      console.log('usercourse of the user--see in the data',res);
+// const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
+//     try {
+//       const res = await axios.get(`http://localhost:5000/userCourse/accordingUser/${user._id}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`//because only user can get all the courseuser by user
+//         }
+//       })
+//       console.log('usercourse of the user--see in the data',res);
       
-      const usercourses = res.data
-      if (usercourses) {//all the courses which the user belong to
-         const arrayWithIdOfCoursesUserBelong = usercourses.map(usercourse => {
-          return usercourse.course
-        })
-        console.log('arrayWithIdOfCoursesUserBelong',arrayWithIdOfCoursesUserBelong);
-        dispatch(setBelongToTheCourses({ newItems: arrayWithIdOfCoursesUserBelong }))
-      }
-      else
-        console.log('usercourses', usercourses);
-    } catch (error) {
-      console.log('error', error);
-    }
-  }
+//       const usercourses = res.data
+//       if (usercourses) {//all the courses which the user belong to
+//          const arrayWithIdOfCoursesUserBelong = usercourses.map(usercourse => {
+//           return usercourse.course
+//         })
+//         console.log('arrayWithIdOfCoursesUserBelong',arrayWithIdOfCoursesUserBelong);
+//         dispatch(setBelongToTheCourses({ newItems: arrayWithIdOfCoursesUserBelong }))
+//       }
+//       else
+//         console.log('usercourses', usercourses);
+//     } catch (error) {
+//       console.log('error', error);
+//     }
+//   }
 
   const loginUser = async (data) => {
 
@@ -49,11 +49,14 @@ const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
     const password = data.password
 
     try {
-      const res = await axios.post('http://localhost:5000/auth/login', { username, password,course:course?course._id:null})
+      const res = await axios.post('http://localhost:5000/auth/login', { username, password})
       console.log("the user after do the login: ",res.data.user);
+      console.log("the courses which the user belong: ",res.data.belongToTheCourses);
+      
       dispatch(setUser({newUser:res.data.user}))
-      if (res.data.role != 'Admin')
-        fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
+      dispatch(setBelongToTheCourses({newItems:res.data.belongToTheCourses}))
+      // if (res.data.role != 'Admin')             
+      //   fillArrayWithIdOfCoursesUserBelong(res.data.user, res.data.accessToken)
       
       dispatch(setToken(res.data))
       //to cancel the option that the login return user      
@@ -66,7 +69,7 @@ const fillArrayWithIdOfCoursesUserBelong = async (user, token) => {
       dispatch(setIsManager(false))//can remove it??
 
       //  navigate('/IntroduceCourse',{state:{course:course}})
-    navigate('/CourseIntroduce', { state: { course: course } })
+    navigate('/')
 
     }
     catch (e) {

@@ -11,33 +11,34 @@ const Home = () => {
 
     // const navigate = useNavigate()
 
-    const [courses, setCourses] = useState([]);
+    // const [courses, setCourses] = useState([]);
 
-    const getCourses = async () => {
-        try {
-            const res = await axios.get('http://localhost:5000/course')
-            if (res.status == 200) {
-                {
-                    // console.log("res.data",res.data);
-                    console.log("res",res);
-                    setCourses(res.data)
-                    console.log("corses",courses);
-                }
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    // const getCourses = async () => {
+    //     try {
+    //         const res = await axios.get('http://localhost:5000/course')
+    //         if (res.status == 200) {
+    //             {
+    //                 // console.log("res.data",res.data);
+    //                 console.log("res",res);
+    //                 setCourses(res.data)
+    //                 console.log("corses",courses);
+    //             }
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
-    useEffect(() => {
-        getCourses()
-    }, [])
+    // useEffect(() => {
+    //     getCourses()
+    // }, [])
 
 
     return (<>
-    <Nav/>
+    {/* <Nav/>
         {courses.length === 1 ? <CourseIntroduce course={courses[0]} /> : <CoursesPage courses={courses} />}
-        Home
+        Home */}
+        <CoursesPage/>
     </>)
 }
 

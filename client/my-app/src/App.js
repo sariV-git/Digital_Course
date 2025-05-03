@@ -36,6 +36,8 @@ import UserTasks from './components/UserTasks';
 import FileExample from './components/File';
 import { useSelector } from 'react-redux';
 import Respond from './components/Respond';
+import MyCoursesPage from './components/UltraCode';
+import Edit from './components/Edit';
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -44,7 +46,7 @@ function App() {
   useEffect(() => {
     console.log('Token after rehydration:', token); // Debug log
   }, [token]);
- 
+
 
   return (
     <div >
@@ -52,6 +54,8 @@ function App() {
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
       <TemplateDemo />
+      {/* <Edit/> */}
+      {/* <MyCoursesPage/> */}
       {/* <FileExample/> */}
       {/* <ChooseVideo/> */}
       {/* <CoursesPage/---put in the menubar */}
@@ -59,7 +63,9 @@ function App() {
       {/* <CourseCard/> for the page of all the courses and not take the fixed */}
       {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
-    {/* need do a homepage??--if there is only one course automally it pass to this course and if there is more automally he go to the many courses--coursePage */}
+        {/* need do a homepage??--if there is only one course automally it pass to this course and if there is more automally he go to the many courses--coursePage */}
+
+        <Route path='/' element={<Home />} />
         <Route path='/LessonVideo' element={<LessonVideo />} />
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />
@@ -68,7 +74,7 @@ function App() {
         <Route path='/Register' element={<Register />} />
         <Route path='/Task' element={<Task />} />
         <Route path='/IntroduceCourse' element={<CourseIntroduce />} />
-        <Route path='/CoursesPage' element={<CoursesPage />} />
+        {/* <Route path='/CoursesPage' element={<CoursesPage />} /> */}
         <Route path='/ManagerAddLesson' element={<ManagerAddLesson />} />
         <Route path='/ManagerAddTask' element={<ManagerAddTask />} />
         <Route path='/ManagerAddQuestions' element={<ManagerAddQuestions />} />
@@ -78,9 +84,9 @@ function App() {
         <Route path='/LogOut' element={<LogOut />} />
         <Route path='/respondUser' element={<RespondUser />} />
         <Route path='/ManagerSetResponds' element={<ManagerSetResponds />} />
-        <Route path='/UserTask'element={<UserTask/>}/>
-        <Route path='/UserTasks'element={<UserTasks/>}/>
-        <Route path='/Respond'element={<Respond/>}/>
+        <Route path='/UserTask' element={<UserTask />} />
+        <Route path='/UserTasks' element={<UserTasks />} />
+        <Route path='/Respond' element={<Respond />} />
       </Routes>
     </div>
   );

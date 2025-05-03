@@ -20,12 +20,11 @@ const LogOut = () => {
         dispatch(setLesson({newLesson:null}))
         dispatch(setCourse({newCourse:null}))
    const persistor=persistStore(store)
-
     }
 
     useEffect(() => {
         actionsDoInLogOut()
-        navigate('/CoursesPage')
+        navigate('/')
     }, [])
     return (<>
     </>)

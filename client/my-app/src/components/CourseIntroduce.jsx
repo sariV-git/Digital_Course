@@ -88,6 +88,8 @@ const CourseIntroduce = () => {
 
 
     useEffect(() => {
+        console.log("the course you want to enter ",course);
+        
         console.log('the user belong to the courses: ', belongToTheCourses);
         dispatch(setCourse({ newCourse: course }))
         //here need to use with useSelector to update the course
