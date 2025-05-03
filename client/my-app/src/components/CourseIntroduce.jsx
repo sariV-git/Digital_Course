@@ -8,6 +8,7 @@ import { Button } from 'primereact/button';
 // import { useNavigate } from 'react-router-dom';
 import { setItemsInTheMenubar } from '../store/reducer/itemsInTheMenubarSlice';
 import RespondsAccordingCourse from './RespondsAccordingCourse';
+import LessonVideo from './LessonVideo';
 
 const CourseIntroduce = () => {
 
@@ -133,7 +134,7 @@ const CourseIntroduce = () => {
 
     return (
         <>
-            <div className="flex flex-column align-items-center justify-content-center min-h-screen">
+            <div className="flex flex-column align-items-center justify-content-center min-h-screen"   >
                 {/* <div className="flex flex-column align-items-center justify-content-center min-h-screen"> */}
                 {/* ?? i want that the loading will include all the things he can */}
                 {loading ? <>Loading...</> : <>
@@ -145,34 +146,50 @@ const CourseIntroduce = () => {
                     {course &&
                         <div className='flex h-screen w-screen bg-gray-100' style={{
                             textAlign: 'center', display: 'flex',
-                            justifyContent: 'center',
+                            justifyContent: 'center'
                         }}>
-                            <div className="w-1/3 h-full">
-                                {/* <LessonVideo path={course.pathTriler} /> */}
-                            </div>
-                            <div className="w-2/3 p-10 flex items-center justify-center">
+                            {/* <div className="w-1/3 h-full">
+                                { <LessonVideo path={course.pathTriler} /> }
+                            </div> */}
+                            {/* <div className="w-2/3 p-10 flex items-center justify-center" > */}
 
-                                <Card title={course.name} subTitle={course.information} footer={footer}
-                                    className="w-full max-w-3xl shadow-2xl">
-                                    <h4 className="text-gray-700 mb-4">
-                                        מרצה: {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}
-                                    </h4>
-                                    {/* about the course:{course.information} */}
-                                    {speakerInformation && <p>אודות המרצה: {speakerInformation.informationOnSpeaker}</p>}
-                                    {<br></br>}
-                                    <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >לצפיה בטרילר</Link>
-                                    {<br></br>}
-                                    <br></br>
-                                    {(userActiveInThisCourse || isManager) ? <></> : <Button label="לכניסה" text raised onClick={() => navigate('/Login')} style={{margin:"10px"}}/>}
+                            <Card title={<div style={{ display: "flex", alignItems: "center", justifyContent: "center",marginTop:"20px" }}>
+                                <span style={{ marginRight: "10px" }}>{course.name}</span>
+                                <div
+                                    style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "30%",
+                                        backgroundImage: `url(http://localhost:5000/upload/${course.backgroundImage})`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center"
+                                    }}
+                                ></div>
+                            </div>} subTitle={course.information} footer={footer}
+                                className="shadow-2xl" style={{ width: "92%", margin: "0 auto", overflow: "hidden", backgroundColor: "rgba(252, 237, 253, 0.3)"  }}>
 
-                                    {(userActiveInThisCourse || isManager) ? <Button label="לצפיה בשיעורים" text raised onClick={() => navigate('/LessonsList')} /> : <Button label="להרשמה" text raised onClick={() => navigate('/Register')} style={{margin:"10px"}} />}
-                                    {/* {(userActiveInThisCourse || isManager)?<Button label="לצפיה בשיעורים" text raised  onClick={() => navigate('/LessonsList')}/>:<></>} */}
-                                    <span style={{ textAlign: "left", display: "block", marginLeft: "auto", marginRight: "auto", width: "60%" }}><h3>:תגובות של משתתפים בקורס</h3></span>
-
-                                    <br></br>
+                                <h4 /*className="text-gray-700 mb-4"*/>
+                                    מרצה: {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}
+                                </h4>
+                                {/* about the course:{course.information} */}
+                                {speakerInformation && <p style={{marginLeft:"10%",marginRight:"10%"}}> <span  style={{fontWeight: "bold" }}> אודות המרצה: </span>{speakerInformation.informationOnSpeaker}</p>}
+                                {<br></br>}
+                                <Link to={'/LessonVideo'} state={{ path: course.pathTriler }} >לצפיה בטרילר</Link>
+                                {<br></br>}
+                                <br></br>
+                                {(userActiveInThisCourse || isManager) ? <></> : <Button label="לכניסה" text raised onClick={() => navigate('/Login')} style={{ margin: "10px" }} />}
+                                {(userActiveInThisCourse || isManager) ? <Button label="לצפיה בשיעורים" text raised onClick={() => navigate('/LessonsList')} /> : <Button label="להרשמה" text raised onClick={() => navigate('/Register')} style={{ margin: "10px" }} />}
+                                <span style={{ textAlign: "left", display: "block", marginLeft: "auto", marginRight: "auto", width: "60%" }}><h3>:תגובות של משתתפים בקורס</h3></span>
+                                <br></br>
+                                {/* <div className="w-1/3 h-full">
+                                { <LessonVideo path={course.pathTriler} /> }
+                            </div> */}
+                                <div style={{ maxHeight: "300px", overflowY: "auto" }}>
                                     <RespondsAccordingCourse course={course} />
-                                </Card>
-                            </div>
+                                </div>
+                                 
+                            </Card>
+                            {/* </div> */}
                         </div>}
                     {/* {userActiveInThisCourse ? <Link to={'/LessonsList'}>see the lessons</Link> : <>nothing</>} */}
                     {/* // setItemsInTheMenubar({newItems:[{ label: 'LogIn' },{label:'HomePage'}]})} */}
