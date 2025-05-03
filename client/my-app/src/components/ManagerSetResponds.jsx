@@ -85,9 +85,9 @@ const ManagerSetResponds = () => {
 
     return (<>{loadData ? <>Loading...</> :
         <> {responds.map(respond => {
-            return (<Card key={respond._id}><p>respond: {respond.text}</p>
-                <p>username: {respond.username}</p>
-                <>{respond.introduce ? <Button key={respond._id} label="don't show me" severity="danger" onClick={() => { hideRespond(respond) }} /> : <Button severity="success" label="show me" onClick={() => showRespond(respond)} />}</>
+            return (<Card key={respond._id} style={{textAlign:"right"}}><p> תגובה: {respond.text}</p>
+                <p>שם:  {respond.username}</p>
+                <>{respond.introduce ? <Button key={respond._id} label="לא להציג" severity="danger" onClick={() => { hideRespond(respond) }} /> : <Button severity="success" label="להציג" onClick={() => showRespond(respond)} />}</>
             </Card>)
         })}
 
