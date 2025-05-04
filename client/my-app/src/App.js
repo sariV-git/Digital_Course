@@ -38,6 +38,7 @@ import { useSelector } from 'react-redux';
 import Respond from './components/Respond';
 import MyCoursesPage from './components/UltraCode';
 import Edit from './components/Edit';
+
 // import IntroduceLesson from './components/forIntroduceLesson';
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
       <TemplateDemo />
+   
       {/* <Edit/> */}
       {/* <MyCoursesPage/> */}
       {/* <FileExample/> */}

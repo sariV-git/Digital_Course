@@ -5,6 +5,9 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Respond() {
 
@@ -14,6 +17,7 @@ export default function Respond() {
     const [respondText, setRespondText] = useState('');
     const username = useRef(null);
     const [insertRespond, setInsertRespond] = useState(false);
+    const navigate = useNavigate()
     
     const saveRespond = async () => {
         const respondToCreate={
@@ -29,7 +33,7 @@ export default function Respond() {
                 }
             })
             console.log("succeed create respond" ,resRespond);
-            
+            navigate('/LessonsList')
 
         } catch (error) {
             console.log("an error with keeping respond",error);

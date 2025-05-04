@@ -26,11 +26,11 @@ const RespondsAccordingCourse = (props) => {
         
     return (<>
         {load ? <>Loading...</> : <>
+            {responds?<span style={{ textAlign: "left", display: "block", marginLeft: "auto", marginRight: "auto", width: "60%" }}><h3>:תגובות של משתתפים בקורס</h3></span>:<></>}
             {responds.map(respond => {
                 return (
-
-                    <div key={respond._id} className="card" style={{ width: '50%', marginBottom: '10px' }}>
-                        <div className="card-header" style={{ backgroundColor: '#f8f9fa' }}>
+                    <div key={respond._id} className="card" style={{ width: '35%', marginBottom: '10px'}}>
+                        {/* <div className="card-header" style={{ backgroundColor: '#f8f9fa' }}> */}
                         <Card>
                             <h4> שם: {respond.username}</h4>
                             <p className="m-0">
@@ -38,7 +38,7 @@ const RespondsAccordingCourse = (props) => {
                             </p>
                         </Card>
                     </div>
-                    </div>
+                    // </div>
                 )
             })}
         </>}

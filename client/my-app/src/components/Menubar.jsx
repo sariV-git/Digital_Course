@@ -221,7 +221,7 @@ const TemplateDemo = () => {
       if (location.pathname === "/CourseIntroduce") {
         setMenuItems([
           { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
-          { template: () => <Edit /> },
+          { label:"edit",template: () => <Edit /> },
           { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage") },
         ]);
       } else if (location.pathname === "/") {

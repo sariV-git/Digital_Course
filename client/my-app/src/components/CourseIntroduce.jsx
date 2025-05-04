@@ -36,12 +36,13 @@ const CourseIntroduce = () => {
     }
 
     //??put him more down at the code
-    const footer = (<>
-        {course && <>
-            {(userActiveInThisCourse || isManager) && <><Link to="/LessonsList">לצפיה בשיעורים</Link></>}
-            {/* to check if the user is already registered to this course then bring him to enter else to register */}
-        </>}
-    </>
+    const footer = (<></>
+    // <>
+    //     {course && <>
+    //         {(userActiveInThisCourse || isManager) && <><Link to="/LessonsList">לצפיה בשיעורים</Link></>}
+    //         {/* to check if the user is already registered to this course then bring him to enter else to register */}
+    //     </>}
+    // </>
     );
 
 
@@ -155,7 +156,7 @@ const CourseIntroduce = () => {
                             </div> */}
                             {/* <div className="w-2/3 p-10 flex items-center justify-center" > */}
 
-                            <Card title={<div style={{ display: "flex", alignItems: "center", justifyContent: "center",marginTop:"20px" }}>
+                            <Card title={<div style={{ display: "flex", alignItems: "center", justifyContent: "center",marginTop:"5%" }}>
                                 <span style={{ marginRight: "10px" }}>{course.name}</span>
                                 <div
                                     style={{
@@ -181,12 +182,12 @@ const CourseIntroduce = () => {
                                 <br></br>
                                 {(userActiveInThisCourse || isManager) ? <></> : <Button label="לכניסה" text raised onClick={() => navigate('/Login')} style={{ margin: "10px" }} />}
                                 {(userActiveInThisCourse || isManager) ? <Button label="לצפיה בשיעורים" text raised onClick={() => navigate('/LessonsList')} /> : <Button label="להרשמה" text raised onClick={() => navigate('/Register')} style={{ margin: "10px" }} />}
-                                <span style={{ textAlign: "left", display: "block", marginLeft: "auto", marginRight: "auto", width: "60%" }}><h3>:תגובות של משתתפים בקורס</h3></span>
+                                {/* <span style={{ textAlign: "left", display: "block", marginLeft: "auto", marginRight: "auto", width: "60%" }}><h3>:תגובות של משתתפים בקורס</h3></span> */}
                                 <br></br>
                                 {/* <div className="w-1/3 h-full">
                                 { <LessonVideo path={course.pathTriler} /> }
                             </div> */}
-                                <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                <div style={{ maxHeight: "350px", overflowY: "auto" }}>
                                     <RespondsAccordingCourse course={course} />
                                 </div>
                                  
