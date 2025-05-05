@@ -8,11 +8,10 @@ const path = require('path')
 
 //create
 const createLesson = async (req, res) => {
-
     const { name, course, numOfLesson } = req.body
     const path = req.file.filename
     if (!name || !course || !path || !numOfLesson)
-        return res.status(400).send('error in create lesson video')
+        return res.status(400).send('error in create lesson video--missing some parametters')
     // console.log({name, course, path, numOfLesson });
     const lesson = await Lesson.create({ name, course, path, numOfLesson })
     if (!lesson)
@@ -90,7 +89,6 @@ const getAllLessons = async (req, res) => {
     return res.json(lessons)
 }
 
-//getAllLessonAccordingCourse
 
 
 //getById

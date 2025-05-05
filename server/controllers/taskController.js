@@ -21,7 +21,7 @@ const funcDeleteTask = async (_id) => {
         userTasks.forEach(userTask=>{
             if(!funcDeleteUserTask(userTask._id))
                 return false
-        })
+    })
     }      
     const deleted = await task.deleteOne()
     if (deleted.deleteCount != 1)
@@ -95,11 +95,15 @@ const getTaskAccordingLesson=async(req,res)=>{
     
     const {_id}=req.params
     if(!_id)
-        return res.status(400).send('error in getAllLessonAccordingCourse')
-    const task=await Task.findOne({lesson:_id})
+        return res.status(400).send('error in getTaskAccordingLesson--missing id')
+    const task=await Task.findOne({lesson:_id})   
+    // if(!task)
+    //     // return res.status(400).send('error in getTaskAccordingLesson--there is no task')
+    // return res.json({name:"Chani"})
     if(!task)
-        return res.status(400).send('error in getAllLessonAccordingCourse')
+        console.log("there is no task according to this lesson");
+          
 return res.json(task)
-}
+}   
 
 module.exports = { deleteTask, funcDeleteTask,updateLesson,createTask,getAlltasks,getByIdTask,getTaskAccordingLesson }

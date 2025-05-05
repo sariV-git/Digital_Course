@@ -3,14 +3,17 @@ import { Button } from 'primereact/button';
 import { TieredMenu } from 'primereact/tieredmenu';
 import ManagerAddCourse from './ManagerAddCourse';
 import ManagerAddLesson from './ManagerAddLesson';
-
+import FileUploadTest from './FileUploadTest'; // Import your file upload component
 export default function Edit() {
+    console.log("rendering edit");
+    
     const menu = useRef(null); // Reference for the menu
     const [isCreateCourse, setIsCreateCourse] = useState(false)
     const [isCreateLesson, setIsCreateLesson] = useState(false)
     const [isDeleteCourse, setIsDeleteCourse] = useState(false)
 
-    const [visible, setVisible] = useState(false)
+    const [visibleCourse, setVisibleCourse] = useState(false)
+    const [visibleLesson, setVisibleLesson] = useState(false)
     // Menu items with nested sub-options
     const items = [
         {
@@ -47,12 +50,12 @@ export default function Edit() {
 
         // Add your logic for creating a course or lesson here
         if (type === 'course') {
-            setVisible(true)
+            setVisibleCourse(true)
             setIsCreateLesson(false)
             setIsCreateCourse(true)
             // return (<ManagerAddCourse setVisible={setVisible} visible={visible} />)
         } else if (type === 'lesson') {
-            setVisible(true)
+            setIsCreateLesson(true)
             setIsCreateCourse(false)
             setIsCreateLesson(true)
         }
@@ -85,7 +88,8 @@ export default function Edit() {
                     padding: '0.5rem 1rem'
                 }}
             />
-        {isCreateCourse && <ManagerAddCourse visible={visible} setVisible={setVisible} />}
-        {isCreateLesson && <ManagerAddLesson visible={visible} setVisible={setVisible} />}
+        {/* {isCreateCourse && <ManagerAddCourse visible={visible} setVisible={setVisible} />} */}
+        <FileUploadTest visible={visibleCourse} setVisible={setVisibleCourse} />
+        {isCreateLesson && <ManagerAddLesson visible={visibleLesson} setVisible={setVisibleLesson} />}
     </>);
 }

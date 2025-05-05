@@ -13,6 +13,7 @@ import RespondUser from "./respondUser";
 import { setUser } from "../store/reducer/userSlice";
 
 const LessonList = () => {
+    
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [lessons, setLessons] = useState([]);
@@ -88,6 +89,7 @@ const LessonList = () => {
     }
 
     const loadData = async () => {
+        
         try {
             const userResponse = await axios.get('http://localhost:5000/user/byToken', {
                 headers: {
@@ -264,12 +266,12 @@ const LessonList = () => {
                 {/* <Route path='/respondUser' element={<RespondUser />} /> */}
             </Routes>
 
-            <Toast ref={toast} />
             {loading ? (
                 <div style={styles.loadingContainer}>
                     <h2>Loading Lessons...</h2>
                 </div>
             ) : (<>
+            <Toast ref={toast} />
 
                 <div style={styles.lessonListContainer}>
                     <DataTable value={lessons} paginator rows={5} rowsPerPageOptions={[5, 10, 25]} className="p-datatable-customers" style={styles.dataTable}>

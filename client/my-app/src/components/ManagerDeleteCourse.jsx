@@ -27,6 +27,7 @@ try {
     console.log('tttttttt',token);
     
 }
+navigate('/')
     }
     return (<>
     <p>Are you sure that you want to delete this course?</p>

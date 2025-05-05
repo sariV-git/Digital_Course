@@ -203,7 +203,7 @@ const ManagerAddLesson = (props) => {
                     { label: "Lessons List", icon: "pi pi-user", to: "/LessonsList" },
                 ],
             })
-        );
+        ); 
     }, [dispatch]);
 
     return (
