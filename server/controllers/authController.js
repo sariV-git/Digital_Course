@@ -18,7 +18,7 @@ const register = async (req, res) => {
     {
         const match = await bcrypt.compare(password, duplicate.password)
         if (!match)
-            return res.status(401).send('duplicate username')
+            return res.status(409).send('duplicate username')
         const alreadyRegistered = UserCourse.find({ user: duplicate._id, course: course })
 
         if (alreadyRegistered)
