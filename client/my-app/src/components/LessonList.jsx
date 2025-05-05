@@ -177,6 +177,7 @@ const LessonList = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
+            console.log('taskResponse', taskResponse.data);
             //load the data about the user
             const userResponse = await axios.get('http://localhost:5000/user/byToken', {
                 headers: {
@@ -223,7 +224,7 @@ const LessonList = () => {
                     })
                     console.log("anssssswers: ", arrayAnswers, 'qqqqqquestion', taskQuestions);
 
-                    navigate('/UserTask', { state: { questions: taskQuestions.data, answers: arrayAnswers } })
+                    navigate('/UserTask', { state: { questions: taskQuestions.data, answers: arrayAnswers ,titleTask:taskResponse.data.title} })
 
                 } catch (error) {
                     console.log('an error in see all the answers', error);
@@ -237,7 +238,7 @@ const LessonList = () => {
     }
 
     const showTaskButton = (rowData) => {
-        return <Button label="Task" onClick={() => { goToTask(rowData) }} className="p-button-rounded p-button-outlined"></Button>
+        return <Button label="משימה" onClick={() => { goToTask(rowData) }} className="p-button-rounded p-button-outlined"></Button>
     }
     const updateLesson = (rowData) => {//to fix this function that she will realy update
         dispatch(setLesson({ newLesson: rowData }));
@@ -275,13 +276,13 @@ const LessonList = () => {
 
                 <div style={styles.lessonListContainer}>
                     <DataTable value={lessons} paginator rows={5} rowsPerPageOptions={[5, 10, 25]} className="p-datatable-customers" style={styles.dataTable}>
-                        <Column header="Number" field="numOfLesson" sortable />
+                        <Column header="מספר שיעור" field="numOfLesson" sortable />
                         <Column header="Name" field="name" sortable />
-                        <Column header="Show" body={showButton} />
-                        {isManager && <Column header="Update" body={updateButton} />}
-                        {isManager && <Column header="Delete" body={deleteButton} />}
-                        <Column header="Feedback" body={showFeedback} />
-                        <Column header='Task' body={showTaskButton} />
+                        <Column header="שיעורים" body={showButton} />
+                        {isManager && <Column header="עריכה" body={updateButton} />}
+                        {isManager && <Column header="מחיקה" body={deleteButton} />}
+                        <Column header="הערת המרצה" body={showFeedback} />
+                        <Column header='משימות' body={showTaskButton} />
                     </DataTable>
 
                     {visible && (

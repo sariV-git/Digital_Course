@@ -134,7 +134,7 @@ import "primeicons/primeicons.css"; // Icons
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import { Avatar } from "primereact/avatar";
-import FileUploadTest from "./FileUploadTest";
+// import FileUploadTest from "./FileUploadTest"; 
 import ManagerAddCourse from "./ManagerAddCourse";
 import ManagerAddLesson from "./ManagerAddLesson";
 import image from "./image.png";

@@ -38,8 +38,9 @@ import { useSelector } from 'react-redux';
 import Respond from './components/Respond';
 import MyCoursesPage from './components/UltraCode';
 import Edit from './components/Edit';
-import FileUploadTest from './components/FileUploadTest';
+// import FileUploadTest from './components/FileUploadTest';
 import Layout from './components/Layout';
+
 
 // import IntroduceLesson from './components/forIntroduceLesson';
 
