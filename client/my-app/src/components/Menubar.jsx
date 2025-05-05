@@ -141,179 +141,193 @@ import image from "./image.png";
 import { useSelector } from "react-redux";
 
 const MenubarWithEdit = () => {
-    const isManager = useSelector(state=>state.token.isManager); // Example: Replace with your logic to check if the user is a manager
-    const token = useSelector(state=>state.token.token); // Example: Replace with your authentication logic
-    const user =useSelector(state=>state.user.user); // Example user data
+  const isManager = useSelector(state => state.token.isManager); // Example: Replace with your logic to check if the user is a manager
+  const token = useSelector(state => state.token.token); // Example: Replace with your authentication logic
+  const user = useSelector(state => state.user.user); // Example user data
 
-    const [shortName, setShortName] = useState(null);
-    const [menuItems, setMenuItems] = useState([]);
-    const location = useLocation();
-    const navigate = useNavigate();
+  const [shortName, setShortName] = useState(null);
+  const [menuItems, setMenuItems] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    // State for Edit component
-    const menu = useRef(null);
-    const [isCreateCourse, setIsCreateCourse] = useState(false);
-    const [isCreateLesson, setIsCreateLesson] = useState(false);
-    const [visibleCourse, setVisibleCourse] = useState(false);
-    const [visibleLesson, setVisibleLesson] = useState(false);
+  // State for Edit component
+  const menu = useRef(null);
+  const [isCreateCourse, setIsCreateCourse] = useState(false);
+  const [isCreateLesson, setIsCreateLesson] = useState(false);
+  const [visibleCourse, setVisibleCourse] = useState(false);
+  const [visibleLesson, setVisibleLesson] = useState(false);
 
-    // Menu items for the TieredMenu in Edit
-    const editMenuItems = [
+  // Menu items for the TieredMenu in Edit
+  const editMenuItems = [
+    {
+      label: "Course",
+      icon: "pi pi-book",
+      items: [
         {
-            label: "Course",
-            icon: "pi pi-book",
-            items: [
-                {
-                    label: "Create Course",
-                    icon: "pi pi-plus",
-                    command: () => handleCreate("course"),
-                },
-                {
-                    label: "Delete Course",
-                    icon: "pi pi-times",
-                    command: () => handleDelete("course"),
-                },
-            ],
+          label: "Create Course",
+          icon: "pi pi-plus",
+          command: () => handleCreate("course"),
         },
         {
-            label: "Lesson",
-            icon: "pi pi-pencil",
-            items: [
-                {
-                    label: "Create Lesson",
-                    icon: "pi pi-plus",
-                    command: () => handleCreate("lesson"),
-                },
-            ],
+          label: "Delete Course",
+          icon: "pi pi-times",
+          command: () => handleDelete("course"),
         },
-    ];
+      ],
+    },
+    {
+      label: "Lesson",
+      icon: "pi pi-pencil",
+      items: [
+        {
+          label: "Create Lesson",
+          icon: "pi pi-plus",
+          command: () => handleCreate("lesson"),
+        },
+      ],
+    },
+  ];
 
-    // Update shortName when user logs in or logs out
-    useEffect(() => {
-        if (token && user) {
-            setShortName(
-                `${user.name.firstName.charAt(0)}${user.name.lastName.charAt(0)}`
-            );
-        } else {
-            setShortName(null); // Clear shortName on logout
-        }
-    }, [token, user]);
+  // Update shortName when user logs in or logs out
+  useEffect(() => {
+    if (token && user) {
+      setShortName(
+        `${user.name.firstName.charAt(0)}${user.name.lastName.charAt(0)}`
+      );
+    } else {
+      setShortName(null); // Clear shortName on logout
+    }
+  }, [token, user]);
 
-    // Update menu items based on role and route
-    useEffect(() => {
-        if (token && isManager) {
-            // Manager Menu
-            setMenuItems([
-                { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
-                {
-                    label: "Edit",
-                    icon: "pi pi-cog",
-                    template: () => (
-                        <>
-                           <TieredMenu model={editMenuItems} popup ref={menu} breakpoint="767px" />
-                            <Button
-                                label="Edit"
-                                icon="pi pi-cog"
-                                onClick={(e) => menu.current.toggle(e)}
-                                style={{
-                                    backgroundColor: "#8B008B",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "8px",
-                                    padding: "0.5rem 1rem",
-                                }}
-                            />
-                        </>
-                    ),
-                },
-                { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage") },
-            ]);
-        } else if (token) {
-            // Regular User Menu
-            setMenuItems([
-                { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
-            ]);
-        } else {
-            // Logged Out (Guest)
-            setMenuItems([]);
-        }
-    }, [token, isManager, location.pathname, navigate]);
 
-    // Handle creation of course or lesson
-    const handleCreate = (type) => {
-        if (type === "course") {
-            setVisibleCourse(true);
-            setIsCreateLesson(false);
-            setIsCreateCourse(true);
-        } else if (type === "lesson") {
-            setIsCreateLesson(true);
-            setVisibleLesson(true)            
-        }
-    };
-
-    // Handle deletion of course
-    const handleDelete = (type) => {
-        if (type === "course") {
-          navigate("/ManagerDeleteCourse")
-        }
-    };
-
-    const start = (
-        <img src={image} alt="Logo" style={{ height: "40px" }} />
-    );
-
-    const end = (
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Button
-                icon="pi pi-bell"
-                className="p-button-rounded p-button-text"
-            />
-            {!token && <Link to="/LogIn">Login</Link>}
-            {token && (
-                <Button onClick={() => {
-                     console.log("the token when you press on the log out is: ",token);
-                     
-                    setShortName(null); // Clear short name
-                    navigate("/LogOut"); // Navigate to the logout page
-                }}>
-                    Logout
-                </Button>
-            )}
-            {shortName && (
-                <Avatar
-                    label={shortName}
-                    shape="circle"
-                    style={{
-                        backgroundColor: "#f0f0f0",
-                        color: "#000",
-                        fontWeight: "bold",
-                    }}
+  // Update menu items based on role and route
+  useEffect(() => {
+    if (token && isManager) {//-----------for manager
+      // Manager Menu
+      if (location.pathname === "/CourseIntroduce") {
+        setMenuItems([
+          { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+          {
+            label: "Edit",
+            icon: "pi pi-cog",
+            template: () => (
+              <>
+                <TieredMenu model={editMenuItems} popup ref={menu} breakpoint="767px" />
+                <Button
+                  label="Edit"
+                  icon="pi pi-cog"
+                  onClick={(e) => menu.current.toggle(e)}
+                  style={{
+                    backgroundColor: "#8B008B",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "0.5rem 1rem",
+                  }}
                 />
-            )}
-        </div>
-    );
+              </>
+            ),
+          },
+          { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage") },
+          { label: "Users Responds ", icon: "pi pi-user", command: () => navigate("/ManagerUsersResponds") },
+        ]);
+      }
+      else if (location.pathname === "/") {
+        setMenuItems([
+          { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+          { label: "Create Course", icon: "pi pi-book", command: () => handleCreate("course") },
+        ]);
+      }
+      //??here adding all the rest which i need 
+      else {
+        setMenuItems([{label: "Home", icon: "pi pi-home", command: () => navigate("/") }]); 
+      }
+    } else if (token) {
+      // Regular User Menu
+      setMenuItems([
+        { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+      ]);
+    } else {
+      // Logged Out (Guest)
+      setMenuItems([]);
+    }
+  }, [token, isManager, location.pathname, navigate]);
 
-    return (
-        <div>
-            <Menubar
-                model={menuItems}
-                end={end}
-                start={start}
-                style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    zIndex: 1000,
-                }}
-            />
-            {/* Render FileUploadTest and ManagerAddLesson conditionally */}
-            {/* <FileUploadTest visible={visibleCourse} setVisible={setVisibleCourse} /> */}
-           <ManagerAddCourse visible={visibleCourse} setVisible={setVisibleCourse} />
-            
-         <ManagerAddLesson visible={visibleLesson} setVisible={setVisibleLesson} />
-        </div>
-    );
+  // Handle creation of course or lesson
+  const handleCreate = (type) => {
+    if (type === "course") {
+      setVisibleCourse(true);
+      setIsCreateLesson(false);
+      setIsCreateCourse(true);
+    } else if (type === "lesson") {
+      setIsCreateLesson(true);
+      setVisibleLesson(true)
+    }
+  };
+
+  // Handle deletion of course
+  const handleDelete = (type) => {
+    if (type === "course") {
+      navigate("/ManagerDeleteCourse")
+    }
+  };
+
+  const start = (
+    <img src={image} alt="Logo" style={{ height: "40px" }} />
+  );
+
+  const end = (
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <Button
+        icon="pi pi-bell"
+        className="p-button-rounded p-button-text"
+      />
+      {!token && <Link to="/LogIn">Login</Link>}
+      {token && (
+        <Button onClick={() => {
+          console.log("the token when you press on the log out is: ", token);
+
+          setShortName(null); // Clear short name
+          navigate("/LogOut"); // Navigate to the logout page
+        }}>
+          Logout
+        </Button>
+      )}
+      {shortName && (
+        <Avatar
+          label={shortName}
+          shape="circle"
+          style={{
+            backgroundColor: "#f0f0f0",
+            color: "#000",
+            fontWeight: "bold",
+          }}
+        />
+      )}
+    </div>
+  );
+
+  return (
+    <div>
+      <Menubar
+        model={menuItems}
+        end={end}
+        start={start}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          zIndex: 1000,
+        }}
+      />
+      {/* Render FileUploadTest and ManagerAddLesson conditionally */}
+      {/* <FileUploadTest visible={visibleCourse} setVisible={setVisibleCourse} /> */}
+      <ManagerAddCourse visible={visibleCourse} setVisible={setVisibleCourse} />
+
+      <ManagerAddLesson visible={visibleLesson} setVisible={setVisibleLesson} />
+    </div>
+  );
 };
 
 export default MenubarWithEdit;

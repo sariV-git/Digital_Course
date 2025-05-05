@@ -57,6 +57,11 @@ const ManagerAddQuestions = () => {
         setVisible(true)
     }
     return (<div className="card flex justify-content-center">
+        <br/> <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <Button onClick={create}>create Question</Button>
         <Dialog
             visible={visible}

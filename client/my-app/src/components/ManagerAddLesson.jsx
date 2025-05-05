@@ -168,6 +168,7 @@ const ManagerAddLesson = (props) => {
     }, [videoLesson]);
 
     const CreateLesson = async () => {
+        setVisible(false); 
         const formData = new FormData();
         formData.append("name", name.current.value);
         formData.append("numOfLesson", numOfLesson.current.value);

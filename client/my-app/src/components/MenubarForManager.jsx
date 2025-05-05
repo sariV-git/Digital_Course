@@ -1,6 +1,6 @@
 import { Card } from "primereact/card"
 import { useLocation } from "react-router-dom"
-
+//can delete it?? 
 
 const MenubarForManager = () => {
     const location=useLocation()

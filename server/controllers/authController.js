@@ -22,8 +22,11 @@ const register = async (req, res) => {
         const alreadyRegistered = UserCourse.find({ user: duplicate._id, course: course })
 
         if (alreadyRegistered)
-            return res.status(401).send('you already regestered for this course')
-
+            {
+                console.log("already registered for this course", alreadyRegistered);
+                
+                return res.status(401).send('you already regestered for this course')
+            }
         const usercourse_id = await funcCreateUserCourse({ user: duplicate._id, course: course })
         if (!usercourse_id)
             return res.status(400).send('failed in create usercourse in register')

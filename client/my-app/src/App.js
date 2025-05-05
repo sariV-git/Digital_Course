@@ -39,6 +39,7 @@ import Respond from './components/Respond';
 import MyCoursesPage from './components/UltraCode';
 import Edit from './components/Edit';
 import FileUploadTest from './components/FileUploadTest';
+import Layout from './components/Layout';
 
 // import IntroduceLesson from './components/forIntroduceLesson';
 
@@ -52,10 +53,11 @@ function App() {
 
   return (
     <div >
+      <Layout>
       {/* <Home/> */}
       {/* <LinearDemo/> */}
       {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
-      <TemplateDemo />
+      {/* <TemplateDemo /> */}
       {/* <FileUploadTest/>  */}
       {/* <TryIt /> */}
 
@@ -69,7 +71,6 @@ function App() {
       {/* <CourseModuleList/> for the page of all the lessons*/}
       <Routes>
         {/* need do a homepage??--if there is only one course automally it pass to this course and if there is more automally he go to the many courses--coursePage */}
-
         <Route path='/' element={<Home />} />
         <Route path='/LessonVideo' element={<LessonVideo />} />
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
@@ -93,6 +94,7 @@ function App() {
         <Route path='/UserTasks' element={<UserTasks />} />
         <Route path='/Respond' element={<Respond />} />
       </Routes>
+      </Layout>
     </div>
   );
 }

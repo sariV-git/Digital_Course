@@ -1,6 +1,6 @@
 const Answer = require('../models/Answer')
 
-//create 
+//create         
 const createAnswer = async (req, res) => {
 
     const { text, question, user } = req.body
