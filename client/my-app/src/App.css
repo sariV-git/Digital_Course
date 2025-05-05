@@ -101,11 +101,14 @@ body {
 
 .input-group input {
   width: 100%;
-  padding: 10px;
+  /* padding: 10px; */
+  padding: 8px 10px;
   font-size: 1rem;
+  margin: 5px 0;
   border-radius: 5px;
   border: 1px solid #ddd;
   outline: none;
+  transition: all 0.3s ease;
 }
 
 .input-group input:focus {
@@ -128,11 +131,28 @@ body {
 .submit-btn:hover {
   background-color: #5a54e0;
 }
+/* כפתור שליחה במצב לא פעיל */
+.submit-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+/* כפתור שליחה במעבר עכבר */
+.submit-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
 
 .input-group.error input {
   border-color: red;
   box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  border: 1px solid red;
+  background-color: #ffe6e6; /* רקע אדום עדין */
 } }
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 4px;
+}
 
 /* //for the recording: */
 /* * { */

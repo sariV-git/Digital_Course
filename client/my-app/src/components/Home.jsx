@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import CourseIntroduce from "./CourseIntroduce";
 import CoursesPage from "./CoursesPage";
 import Nav from "./Nav";
-import A from "./a";
+
 const Home = () => {
 
     // const navigate = useNavigate()
