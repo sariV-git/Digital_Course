@@ -10,6 +10,6 @@ router.put('/',verifyJWTuser,userController.updateUser)
 router.get('/',verifyJWTmanager,userController.getAllUsers)
 router.get('/byToken',verifyJWTuser,userController.getUserByToken)
 router.get('/:_id',verifyJWTmanager,userController.getUserById)
-router.delete('/:_id',verifyJWTmanager,userController.deleteUser)
 router.get('/byUserName/:username',verifyJWTmanager,userController.getUserByUserName)
-module.exports=router
+router.delete('/:_id',verifyJWTmanager,userController.deleteUser)
+module.exports=router     

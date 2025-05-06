@@ -41,43 +41,92 @@ const updatLesson = async (req, res) => {
 }
 
 //delete
+// const funcDeleteLesson = async (_id) => {
+
+//     const lesson = await Lesson.findById(_id)
+//     if (!lesson)
+//         return false
+//     const tasks = await Task.find({ lesson: _id })
+//     if (!tasks)
+//         return true
+//     tasks.forEach(task => {
+//         if (!funcDeleteTask(task._id))
+//             return false
+//     })
+//     const absolatePath = path.join(__dirname, '../public/upload', lesson.path)
+//     console.log('the path', absolatePath);
+//     fs.unlink(absolatePath, (err) => {
+//         if (err) {
+//             console.log('error in delete video file', err);
+//             return false
+//         }
+//     })
+
+//     const deleted = await lesson.deleteOne()
+//     if (deleted.deleteCount != 1)
+//         return false
+//     return true
+// }
+
+//funcDeleteLesson
 const funcDeleteLesson = async (_id) => {
+    try {
+        const lesson = await Lesson.findById(_id);
+        if (!lesson) return false; // No lesson found, nothing to delete
 
-    const lesson = await Lesson.findById(_id)
-    if (!lesson)
-        return false
-    const tasks = await Task.find({ lesson: _id })
-    if (!tasks)
-        return true
-    tasks.forEach(task => {
-        if (!funcDeleteTask(task._id))
-            return false
-    })
-    const absolatePath = path.join(__dirname, '../public/upload', lesson.path)
-    console.log('the path', absolatePath);
-    fs.unlink(absolatePath, (err) => {
-        if (err) {
-            console.log('error in delete video file', err);
-            return false
+        // Delete all tasks associated with the lesson
+        const tasks = await Task.find({ lesson: _id });
+        if (tasks && tasks.length > 0) {
+            for (const task of tasks) {
+                const deleted = await funcDeleteTask(task._id); // Await the result of funcDeleteTask
+                if (!deleted) {
+                    console.error(`Failed to delete task with ID: ${task._id}`);
+                    return false; // If any task deletion fails, return false
+                }
+            }
         }
-    })
 
-    const deleted = await lesson.deleteOne()
-    if (deleted.deleteCount != 1)
-        return false
-    return true
-}
+        // Delete the video file associated with the lesson
+        const absolutePath = path.join(__dirname, '../public/upload', lesson.path);
+        console.log('Deleting video file at path:', absolutePath);
+        await fs.promises.unlink(absolutePath).catch((err) => {
+            console.error('Error deleting video file:', err.message);
+            throw new Error('Failed to delete video file');
+        });
+
+        // Delete the lesson itself
+        const deletedLesson = await lesson.deleteOne();
+        if (!deletedLesson) {
+            console.error(`Failed to delete lesson with ID: ${_id}`);
+            return false;
+        }
+
+        console.log(`Successfully deleted lesson with ID: ${_id}`);
+        return true; // All deletions were successful
+    } catch (error) {
+        console.error(`Error in funcDeleteLesson: ${error.message}`);
+        return false; // Return false if an error occurs
+    }
+};
 //delete
 const deleteLesson = async (req, res) => {
-    //to check how delete the old video
-    const { _id } = req.params
-    if (!_id)
-        return res.status(404).send('error with deleteLesson')
-    if (!funcDeleteLesson(_id))
-        return res.status(404).send('there are any lesson or some mistakes')
+    const { _id } = req.params; // Extract the lesson ID from the request parameters
+    if (!_id) {
+        return res.status(400).send('Error in deleteLesson: Missing _id'); // Validate input
+    }
 
-    return res.send('succeed delete lesson')
-}
+    try {
+        const deleted = await funcDeleteLesson(_id); // Await the result of funcDeleteLesson
+        if (!deleted) {
+            return res.status(400).send('Error in deleteLesson: Failed to delete lesson'); // Handle failure
+        }
+
+        return res.status(200).send(`Lesson with ID ${_id} deleted successfully!`); // Success response
+    } catch (error) {
+        console.error(`Error in deleteLesson: ${error.message}`); // Log unexpected errors
+        return res.status(500).send('Server error in deleteLesson'); // Internal server error response
+    }
+};
 
 //getAll
 const getAllLessons = async (req, res) => {

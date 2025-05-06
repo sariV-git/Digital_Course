@@ -134,6 +134,7 @@ import "primeicons/primeicons.css"; // Icons
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import { Avatar } from "primereact/avatar";
+// import FileUploadTest from "./FileUploadTest"; 
 import ManagerAddCourse from "./ManagerAddCourse";
 import ManagerAddLesson from "./ManagerAddLesson";
 import image from "./image.png";
@@ -228,7 +229,7 @@ const MenubarWithEdit = () => {
             ),
           },
           { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage") },
-          { label: "Users Responds ", icon: "pi pi-user", command: () => navigate("/ManagerUsersResponds") },
+          { label: "Users Responds ", icon: "pi pi-user", command: () => navigate("/ManagerSetResponds") },
         ]);
       }
       else if (location.pathname === "/") {
@@ -239,16 +240,20 @@ const MenubarWithEdit = () => {
       }
       //??here adding all the rest which i need 
       else {
-        setMenuItems([{label: "Home", icon: "pi pi-home", command: () => navigate("/") }]); 
+        setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") }]);
       }
     } else if (token) {
       // Regular User Menu
-      setMenuItems([
-        { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
-      ]);
+      if (location.pathname == '/LessonsList')
+        setMenuItems([
+          { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+          { label: "My Tasks", icon: "pi pi-book", command: () => navigate("/UserTasksComplete") },
+
+        ]);
     } else {
       // Logged Out (Guest)
-      setMenuItems([]);
+      setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+      ]);
     }
   }, [token, isManager, location.pathname, navigate]);
 

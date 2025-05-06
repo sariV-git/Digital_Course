@@ -2,8 +2,8 @@
 // // import './TryIt.css'; // Importing the CSS for the page styling
 // // import { Link } from "react-router-dom";
 
-import { Button } from "primereact/button";
-import { useState } from "react";
+// import { Button } from "primereact/button";
+// import { useState } from "react";
 
 // // const CoursePage = () => {
 // //   const courses = [
@@ -174,10 +174,13 @@ import { useState } from "react";
         
 
 //it is working!!
-const TryIt = () => {
-    const [visible, setVisible] = useState(false)
-    return(<>
-    <Button label="Click Me" icon="pi pi-check" className="p-button-success" onClick={() => setVisible(true)} />    
-    </>)
-}
-export default TryIt;
+
+// import FileUploadTest from "./FileUploadTest";
+// const TryIt = () => {
+//     const [visible, setVisible] = useState(false)
+//     return(<>
+//     <Button label="Click Me" icon="pi pi-check" className="p-button-success" onClick={() => setVisible(true)} />    
+//     <FileUploadTest visible={visible} setVisible={setVisible} />
+//     </>)
+// }
+// export default TryIt;

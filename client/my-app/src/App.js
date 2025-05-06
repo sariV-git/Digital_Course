@@ -38,7 +38,10 @@ import { useSelector } from 'react-redux';
 import Respond from './components/Respond';
 import MyCoursesPage from './components/UltraCode';
 import Edit from './components/Edit';
+// import FileUploadTest from './components/FileUploadTest';
 import Layout from './components/Layout';
+import UserTasksComplete from './components/UserTasksComplete';
+
 
 // import IntroduceLesson from './components/forIntroduceLesson';
 
@@ -92,6 +95,7 @@ function App() {
         <Route path='/UserTask' element={<UserTask />} />
         <Route path='/UserTasks' element={<UserTasks />} />
         <Route path='/Respond' element={<Respond />} />
+        <Route path='/UserTasksComplete' element={<UserTasksComplete/>}/>
       </Routes>
       </Layout>
     </div>

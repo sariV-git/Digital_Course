@@ -1,49 +1,75 @@
 const Task = require('../models/Task')
 const Question = require('../models/Question')
 const UserTask=require('../models/UserTask')
-const {funcDeleteUserTask}=require('../models/UserTask')
-
+const { funcDeleteUserTask } = require('./userTaskController');
+const{funcDeleteQuestion}=require('./questionController')
 //func delete task
+
+
+
 const funcDeleteTask = async (_id) => {
-    const task = await Task.findById(_id)
-    if (!task)
-        return true//there is no task
-    const questions = await Question.find({ task: _id })
-    if (questions)
-        questions.forEach(async q => {
-            const deleted = await q.deleteOne()
-            if (!deleted)
-                return false
-        })
-    const userTasks=await UserTask.find({task:_id})
-    if(userTasks)
-    {
-        userTasks.forEach(userTask=>{
-            if(!funcDeleteUserTask(userTask._id))
-                return false
-    })
-    }      
-    const deleted = await task.deleteOne()
-    if (deleted.deleteCount != 1)
-        return false
-    if(!userTasks)
-        return false
-    userTasks.forEach(async usertask=>{
-      if(!await funcDeleteUserTask(usertask._id)) 
-        return false
-    })
-    return true
-}
+    try {
+        const task = await Task.findById(_id);
+        if (!task) return true; // No task found, nothing to delete
+
+        // Delete all questions associated with the task
+        const questions = await Question.find({ task: _id });
+        if (questions && questions.length > 0) {
+            for (const q of questions) {
+                const deleted = await funcDeleteQuestion(q._id); // Use funcDeleteQuestion
+                if (!deleted) {
+                    console.error(`Failed to delete question with ID: ${q._id}`);
+                    return false; // If any question deletion fails, return false
+                }
+            }
+        }
+
+        // Delete all user tasks associated with the task
+        const userTasks = await UserTask.find({ task: _id });
+        if (userTasks && userTasks.length > 0) {
+            for (const userTask of userTasks) {
+                const deleted = await funcDeleteUserTask(userTask._id); // Use funcDeleteUserTask
+                if (!deleted) {
+                    console.error(`Failed to delete user task with ID: ${userTask._id}`);
+                    return false; // If any user task deletion fails, return false
+                }
+            }
+        }
+
+        // Delete the task itself
+        const deletedTask = await task.deleteOne();
+        if (!deletedTask) {
+            console.error(`Failed to delete task with ID: ${_id}`);
+            return false;
+        }
+
+        console.log(`Successfully deleted task with ID: ${_id}`);
+        return true; // All deletions were successful
+    } catch (error) {
+        console.error(`Error in funcDeleteTask: ${error.message}`);
+        return false; // Return false if an error occurs
+    }
+};
 
 //delete
 const deleteTask = async (req, res) => {
-    const { _id } = req.params
-    if (!_id)
-        return res.status(404).send('error in deletTask')
-    if (!funcDeleteTask(_id))
-        return res.status(404).send('error in deletTask')
-    return res.send(`succeed delete task ${_id}`)
-}
+    const { _id } = req.params; // Extract the task ID from the request parameters
+    if (!_id) {
+        return res.status(400).send('Error in deleteTask: Missing _id'); // Validate input
+    }
+
+    try {
+        const deleted = await funcDeleteTask(_id); // Await the result of funcDeleteTask
+        if (!deleted) {
+            return res.status(400).send('Error in deleteTask: Failed to delete task'); // Handle failure
+        }
+
+        return res.status(200).send(`Task  deleted successfully!`); // Success response
+    } catch (error) {
+        console.error(`Error in deleteTask: ${error.message}`); // Log unexpected errors
+        return res.status(500).send('Server error in deleteTask'); // Internal server error response
+    }
+};
 
 //create
 const createTask=async(req,res)=>{
