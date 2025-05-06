@@ -174,12 +174,10 @@ import { useState } from "react";
         
 
 //it is working!!
-import FileUploadTest from "./FileUploadTest";
 const TryIt = () => {
     const [visible, setVisible] = useState(false)
     return(<>
     <Button label="Click Me" icon="pi pi-check" className="p-button-success" onClick={() => setVisible(true)} />    
-    <FileUploadTest visible={visible} setVisible={setVisible} />
     </>)
 }
 export default TryIt;

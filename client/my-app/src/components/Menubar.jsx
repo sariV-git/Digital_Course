@@ -134,7 +134,6 @@ import "primeicons/primeicons.css"; // Icons
 import { Button } from "primereact/button";
 import { TieredMenu } from "primereact/tieredmenu";
 import { Avatar } from "primereact/avatar";
-import FileUploadTest from "./FileUploadTest";
 import ManagerAddCourse from "./ManagerAddCourse";
 import ManagerAddLesson from "./ManagerAddLesson";
 import image from "./image.png";
@@ -321,8 +320,6 @@ const MenubarWithEdit = () => {
           zIndex: 1000,
         }}
       />
-      {/* Render FileUploadTest and ManagerAddLesson conditionally */}
-      {/* <FileUploadTest visible={visibleCourse} setVisible={setVisibleCourse} /> */}
       <ManagerAddCourse visible={visibleCourse} setVisible={setVisibleCourse} />
 
       <ManagerAddLesson visible={visibleLesson} setVisible={setVisibleLesson} />
