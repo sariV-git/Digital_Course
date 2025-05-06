@@ -325,8 +325,6 @@ const MenubarWithEdit = () => {
           zIndex: 1000,
         }}
       />
-      {/* Render FileUploadTest and ManagerAddLesson conditionally */}
-      {/* <FileUploadTest visible={visibleCourse} setVisible={setVisibleCourse} /> */}
       <ManagerAddCourse visible={visibleCourse} setVisible={setVisibleCourse} />
 
       <ManagerAddLesson visible={visibleLesson} setVisible={setVisibleLesson} />

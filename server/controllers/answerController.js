@@ -44,24 +44,38 @@ const getAnswerById = async (req, res) => {
 
 //delete one answer                    
 const funcDeleteAnswer = async (_id) => {
-    const answer = await Answer.findById(_id)
-    if (!answer)
-        return false
-    const deleted = await answer.deleteOne()
-    if (deleted.deleteCount != 1)
-        return false
-    return true
-}
+    try {
+        const answer = await Answer.findById(_id);
+        if (!answer) return true; // No answer found, nothing to delete
+
+        const deleted = await answer.deleteOne();
+        if (!deleted) {
+            console.error(`Failed to delete answer with ID: ${_id}`);
+            return false;
+        }
+
+        console.log(`Successfully deleted answer with ID: ${_id}`);
+        return true; // Answer deleted successfully
+    } catch (error) {
+        console.error(`Error in funcDeleteAnswer: ${error.message}`);
+        return false; // Return false if an error occurs
+    }
+};
 //delete
 const deleteAnswer = async (req, res) => {
-    const { _id } = req.params
-    if (!_id)
-        return res.status(400).send('error in delete answer')
-    if (!funcDeleteAnser(_id))
-        return res.status(400).send('error in delete answer')
-    return res.status(200).send('answer deleted!')
+    const { _id } = req.params;
+    if (!_id) {
+        return res.status(400).send('Error in deleteAnswer: Missing _id');
+    }
 
-}
+    const deleted = await funcDeleteAnswer(_id); // Await the result of funcDeleteAnswer
+    if (!deleted) {
+        return res.status(400).send('Error in deleteAnswer: Failed to delete answer');
+    }
+
+    return res.status(200).send('Answer deleted successfully!');
+};
+
 //getAllAnswers
 const getAllAnswers = async (req, res) => {
     const answers = await Answer.find().lean();

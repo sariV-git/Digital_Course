@@ -97,34 +97,50 @@ const getSpeakerInformationByCoursId = async (req,res) => {
 
 //delete
 const deleteCourse = async (req, res) => {
-    const { _id } = req.params
-    if (!_id)
-        return res.status(400).send('error in deleteCourse')
-    const course = await Course.findById(_id)
-    if (!course)
-        return res.status(400).send('already there is no course')
-
-    const lessons = await Lesson.find({ course: _id })
-    if (lessons)
-        lessons.forEach(async l => {
-            if (!funcDeleteLesson(l._id))
-                return res.status(401).send('error in deleteCourse')
-        })
-    const deleted = await course.deleteOne()
-    if (deleted.deletedCount != 1)
-        return res.status(401).json({text:'error in deleteCourse',delete:deleted}) 
-//to delete the video of a  course
-    const absolatePath=path.join(__dirname,'../public/ upload',course.pathTriler)
-   fs.unlink(absolatePath,(err)=>{
-    if(err)
-    {
-        console.log('error in delete video in course',err);
-        res.status(500).send('error in delete video in course')
-        
+    const { _id } = req.params;
+    if (!_id) {
+        return res.status(400).send('Error in deleteCourse: Missing _id'); // Validate input
     }
-   })
-    return res.status(200).send('succeed delete course')
-}
+
+    try {
+        const course = await Course.findById(_id);
+        if (!course) {
+            return res.status(400).send('Error in deleteCourse: Course not found'); // Course does not exist
+        }
+
+        // Delete all lessons associated with the course
+        const lessons = await Lesson.find({ course: _id });
+        if (lessons && lessons.length > 0) {
+            for (const lesson of lessons) {
+                const deleted = await funcDeleteLesson(lesson._id); // Await the result of funcDeleteLesson
+                if (!deleted) {
+                    console.error(`Failed to delete lesson with ID: ${lesson._id}`);
+                    return res.status(400).send('Error in deleteCourse: Failed to delete lessons');
+                }
+            }
+        }
+
+        // Delete the course itself
+        const deletedCourse = await course.deleteOne();
+        if (!deletedCourse) {
+            console.error(`Failed to delete course with ID: ${_id}`);
+            return res.status(400).send('Error in deleteCourse: Failed to delete course');
+        }
+
+        // Delete the course trailer video
+        const absolutePath = path.join(__dirname, '../public/upload', course.pathTriler);
+        await fs.promises.unlink(absolutePath).catch((err) => {
+            console.error(`Error deleting course trailer video: ${err.message}`);
+            throw new Error('Failed to delete course trailer video');
+        });
+
+        console.log(`Successfully deleted course with ID: ${_id}`);
+        return res.status(200).send(`Course with ID ${_id} deleted successfully!`);
+    } catch (error) {
+        console.error(`Error in deleteCourse: ${error.message}`);
+        return res.status(500).send('Server error in deleteCourse'); // Internal server error response
+    }
+};
 
 
 

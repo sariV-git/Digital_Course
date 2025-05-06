@@ -3,6 +3,7 @@ import { Button } from 'primereact/button';
 import { TieredMenu } from 'primereact/tieredmenu';
 import ManagerAddCourse from './ManagerAddCourse';
 import ManagerAddLesson from './ManagerAddLesson';
+
 // import FileUploadTest from './FileUploadTest'; // Import your file upload component
 export default function Edit() {
     console.log("rendering edit");

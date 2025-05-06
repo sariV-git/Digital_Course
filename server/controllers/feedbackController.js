@@ -11,25 +11,32 @@ const createFeadback = async (req, res) => {
         return res.status(400).send('error in createFeadback')
     return res.status(200).send('create feedback!')
 }
+
 const funcDeleteFeedback = async (_id) => {
     const feedback = await Feedback.findById(_id)
     if (!feedback)
         return true//there is no feedback like this
     const deleted = await feedback.deleteOne()
-    if (deleted.deleteCount != 1)
+    if (!deleted) {
+        console.log('Failed delete feedback');
         return false
+    }
     return true
 }
 //delete
 const deleteFeedback = async (req, res) => {
-    const { _id } = req.params
-    if (!_id)
-        return res.status(400).send('error in deleteFeedback')
-    if (!funcDeleteFeedback(_id))
-        return res.status(400).send('error in deleteFeedback')
-    return res.status(200).send('feedback deleted!')
+    const { _id } = req.params;
+    if (!_id) {
+        return res.status(400).send('Error in deleteFeedback: Missing _id');
+    }
 
-}
+    const deleted = await funcDeleteFeedback(_id); // Await the result of funcDeleteFeedback
+    if (!deleted) {
+        return res.status(400).send('Error in deleteFeedback: Failed to delete feedback');
+    }
+
+    return res.status(200).send('Feedback deleted successfully!');
+};
 //update
 const updateFeedback = async (req, res) => {
     const { text, _id } = req.body
@@ -52,8 +59,8 @@ const getFeedbackAccordingUserTask = async (req, res) => {
     const feedback = await Feedback.findOne({ userTask: _id })
     if (!feedback)
         return res.status(200).send('there is no feedback')
-    return res.json(feedback)               
+    return res.json(feedback)
 }
 
 //get feedback AccordingUserTaskAndUser
-module.exports = { funcDeleteFeedback,getFeedbackAccordingUserTask, updateFeedback, createFeadback, deleteFeedback }
+module.exports = { funcDeleteFeedback, getFeedbackAccordingUserTask, updateFeedback, createFeadback, deleteFeedback }
