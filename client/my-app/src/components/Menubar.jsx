@@ -229,7 +229,7 @@ const MenubarWithEdit = () => {
             ),
           },
           { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage") },
-          { label: "Users Responds ", icon: "pi pi-user", command: () => navigate("/ManagerUsersResponds") },
+          { label: "Users Responds ", icon: "pi pi-user", command: () => navigate("/ManagerSetResponds") },
         ]);
       }
       else if (location.pathname === "/") {

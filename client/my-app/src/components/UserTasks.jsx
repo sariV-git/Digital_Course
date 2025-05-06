@@ -189,91 +189,67 @@ const UserTasks = () => {
   const [tabsTask, setTabsTask] = useState([]); // המשימות והמידע
   const [showInputFeedback, setShowInputFeedback] = useState(false); // טופס פידבק
   const feedbackText = useRef(null);
-
+ const lessons=useSelector(state=>state.lesson.lessons)
   // טוען את המידע על המשימות של המשתמש
-  useEffect(() => {
-    const loadTasksUserData = async () => {
-      try {
-        const resUsersTask = await axios.get(
-          `http://localhost:5000/userTask/AllUserTasksAccordingUserAndCourse/${user_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const dataTabs = await Promise.all(
-          resUsersTask.data.usersTask.map(async (userTask) => {
-            try {
-              const [
-                taskRespond,
-                questionsRespond,
-                fullAnswers,
-                feedbackRespond,
-              ] = await Promise.all([
-                axios.get(`http://localhost:5000/task/${userTask.task}`, {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }),
-                axios.get(
-                  `http://localhost:5000/question/AccordingTask/${userTask.task}`,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  }
-                ),
-                Promise.all(
-                  userTask.answers.map(async (answer) => {
-                    const answerRespond = await axios.get(
-                      `http://localhost:5000/answer/${answer}`,
-                      {
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                        },
-                      }
-                    );
-                    return answerRespond.data;
-                  })
-                ),
-                axios.get(
-                  `http://localhost:5000/feedback/AccordingUserTask/${userTask._id}`,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  }
-                ),
-              ]);
-
-              return {
-                userTask_id: userTask._id,
-                task: taskRespond.data.title,
-                questions: questionsRespond.data,
-                answers: fullAnswers,
-                feedback: feedbackRespond.data.text
-                  ? {
-                      _id: feedbackRespond.data._id,
-                      text: feedbackRespond.data.text,
-                    }
-                  : null,
-              };
-            } catch (error) {
-              console.error("Error in mapping user tasks:", error);
-              return null; // במקרה של שגיאה, דלג על המשימה
-            }
+  
+  
+  useEffect(() => {//settabstask
+  const loadTasksUserData=async()=>{
+    try {
+      const finalArray = await Promise.all(lessons.map(async lesson => {
+          const matchTaskRes = await axios.get(`http://localhost:5000/task/AccordingLesson/${lesson._id}`, {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
           })
-        );
+          const task = matchTaskRes.data
+          const matchUserTaskRes = await axios.get(`http://localhost:5000/userTask/getUserTaskAccordingUserAndTask/${user_id}/${task._id}`, {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          })
 
-        setTabsTask(dataTabs.filter((tab) => tab !== null)); // מסנן משימות שנכשלו
-        setLoading(false);
-      } catch (error) {
-        console.error("Error loading user task data:", error);
-        setLoading(false);
-      }
-    };
+          const userTask = matchUserTaskRes.data.userTask
+          if (userTask) {
+              const answers_id = userTask.answers
+
+              const answers = await Promise.all(answers_id.map(async answer_id => {//the full answers
+                  const answerRes = await axios.get(`http://localhost:5000/answer/${answer_id}`, {
+                      headers: {
+                          Authorization: `Bearer ${token}`
+                      }
+                  })
+                  return answerRes.data
+              }))
+              const questionsRes = await axios.get(`http://localhost:5000/question/AccordingTask/${task._id}`, {
+                  headers: {
+                      Authorization: `Bearer ${token}`
+                  }
+              })
+
+              const feedback = await axios.get(`http://localhost:5000/feedback/AccordingUserTask/${userTask._id}`, {
+                  headers: {
+                      Authorization: `Bearer ${token}`
+                  }
+              })
+              // const feedbackText = feedback.data._id ? feedback.data.text : "אין הערה"
+
+              return { exist: true, userTask_id:userTask._id,numOfLesson: lesson.numOfLesson,titleLesson:lesson.name, titleTask: task.title, questions: questionsRes.data, answers: answers, feedback: feedback.data }
+
+          }
+          else {//ther is no users tasks
+              return { exist: false }
+          }
+      }))
+      console.log("fffffinalArray", finalArray);
+      setTabsTask(finalArray)
+
+  }
+  catch (e) {
+      console.log("it failed--in load usertasks ", e);
+  }
+  setLoading(false)
+  }
 
     loadTasksUserData();
   }, [user_id, token]); // TODO: ודא שהמשתנים האלה נכונים להקשר שלך
@@ -343,7 +319,8 @@ const UserTasks = () => {
         <Accordion>
           {tabsTask.map((tabTask, index) => {
             return (
-              <AccordionTab key={index} header={tabTask.task}>
+              <AccordionTab key={index} header={`lesson : ${tabTask.numOfLesson}. ${tabTask.titleLesson}`}>
+                <>task: {tabTask.titleTask}</><br/>
                 {tabTask.questions.map((question) => {
                   const matchAnswer = tabTask.answers.find(
                     (answer) => answer.question === question._id
@@ -355,7 +332,7 @@ const UserTasks = () => {
                     </div>
                   );
                 })}
-                {!tabTask.feedback ? (
+                {!tabTask.feedback._id ? (
                   <>
                     <Button
                       onClick={() => setShowInputFeedback(true)}
@@ -387,7 +364,7 @@ const UserTasks = () => {
                       <>
                         <InputText
                           ref={feedbackText}
-                          placeholder={tabTask.feedback.text}
+                          defaultValue={tabTask.feedback.text}
                         />
                         <Button
                           onClick={() =>
@@ -411,3 +388,87 @@ const UserTasks = () => {
 };
 
 export default UserTasks;
+
+
+// const loadTasksUserData = async () => {
+  //       try {
+  //         const resUsersTask = await axios.get(
+  //           `http://localhost:5000/userTask/AllUserTasksAccordingUser/${user_id}`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+  // console.log("resUsersTask",resUsersTask);
+  //         const dataTabs = await Promise.all(
+  //           resUsersTask.data.userTasks.map(async (userTask) => {
+  //             try {
+  //               const [
+  //                 taskRespond,
+  //                 questionsRespond,
+  //                 fullAnswers,
+  //                 feedbackRespond,
+  //               ] = await Promise.all([
+  //                 axios.get(`http://localhost:5000/task/${userTask.task}`, {
+  //                   headers: {
+  //                     Authorization: `Bearer ${token}`,
+  //                   },
+  //                 }),
+  //                 axios.get(
+  //                   `http://localhost:5000/question/AccordingTask/${userTask.task}`,
+  //                   {
+  //                     headers: {
+  //                       Authorization: `Bearer ${token}`,
+  //                     },
+  //                   }
+  //                 ),
+  //                 Promise.all(
+  //                   userTask.answers.map(async (answer) => {
+  //                     const answerRespond = await axios.get(
+  //                       `http://localhost:5000/answer/${answer}`,
+  //                       {
+  //                         headers: {
+  //                           Authorization: `Bearer ${token}`,
+  //                         },
+  //                       }
+  //                     );
+  //                     return answerRespond.data;
+  //                   })
+  //                 ),
+  //                 axios.get(
+  //                   `http://localhost:5000/feedback/AccordingUserTask/${userTask._id}`,
+  //                   {
+  //                     headers: {
+  //                       Authorization: `Bearer ${token}`,
+  //                     },
+  //                   }
+  //                 ),
+  //               ]);
+  
+  //               return {
+  //                 userTask_id: userTask._id,
+  //                 task: taskRespond.data.title,
+  //                 questions: questionsRespond.data,
+  //                 answers: fullAnswers,
+  //                 feedback: feedbackRespond.data.text
+  //                   ? {
+  //                       _id: feedbackRespond.data._id,
+  //                       text: feedbackRespond.data.text,
+  //                     }
+  //                   : null,
+  //               };
+  //             } catch (error) {
+  //               console.error("Error in mapping user tasks:", error);
+  //               return null; // במקרה של שגיאה, דלג על המשימה
+  //             }
+  //           })
+  //         );
+  
+  //         setTabsTask(dataTabs.filter((tab) => tab !== null)); // מסנן משימות שנכשלו
+  //         setLoading(false);
+  //       } catch (error) {
+  //         console.error("Error loading user task data:", error);
+  //         setLoading(false);
+  //       }
+  //     };
