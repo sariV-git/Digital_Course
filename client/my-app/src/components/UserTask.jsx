@@ -1,12 +1,12 @@
 import { useLocation } from "react-router-dom"
 
-const UserTask = () => {
+const UserTask = (prop) => {
 
   const location = useLocation()
-  const { questions, answers, titleTask } = location.state
+  const { questions, answers, titleTask } = location.state?location.state:prop
   // const {answers,questions}=location.state
 
-  console.log('in userTask state: ', location.state);
+  console.log('in userTask state: ', { questions, answers, titleTask });
   return (
     <div style={{ fontFamily: '"Poppins", "Nunito", "Lato", Arial, sans-serif', padding: '20px', direction: 'rtl', textAlign: 'right', backgroundColor: '#f7faff' }}>
       <h1 style={{ color: '#2b6cb0', borderBottom: '2px solid #e2e8f0', paddingBottom: '10px' }}>{titleTask}</h1>

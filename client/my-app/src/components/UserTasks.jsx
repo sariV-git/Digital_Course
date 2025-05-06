@@ -195,7 +195,7 @@ const UserTasks = () => {
     const loadTasksUserData = async () => {
       try {
         const resUsersTask = await axios.get(
-          `http://localhost:5000/userTask/AllUserTasksAccordingUser/${user_id}`,
+          `http://localhost:5000/userTask/AllUserTasksAccordingUserAndCourse/${user_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

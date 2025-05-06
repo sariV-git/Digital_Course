@@ -82,7 +82,17 @@ const allUserTasksAccordingUser = async (req, res) => {
    return res.json({ userTasks }).status(200)
 }
    
-
+const getUserTaskAccordingUserAndTask = async (req, res) => {
+   const { user ,task} = req.params
+   if (!user||!task)
+      return res.status(400).send('error in getUserTaskAccordingUserAndTask in user task--missing task ')
+   const userTask = await UserTask.findOne({ user: user,task:task }).populate('user')
+   console.log('the usersTask: ', userTask);
+   if (!userTask)
+      return res.status(200).send('there is no usertask for this user')//??
+   return res.json({ userTask }).status(200)
+}
+   
 // const getByTask = async (req, res) => {
 //    const { task } = req.params;
 
@@ -109,4 +119,4 @@ const allUserTasksAccordingUser = async (req, res) => {
 //    }
 // };
 
-module.exports = { allUserTasksAccordingUser,getByTask, getUserTaskByUserAndTask, deleteUserTask, funcDeleteUserTask, createUserTask }
+module.exports = {getUserTaskAccordingUserAndTask, allUserTasksAccordingUser,getByTask, getUserTaskByUserAndTask, deleteUserTask, funcDeleteUserTask, createUserTask }

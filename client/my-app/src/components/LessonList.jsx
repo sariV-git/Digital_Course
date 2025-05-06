@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { setLesson } from '../store/reducer/lessonSlice';
+import { setLessons } from '../store/reducer/lessonSlice';
 import ManagerUpdateLesson from "./ManagerUpdateLesson";
 import TryIt from "./TryIt";
 import { useEffect, useState, useRef } from "react";
@@ -16,7 +16,7 @@ const LessonList = () => {
     
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
-    const [lessons, setLessons] = useState([]);
+    const [lessons, setLessonsHere] = useState([]);
     const [loading, setLoading] = useState(true)
     const [finishCourse, setFinishCourse] = useState(false)
     const user=useSelector(state=>state.user.user)
@@ -106,7 +106,8 @@ const LessonList = () => {
                 }
             );
             console.log('the lessons from the new router: ', response.data);
-            setLessons(response.data.lessons);//to set another lessons
+            setLessonsHere(response.data.lessons);//to set another lessons
+            dispatch(setLessons({lessons:response.data.lessons}))
             setFinishCourse(response.data.finish)//to know if i need intoduce an respond of user
             if (response.data.lessons.length > 0) {
                
@@ -161,7 +162,7 @@ const LessonList = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 }
-            ).then(() => { setLessons(lessons.filter(lesson => lesson._id !== lesson_id)) });
+            ).then(() => { setLessonsHere(lessons.filter(lesson => lesson._id !== lesson_id)) });
             toast.current.show({ severity: 'success', summary: 'Success', detail: 'Lesson deleted', life: 3000 });
         } catch (error) {
             toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to delete lesson', life: 3000 });
@@ -241,7 +242,7 @@ const LessonList = () => {
         return <Button label="משימה" onClick={() => { goToTask(rowData) }} className="p-button-rounded p-button-outlined"></Button>
     }
     const updateLesson = (rowData) => {//to fix this function that she will realy update
-        dispatch(setLesson({ newLesson: rowData }));
+        dispatch(setLessons({ newLesson: rowData }));
         setVisible(true);
     };
 
@@ -287,7 +288,7 @@ const LessonList = () => {
 
                     {visible && (
                         <ManagerUpdateLesson
-                            setLessons={setLessons}
+                            setLessons={setLessonsHere}
                             lessons={lessons}
                             visible={visible}
                             setVisible={setVisible}
