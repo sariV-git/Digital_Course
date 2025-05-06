@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -9,6 +10,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCourses } from "../store/reducer/courseSlice";
+
 const ManagerAddCourse = (props) => {
     const { visible, setVisible } = props;
     const token = useSelector((state) => state.token.token);
@@ -20,8 +22,9 @@ const ManagerAddCourse = (props) => {
     const [videoTriler, setVideoTriler] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [isCreateEnabled, setIsCreateEnabled] = useState(false);
-   const courses=useSelector(state=>state.course.courses)
-   const dispatch=useDispatch()
+    const courses = useSelector((state) => state.course.courses);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const isNameValid = courseName.trim() !== "";
         const isVideoValid = videoTriler !== null;
@@ -59,21 +62,16 @@ const ManagerAddCourse = (props) => {
             );
 
             formData.append("speaker", speakerRes.data._id);
-       const courseRes=      await axios.post("http://localhost:5000/course", formData, {
+            const courseRes = await axios.post("http://localhost:5000/course", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,
                 },
             });
             console.log("courseRes", courseRes.data);
-           dispatch(setCourses({newCourses:[...courses,courseRes.data]}))
+            dispatch(setCourses({ newCourses: [...courses, courseRes.data] }));
 
-            console.log("setVisible------", visible);
-
-            setVisible(false)
-            console.log("after setVisible", visible);
-
-            // navigate("/CoursesPage");
+            setVisible(false);
         } catch (error) {
             console.error("Error creating course:", error);
         }
@@ -110,11 +108,14 @@ const ManagerAddCourse = (props) => {
 
                     <div className="input-group">
                         <label htmlFor="information">Information</label>
-                        <InputText
+                        <textarea
                             id="information"
-                            className="input-field"
+                            className="textarea-field"
                             value={courseInfo}
                             onChange={(e) => setCourseInfo(e.target.value)}
+                            rows={5}
+                            cols={30}
+                            placeholder="Enter course information..."
                         />
                     </div>
 
@@ -146,18 +147,16 @@ const ManagerAddCourse = (props) => {
                         <Button
                             label="Create"
                             onClick={() => {
-                                console.log("createCourse()");
-                                setVisible(false)
-                                createCourse()
+                                setVisible(false);
+                                createCourse();
                             }}
                             disabled={!isCreateEnabled}
                             className="p-button-rounded p-button-purple"
                         />
                         <Button
                             label="Cancel"
-                            onClick={() => {console.log("in cancel button");
-                             setVisible(false)}}
-                            className="p-button-rounded p-button-secondary"
+                            onClick={() => setVisible(false)}
+                            className="p-button-rounded p-button-purple"
                         />
                     </div>
                 </div>
@@ -195,6 +194,23 @@ const ManagerAddCourse = (props) => {
                     transition: border-color 0.3s ease, box-shadow 0.3s ease;
                 }
 
+                .textarea-field {
+                    background-color: #ffffff;
+                    border: 2px solid #ba68c8;
+                    border-radius: 8px;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    color: #333;
+                    outline: none;
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                    resize: none;
+                }
+
+                .textarea-field:focus {
+                    border-color: #8e24aa;
+                    box-shadow: 0px 0px 5px rgba(142, 36, 170, 0.5);
+                }
+
                 .input-field:focus {
                     border-color: #8e24aa;
                     box-shadow: 0px 0px 5px rgba(142, 36, 170, 0.5);
@@ -207,22 +223,13 @@ const ManagerAddCourse = (props) => {
                 }
 
                 .p-button-purple {
-                    background-color:rgb(128, 61, 147);
+                    background-color: rgb(128, 61, 147);
                     border: none;
                     color: white;
                 }
 
                 .p-button-purple:hover {
                     background-color: #6a1b9a;
-                }
-
-                .p-button-secondary {
-                    background-color: #f0f0f0;
-                    color: #333;
-                }
-
-                .p-button-secondary:hover {
-                    background-color: #e0e0e0;
                 }
             `}</style>
         </div>

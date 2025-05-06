@@ -26,6 +26,6 @@ router.delete('/:_id', verifyJWTmanager, courseController.deleteCourse)
 router.get('/', courseController.getAllCourses)
 router.get(':_id', courseController.getCourse)
 router.get("/getSpeakerInformation/:_id", courseController.getSpeakerInformationByCoursId)
-router.get('/allLessonsAccordingCourse/:_id', verifyJWTuser, courseController.getAllLessonAccordingCourse)
+// router.get('/allLessonsAccordingCourse/:_id', verifyJWTuser, courseController.getAllLessonAccordingCourse)
 
 module.exports = router
