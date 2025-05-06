@@ -51,7 +51,7 @@ const deleteUserTask = async (req, res) => {
 //get UserTask by user and task
 const getUserTaskByUserAndTask = async (req, res) => {
    const { user, task } = req.params
-   if (!user || !task)
+   if (!user || !task)                     
       return res.status(400).send('error in getUserTaskByUserAndTask--missing user or task')
    const userTask = await UserTask.findOne({ user: user, task: task })
    const found = userTask ? true : false
@@ -65,7 +65,7 @@ const getByTask = async (req, res) => {
       return res.status(400).send('error in getBytask in user task--missing task ')
    const usersTask = await UserTask.find({ task: task }).populate('user').populate('answers')
    console.log('in usertask after the populate: ', usersTask);
-
+                 
    return res.json({ usersTask }).status(200)
 
 }
