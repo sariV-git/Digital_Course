@@ -28,6 +28,8 @@ const UserTasks = () => {
   useEffect(() => {//settabstask
   const loadTasksUserData=async()=>{
     try {
+      console.log("lessons", lessons);
+      
       const finalArray = await Promise.all(lessons.map(async lesson => {
           const matchTaskRes = await axios.get(`http://localhost:5000/task/AccordingLesson/${lesson._id}`, {
               headers: {

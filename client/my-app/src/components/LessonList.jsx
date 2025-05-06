@@ -827,7 +827,7 @@ const [showTask, setShowTask] = useState(false)
       setLessonsHere(response.data);
       console.log("the lessons from the new router: ", response.data);
 
-      dispatch(setLessons({ lessons: response.data.lessons }));
+      dispatch(setLessons({ lessons: response.data }));
       setLoading(false);
     } catch (error) {
       console.error("Error in loadData for manager:", error);
