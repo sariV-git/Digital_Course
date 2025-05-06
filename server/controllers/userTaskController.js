@@ -75,13 +75,13 @@ const allUserTasksAccordingUser = async (req, res) => {
    const { user } = req.params
    if (!user)
       return res.status(400).send('error in allUserTasksAccordingUser in user task--missing task ')
-   const usersTask = await UserTask.find({ user: user }).populate('user')
-   console.log('the usersTask: ', usersTask);
-   if (!usersTask)
+   const userTasks = await UserTask.find({ user: user }).populate('user')
+   console.log('the usersTask: ', userTasks);
+   if (!userTasks)
       return res.status(200).send('there is no usertask for this user')
-   return res.json({ usersTask }).status(200)
+   return res.json({ userTasks }).status(200)
 }
-
+   
 
 // const getByTask = async (req, res) => {
 //    const { task } = req.params;

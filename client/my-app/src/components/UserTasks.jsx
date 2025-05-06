@@ -184,7 +184,6 @@ const UserTasks = () => {
   const location = useLocation();
   const user_id = location.state.user_id; // TODO: ודא שהנתון הזה קיים ב-location.state
   const userName = location.state.userName; // TODO: ודא שהנתון הזה קיים ב-location.state
-  console.log(user_id,userName,"999999999999999999999999999999999999999999999")
   const token = useSelector((state) => state.token.token); // Redux token
   const [loading, setLoading] = useState(true); // מצב טעינה
   const [tabsTask, setTabsTask] = useState([]); // המשימות והמידע

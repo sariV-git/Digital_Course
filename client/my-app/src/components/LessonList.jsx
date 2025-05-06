@@ -91,7 +91,7 @@ const LessonList = () => {
     const loadData = async () => {
         
         try {
-            const userResponse = await axios.get('http://localhost:5000/user/byToken', {
+            const userResponse = await axios.get('http://localhost:5000/user/byToken', {//??
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

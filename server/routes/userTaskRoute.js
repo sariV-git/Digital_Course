@@ -9,5 +9,5 @@ router.delete('/',verifyJWTspeeker,userTaskController.deleteUserTask)
 router.get('/ByUserAndTask/:user/:task',verifyJWTuser,userTaskController.getUserTaskByUserAndTask)
 //??need also check that the speeker is speek in that course of that task??
 router.get('/AccordingTask/:task',verifyJWTspeeker,userTaskController.getByTask)
-router.get('/AllUserTasksAccordingUser/:user',verifyJWTspeeker,userTaskController.allUserTasksAccordingUser)
-module.exports=router
+router.get('/AllUserTasksAccordingUser/:user',verifyJWTuser,userTaskController.allUserTasksAccordingUser)
+module.exports=router     

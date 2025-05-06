@@ -240,16 +240,20 @@ const MenubarWithEdit = () => {
       }
       //??here adding all the rest which i need 
       else {
-        setMenuItems([{label: "Home", icon: "pi pi-home", command: () => navigate("/") }]); 
+        setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") }]);
       }
     } else if (token) {
       // Regular User Menu
-      setMenuItems([
-        { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
-      ]);
+      if (location.pathname == '/LessonsList')
+        setMenuItems([
+          { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+          { label: "My Tasks", icon: "pi pi-book", command: () => navigate("/UserTasksComplete") },
+
+        ]);
     } else {
       // Logged Out (Guest)
-      setMenuItems([]);
+      setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+      ]);
     }
   }, [token, isManager, location.pathname, navigate]);
 
