@@ -238,18 +238,37 @@ const MenubarWithEdit = () => {
           { label: "Create Course", icon: "pi pi-book", command: () => handleCreate("course") },
         ]);
       }
+      else if (location.pathname === "/LessonsList" || location.pathname == './CourseIntroduce') {
+        setMenuItems
+          ([
+            { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+            { label: "Create Lesson", icon: "pi pi-book ", command: () => handleCreate("lesson") },
+            { label: 'Users Responds ', icon: "pi pi-user", command: () => navigate("/ManagerSetResponds") },
+            { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage"), },
+            { label: 'lessons', icon: "pi pi-book", command: () => navigate("/LessonsList") },
+          ]);
+      }
+      // else if (location.pathname === "/CourseIntroduce") {
       //??here adding all the rest which i need 
       else {
-        setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") }]);
+        setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+          { label: 'Users Responds ', icon: "pi pi-user", command: () => navigate("/ManagerSetResponds") },
+        { label: "Users", icon: "pi pi-user", command: () => navigate("/ManagerUsersPage"), },
+        { label: 'lessons', icon: "pi pi-book", command: () => navigate("/LessonsList") }
+        ]);
       }
     } else if (token) {
       // Regular User Menu
-      if (location.pathname == '/LessonsList')
-        setMenuItems([
-          { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
-          { label: "My Tasks", icon: "pi pi-book", command: () => navigate("/UserTasksComplete") },
+      if (location.pathname == '/')
+        setMenuItems([{ label: 'home', icon: 'pi pi-home', command: () => navigate("/") },]);
+      else if (location.pathname == '/CourseIntroduce')
+        setMenuItems([{ label: 'home', icon: 'pi pi-home', command: () => navigate("/") },
+        { label: '' }]);
+      else
+        setMenuItems([{ label: "UserTasksComplete", icon: "pi pi-book", command: () => navigate("/UserTasksComplete") },
+        { label: "Home", icon: "pi pi-home", command: () => navigate("/") },
+        { label: "lessons", icon: "pi pi-book", command: () => navigate("/LessonsList") },]);
 
-        ]);
     } else {
       // Logged Out (Guest)
       setMenuItems([{ label: "Home", icon: "pi pi-home", command: () => navigate("/") },

@@ -164,6 +164,17 @@ const getTaskAccordingLesson = async (req, res) => {
     return res.json(task)
 }
 
+const getAllLessonsAccordingCourse = async (req, res) => {
+    const { course } = req.params
+    
+    if (!course)
+        return res.status(400).send('error in getAllLessonsAccordingCourse--missing course')
+    const lessons = await Lesson.find({ course: course })
+    if (!lessons)
+        return res.status(400).send('error in getAllLessonsAccordingCourse--missing lessons')
+    return res.json(lessons)
+}
+
 //getLessonForUserAccordingCourse
 const getLessonForUserAccordingCourse = async (req, res) => {
     let matchLessons = []; // the lessons that match for this specific user
@@ -178,6 +189,7 @@ const getLessonForUserAccordingCourse = async (req, res) => {
             return res.status(400).send('No lessons found for this course');
         }
 
+       
         // Fetch all tasks for the lessons in the course in parallel
         const tasksArray = await Task.find({ lesson: { $in: allLessons.map(lesson => lesson._id) } });
         
@@ -223,4 +235,4 @@ console.log('lastLesson---',lastLesson);
 };
                
 
-module.exports = { getLessonForUserAccordingCourse,createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson, funcDeleteLesson, getTaskAccordingLesson }
+module.exports = {getAllLessonsAccordingCourse ,getLessonForUserAccordingCourse,createLesson, updatLesson, deleteLesson, deleteLesson, getAllLessons, getByIdLesson, funcDeleteLesson, getTaskAccordingLesson }

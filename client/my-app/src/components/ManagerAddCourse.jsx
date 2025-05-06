@@ -6,9 +6,9 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { FileUpload } from "primereact/fileupload";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { setCourses } from "../store/reducer/courseSlice";
 const ManagerAddCourse = (props) => {
     const { visible, setVisible } = props;
     const token = useSelector((state) => state.token.token);
@@ -20,7 +20,8 @@ const ManagerAddCourse = (props) => {
     const [videoTriler, setVideoTriler] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [isCreateEnabled, setIsCreateEnabled] = useState(false);
-
+   const courses=useSelector(state=>state.course.courses)
+   const dispatch=useDispatch()
     useEffect(() => {
         const isNameValid = courseName.trim() !== "";
         const isVideoValid = videoTriler !== null;
@@ -58,14 +59,14 @@ const ManagerAddCourse = (props) => {
             );
 
             formData.append("speaker", speakerRes.data._id);
-
-            await axios.post("http://localhost:5000/course", formData, {
+       const courseRes=      await axios.post("http://localhost:5000/course", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+            console.log("courseRes", courseRes.data);
+           dispatch(setCourses({newCourses:[...courses,courseRes.data]}))
 
             console.log("setVisible------", visible);
 
