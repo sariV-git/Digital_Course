@@ -23,7 +23,7 @@ const createCourse = async (req, res) => {
     const course = await Course.create({ name, speaker, information, pathTriler,backgroundImage })
     if (!course)
         return res.status(400).send('error with create course')
-    return res.send('succeed to create course')
+    return res.status(200).json(course)
 }
 
 //getAllLessonsOfThisCourse

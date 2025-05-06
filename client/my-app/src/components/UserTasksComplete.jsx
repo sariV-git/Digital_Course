@@ -12,7 +12,8 @@ const UserTasksComplete = () => {
     const [userTasks, setUserTasks] = useState([])
 
     const loadData = async () => {//wrapping all in try and catch
-        try {
+        
+        try {   
             const finalArray = await Promise.all(lessons.map(async lesson => {
                 const matchTaskRes = await axios.get(`http://localhost:5000/task/AccordingLesson/${lesson._id}`, {
                     headers: {

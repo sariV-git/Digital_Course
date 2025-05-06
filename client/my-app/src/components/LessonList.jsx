@@ -638,6 +638,75 @@ const LessonList = () => {
   const toast = useRef(null); // For showing Toast messages
   const [feedbackMap, setFeedbackMap] = useState({});
   const [createdRespond, setCreatedRespond] = useState(false);
+const [showTask, setShowTask] = useState(false)
+
+            const goToTask = async (lesson) => {
+            try {
+                //load the data about the task
+                const taskResponse = await axios.get(`http://localhost:5000/task/AccordingLesson/${lesson._id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                console.log('taskResponse', taskResponse.data);
+                //load the data about the user
+                const userResponse = await axios.get('http://localhost:5000/user/byToken', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                console.log('userResponse', userResponse);
+    
+                console.log('task', taskResponse.data)
+                //load this data to check if already the user did this task
+                const respondUserTask = await axios.get(`http://localhost:5000/userTask/ByUserAndTask/${userResponse.data._id}/${taskResponse.data._id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                console.log('respondUserTask', respondUserTask.data);
+    
+                if (!respondUserTask.data.userTask) {
+                    setShowTask(true)//navigate to see the task???can delete it??
+                    navigate('/Task', { state: { task: taskResponse.data } })//??mabye need to pass also the user
+    
+                }
+                else {
+                    let arrayAnswers = []
+                    console.log('in see the task');
+                    // let QuestionsAnswersArray=[]//the array of objects every object look like :{questionText:"  ",answerText:"  "}
+                    const answers = respondUserTask.data.userTask.answers//an array of id of the answers of the user
+                    console.log('answers Before: ', answers);
+                    try {
+                        answers.forEach(async answer => {
+                            const resAnswer = await axios.get(`http://localhost:5000/answer/${answer}`, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            })
+                            console.log('resAnswer', resAnswer.data);
+                            arrayAnswers.push(resAnswer.data)
+                            return (resAnswer.data)
+                        })
+                        const taskQuestions = await axios.get(`http://localhost:5000/question/AccordingTask/${taskResponse.data._id}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        console.log("anssssswers: ", arrayAnswers, 'qqqqqquestion', taskQuestions);
+    
+                        navigate('/UserTask', { state: { questions: taskQuestions.data, answers: arrayAnswers, titleTask: taskResponse.data.title } })
+    
+                    } catch (error) {
+                        console.log('an error in see all the answers', error);
+                    }
+    
+                }
+                //    setUserTask(respondUserTask.data.userTask)//navigate to do the task
+            } catch (error) {
+                console.log('error in loaddata for user in lessonpage', error);
+            }
+        }
 
   const fetchFeedbacks = async (lessonsFromLoad) => {
     try {
@@ -695,7 +764,7 @@ const LessonList = () => {
     }
   };
 
-  const loadData = async () => {
+  const loadDataForUser = async () => {
     try {
       const userResponse = await axios.get("http://localhost:5000/user/byToken", {
         headers: {
@@ -713,6 +782,7 @@ const LessonList = () => {
       );
 
       setLessonsHere(response.data.lessons);
+      
       dispatch(setLessons({ lessons: response.data.lessons }));
       setFinishCourse(response.data.finish);
 
@@ -737,14 +807,40 @@ const LessonList = () => {
         }
       }
     } catch (error) {
-      console.error("Error in loadData:", error);
+      console.error("Error in loadData for user:", error);
       setErrors(true);
       setLoading(false);
     }
   };
 
+  const loadDataForManager = async () => {
+    try {
+        
+      const response = await axios.get(
+        `http://localhost:5000/lesson/getAllLessonsAccordingCourse/${course._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setLessonsHere(response.data);
+      console.log("the lessons from the new router: ", response.data);
+
+      dispatch(setLessons({ lessons: response.data.lessons }));
+      setLoading(false);
+    } catch (error) {
+      console.error("Error in loadData for manager:", error);
+      setErrors(true);
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    loadData();
+    if(isManager)
+        loadDataForManager()
+    else
+    loadDataForUser();
   }, []);
 
   const goToLesson = (lesson) => {
@@ -786,7 +882,7 @@ const LessonList = () => {
     return (
       <Button
         label="Task"
-        onClick={() => goToLesson(rowData)}
+        onClick={() => goToTask(rowData)}
         className="p-button-rounded p-button-outlined"
       />
     );
@@ -828,7 +924,7 @@ const LessonList = () => {
   };
 
   const showFeedback = (rowData) => {
-    return <span>{feedbackMap[rowData._id] || "Loading..."}</span>;
+    return <span>{feedbackMap[rowData._id] || "no feedback"}</span>;
   };
 
   return (
@@ -837,7 +933,7 @@ const LessonList = () => {
         <div style={styles.loadingContainer}>
           <h2>Loading Lessons...</h2>
         </div>
-      ) : lessons.length === 0 ? (
+      ) :!lessons? (
         <div style={styles.noLessonsContainer}>
           <h2 style={styles.noLessonsMessage}>There are no lessons available.</h2>
         </div>
@@ -859,8 +955,8 @@ const LessonList = () => {
               <Column header="Lessons" body={showButton} />
               {isManager && <Column header="Edit" body={updateButton} />}
               {isManager && <Column header="Delete" body={deleteButton} />}
-              <Column header="Instructor Feedback" body={showFeedback} />
-              <Column header="Tasks" body={showTaskButton} />
+              {!isManager&&<Column header="Instructor Feedback" body={showFeedback} />}
+             {!isManager&& <Column header="Tasks" body={showTaskButton} />}
             </DataTable>
 
             {visible && (
@@ -872,7 +968,7 @@ const LessonList = () => {
               />
             )}
           </div>
-          {finishCourse && !createdRespond && (
+          {!isManager&&finishCourse && !createdRespond && (
             <Button onClick={() => navigate("/Respond")}>Your Respond</Button>
           )}
         </>

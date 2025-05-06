@@ -228,7 +228,7 @@ const UserTasks = () => {
     );
   })}
 </Accordion>
-        {tabsTask.exist&&<FileExample contentFile={tabsTask} userName={userName} />}
+        <FileExample contentFile={tabsTask} userName={userName} />
       </div>
     </>
   );

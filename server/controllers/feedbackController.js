@@ -34,7 +34,7 @@ const deleteFeedback = async (req, res) => {
     if (!deleted) {
         return res.status(400).send('Error in deleteFeedback: Failed to delete feedback');
     }
-
+     
     return res.status(200).send('Feedback deleted successfully!');
 };
 //update
