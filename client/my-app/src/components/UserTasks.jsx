@@ -189,14 +189,14 @@ const UserTasks = () => {
   const [tabsTask, setTabsTask] = useState([]); // המשימות והמידע
   const [showInputFeedback, setShowInputFeedback] = useState(false); // טופס פידבק
   const feedbackText = useRef(null);
- const lessons=useSelector(state=>state.lesson.lessons)
+ const lessons = useSelector((state)=>state.lesson.lessons)
   // טוען את המידע על המשימות של המשתמש
   
   
   useEffect(() => {//settabstask
   const loadTasksUserData=async()=>{
     try {
-      const finalArray = await Promise.all(lessons.map(async lesson => {
+      const finalArray = await Promise.all(lessons.map(async (lesson) => {
           const matchTaskRes = await axios.get(`http://localhost:5000/task/AccordingLesson/${lesson._id}`, {
               headers: {
                   Authorization: `Bearer ${token}`
@@ -213,7 +213,7 @@ const UserTasks = () => {
           if (userTask) {
               const answers_id = userTask.answers
 
-              const answers = await Promise.all(answers_id.map(async answer_id => {//the full answers
+              const answers = await Promise.all(answers_id.map(async (answer_id) => {//the full answers
                   const answerRes = await axios.get(`http://localhost:5000/answer/${answer_id}`, {
                       headers: {
                           Authorization: `Bearer ${token}`
@@ -317,21 +317,26 @@ const UserTasks = () => {
     <>
       <div className="card">
         <Accordion>
-          {tabsTask.map((tabTask, index) => {
+        {Array.isArray(tabsTask) && tabsTask.length > 0 ? (
+          tabsTask.map((tabTask, index) => {
             return (
               <AccordionTab key={index} header={`lesson : ${tabTask.numOfLesson}. ${tabTask.titleLesson}`}>
-                <>task: {tabTask.titleTask}</><br/>
-                {tabTask.questions.map((question) => {
+                <>task: {tabTask?.titleTask}</>
+                <br/>
+                {Array.isArray(tabTask?.questions) && tabTask?.questions.length > 0 ? (
+                tabTask?.questions.map((question) => {
                   const matchAnswer = tabTask.answers.find(
                     (answer) => answer.question === question._id
-                  );
+                  ); 
                   return (
                     <div key={question._id}>
                       <p>שאלה: {question.text}</p>
                       <p>תשובה: {matchAnswer ? matchAnswer.text : "לא ניתנה תשובה"}</p>
                     </div>
                   );
-                })}
+                })
+                ): null}
+
                 {!tabTask.feedback._id ? (
                   <>
                     <Button
@@ -340,10 +345,7 @@ const UserTasks = () => {
                     />
                     {showInputFeedback && (
                       <>
-                        <InputText
-                          ref={feedbackText}
-                          placeholder="הכנס פידבק..."
-                        />
+                        <InputText ref={feedbackText} placeholder="הכנס פידבק..."/>
                         <Button
                           onClick={() =>
                             feedbackText.current.value &&
@@ -378,8 +380,10 @@ const UserTasks = () => {
                   </>
                 )}
               </AccordionTab>
-            );
-          })}
+);
+          })
+        ):null
+        }
         </Accordion>
         <FileExample contentFile={tabsTask} userName={userName} />
       </div>
