@@ -9,23 +9,22 @@ const processRTL = (text) => {
 
 
 const FileExample = (props) => {
-    const userName = props.userName
-    const contentFile = props.contentFile;
+    const{userName,contentFile}=props
     const [contentFileReady, setContentFileReady] = useState("")
     const [loading, setLoading] = useState(true)
     useEffect(() => {
         console.log("the content of the file: ", contentFile);
-
+    console.log("contentFile: ",contentFile);
         const readyContent = contentFile.map(userTask => {
             // console.log('the name of the task: \n',userTask.task);
             let sentence = ""
             userTask.questions.forEach(question => {
-                sentence += `שאלה: ${question.text}?\n`;
+                sentence += `שאלה: ${question.text?question.text:"there is no task"}?\n`;
                 const matchAnswer = userTask.answers.find(answer => answer.question === question._id)
                 sentence += `תשובה: ${matchAnswer?.text || "לא ניתנה תשובה"}\n\n`;
                 // console.log("the question and the answer:  \n",sentence);
             })
-            return `שם המשימה: ${userTask.task}\n\n` + sentence;
+            return `שם המשימה:${userTask.titleTask}\n\n` + sentence;
         })
 
         console.log('the array: ', readyContent);
@@ -43,7 +42,7 @@ const FileExample = (props) => {
         let yPosition = 40; // התחלת מיקום Y
         contentFile.forEach((task) => {
             doc.setFontSize(14);
-            doc.text(processRTL(`שם המשימה: ${task.task}`), 200, yPosition, { align: "right" });
+            doc.text(processRTL(`שם המשימה: ${task.titleTask}`), 200, yPosition, { align: "right" });
             yPosition += 10; // ריווח אחרי שם המשימה
 
             task.questions.forEach((question) => {

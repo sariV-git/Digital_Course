@@ -195,7 +195,7 @@ const getLessonForUserAccordingCourse = async (req, res) => {
         
         // Fetch all user tasks in parallel
         const userTasks = await UserTask.find({ user: user, task: { $in: tasksArray.map(task => task._id) } });
-
+                                     
         // Get the lessons that the user has already completed
         const completedLessons = userTasks.map(userTask => {
             const task = tasksArray.find(task => task._id.toString() === userTask.task.toString());

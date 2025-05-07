@@ -117,7 +117,7 @@ import { setLesson } from "../store/reducer/lessonSlice";
 const Lesson = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const lesson = location.state.lesson;
+  const lesson = location.state?.lesson;
 
   useEffect(() => {
     dispatch(setLesson({ newLesson: lesson })); // Save the lesson in the Redux store
@@ -126,11 +126,11 @@ const Lesson = () => {
   return (
     <div className="lesson-page">
       <header className="lesson-header">
-        <h1 className="lesson-title">{lesson.name}</h1>
+        <h1 className="lesson-title">{lesson?.name}</h1>
       </header>
       <div className="lesson-video-container">
         <video
-          src={`http://localhost:5000/upload/${lesson.path}`}
+          src={`http://localhost:5000/upload/${lesson?.path}`}
           controls
           className="lesson-video"
         />

@@ -1,10 +1,10 @@
 //the menubar in correct place
 
-import Menubar from './Menubar';
+import MenubarWithEdit from './Menubar';
 const Layout = ({children}) => {  
     return(
         <div>
-            <Menubar/>
+            <MenubarWithEdit/>
             <div style={{ paddingTop: "60px" }}> {/* Adjust padding for Menubar height */}
            {children}
             </div>

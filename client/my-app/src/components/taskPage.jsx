@@ -14,7 +14,8 @@ const Task = () => {
   const location = useLocation();
   const task = location.state.task;
   const token = useSelector((state) => state.token.token);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
+  const user=useSelector(state=>state.user.user)
   const [questions, setQuestions] = useState(null);
   const [load, setLoad] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -35,13 +36,7 @@ const Task = () => {
         setCurrentQuestion(respond.data[0] || null);
         setLastIndex(respond.data.length - 1);
 
-        const userResponse = await axios.get("http://localhost:5000/user/byToken", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(userResponse.data);
-      } catch (error) {
+          } catch (error) {
         console.log("Error fetching data: ", error);
       } finally {
         setLoad(false);
