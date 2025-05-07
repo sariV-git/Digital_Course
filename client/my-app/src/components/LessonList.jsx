@@ -40,7 +40,7 @@ const [showTask, setShowTask] = useState(false)
     
                 console.log('task', taskResponse.data)
                 //load this data to check if already the user did this task
-                const respondUserTask = await axios.get(`http://localhost:5000/userTask/ByUserAndTask/${user.data._id}/${taskResponse.data._id}`, {
+                const respondUserTask = await axios.get(`http://localhost:5000/userTask/ByUserAndTask/${user._id}/${taskResponse.data._id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -104,7 +104,7 @@ const [showTask, setShowTask] = useState(false)
         );
 
         const respondUserTask = await axios.get(
-          `http://localhost:5000/userTask/ByUserAndTask/${user.data._id}/${taskResponse.data._id}`,
+          `http://localhost:5000/userTask/ByUserAndTask/${user._id}/${taskResponse.data._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ const [showTask, setShowTask] = useState(false)
      
 
       const response = await axios.get(
-        `http://localhost:5000/lesson/getForUserAccordingCourse/${user.data._id}/${course._id}`,
+        `http://localhost:5000/lesson/getForUserAccordingCourse/${user._id}/${course._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -165,7 +165,7 @@ const [showTask, setShowTask] = useState(false)
       if (response.data.finish) {
         try {
           const respondUser = await axios.get(
-            `http://localhost:5000/respond/accordingCourseAndUser/${course._id}/${user.data._id}`,
+            `http://localhost:5000/respond/accordingCourseAndUser/${course._id}/${user._id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

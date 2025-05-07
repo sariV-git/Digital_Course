@@ -229,7 +229,7 @@ const ManagerUsersPage = () => {
                     paginator
                     rows={10}
                     style={{ borderRadius: "10px", overflow: "hidden" }}
-                    headerStyle={{ backgroundColor: "#6A1B9A", color: "white" }}
+                    // headerStyle={{ backgroundColor: "#6A1B9A", color: "white" }}
                 >
                     {/* Reverse the order of columns */}
                     <Column
@@ -270,3 +270,6 @@ const ManagerUsersPage = () => {
 };
 
 export default ManagerUsersPage;
+
+
+

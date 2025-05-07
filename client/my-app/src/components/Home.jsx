@@ -6,7 +6,6 @@ import { PrimeReactProvider, PrimeReactContext } from 'primereact/api'
 import { useNavigate } from 'react-router-dom'
 import CourseIntroduce from "./CourseIntroduce";
 import CoursesPage from "./CoursesPage";
-import Nav from "./Nav";
 
 const Home = () => {
 
