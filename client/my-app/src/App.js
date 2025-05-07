@@ -54,24 +54,10 @@ function App() {
   return (
     <div >
       <Layout>
-      {/* <Home/> */}
-      {/* <LinearDemo/> */}
-      {/* className='bg-blue-600 p-3 text 3xl text-red' //for the menubar!!*/}
-      {/* <TemplateDemo /> */}
-      {/* <FileUploadTest/>  */}
-      {/* <TryIt /> */}
-
-      {/* <Edit/> */}
-      {/* <MyCoursesPage/> */}
-      {/* <FileExample/> */}
-      {/* <ChooseVideo/> */}
-      {/* <CoursesPage/---put in the menubar */}
-      {/* <IntroduceUsers/> //for users!!*/}
-      {/* <CourseCard/> for the page of all the courses and not take the fixed */}
-      {/* <CourseModuleList/> for the page of all the lessons*/}
+      
       <Routes>
         {/* need do a homepage??--if there is only one course automally it pass to this course and if there is more automally he go to the many courses--coursePage */}
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home/>} />
         <Route path='/LessonVideo' element={<LessonVideo />} />
         <Route path='/CourseIntroduce' element={<CourseIntroduce />} />
         <Route path='/LessonsList' element={<LessonList />} />

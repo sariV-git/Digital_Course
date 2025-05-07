@@ -138,8 +138,6 @@ const CourseIntroduce = () => {
     return (
         <>
             <div className="flex flex-column align-items-center justify-content-center min-h-screen"   >
-                {/* <div className="flex flex-column align-items-center justify-content-center min-h-screen"> */}
-                {/* ?? i want that the loading will include all the things he can */}
                 {loading ? <>Loading...</> : <>
                     {/* {isManager && optionForManager()} */}
                     {/* at the menubar: */}

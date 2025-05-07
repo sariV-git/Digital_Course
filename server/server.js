@@ -15,7 +15,7 @@ const app=express()
 
 connectDB()
           
-                    
+                                                 
 
      
 app.use(cors(corsOptions))  

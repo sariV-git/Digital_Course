@@ -29,7 +29,7 @@ const ManagerAddQuestions = () => {
 
     const questionTypes = [
         { label: "American", value: "American" },
-        { label: "Regular", value: "Regular" },
+        { label: "Regular", value: "Free" },
     ];
 
     const finishWriteQuestions = () => {
