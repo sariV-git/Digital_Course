@@ -31,17 +31,19 @@ const Login = () => {
       const course_id=res.data.belongToTheCourses.find(_id=>_id===course._id)
       setIsRegistered(course_id)
       
+      
       dispatch(setUser({ newUser: res.data.user }));
       dispatch(setBelongToTheCourses({ newItems: res.data.belongToTheCourses }));
       dispatch(setToken(res.data));
        
       if (res.data.role === 'Admin') {
         console.log('you are a manager!!!');
+        setIsRegistered("aaa")
         dispatch(setIsManager(true));
       } else {
         dispatch(setIsManager(false));
       }
-      if(course_id)
+      if(course_id||res.data.role === 'Admin')
       navigate('/');
     } catch (e) {
       // Update error message and show options
