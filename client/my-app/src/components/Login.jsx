@@ -69,6 +69,8 @@ const Login = () => {
       dispatch(setIsManager(false))//can remove it??
 
       //  navigate('/IntroduceCourse',{state:{course:course}})
+      console.log("you are inside the login page ",res.data);
+      
     navigate('/')
 
     }

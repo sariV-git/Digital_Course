@@ -1,279 +1,245 @@
-import axios from "axios"
-import { useEffect, useRef, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useLocation, useNavigate } from "react-router-dom"
-import { Card } from "primereact/card"
-import { InputText } from "primereact/inputtext"
-import { MultiSelect } from 'primereact/multiselect';
-import { Button } from "primereact/button"
-// import '../DisignPages/TaskPage.css'
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Card } from "primereact/card";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
 import { RadioButton } from "primereact/radiobutton";
 
 const Task = () => {
-  const [index, setIndex] = useState(0)
-  const answer = useRef(null)//the current answer
-  const [lastIndex, setLastIndex] = useState(0)
-  const location = useLocation()
-  const task = location.state.task
-  const token = useSelector(state => state.token.token)
+  const [index, setIndex] = useState(0);
+  const answer = useRef(null);
+  const [lastIndex, setLastIndex] = useState(0);
+  const location = useLocation();
+  const task = location.state.task;
+  const token = useSelector((state) => state.token.token);
   const [user, setUser] = useState(null);
-  const lesson = useSelector(state => state.lesson.lesson)
-  const [questions, setQuestions] = useState(null)
-  const [load, setLoad] = useState(true)
-  const [currentQuestion, setCurrentQuestion] = useState(null)
-  const [answers, setAnswers] = useState([])
+  const [questions, setQuestions] = useState(null);
+  const [load, setLoad] = useState(true);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [showCompletionAlert, setShowCompletionAlert] = useState(false);
+  const navigate = useNavigate();
 
-  const [selectedOption, setSelectedOption] = useState({})//??to see how can i intialize it
-
-  // const newArrayAnswers=[]
-  const navigate = useNavigate()
-
-
-  
   useEffect(() => {
-
     const loadDataQuestion = async () => {
       try {
         const respond = await axios.get(`http://localhost:5000/question/AccordingTask/${task._id}`, {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
-        console.log('question', respond.data);
-        setQuestions(respond.data)
-        setCurrentQuestion(respond.data[0] ? respond.data[0] : null)//the current question
-        console.log('the number of the questions: ', respond.data.length);
-        setLastIndex(respond.data.length - 1)
-        const userResponse = await axios.get('http://localhost:5000/user/byToken', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUser(userResponse.data)//the user
-        console.log('user', userResponse.data);
+        setQuestions(respond.data);
+        setCurrentQuestion(respond.data[0] || null);
+        setLastIndex(respond.data.length - 1);
 
+        const userResponse = await axios.get("http://localhost:5000/user/byToken", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(userResponse.data);
       } catch (error) {
-        console.log('error fetching data: ', error);
+        console.log("Error fetching data: ", error);
+      } finally {
+        setLoad(false);
       }
-      finally {
-        setLoad(false)
-      }
-    }
-    setLoad(true)//can erase it??
-    loadDataQuestion()
-  }, [])
+    };
 
+    loadDataQuestion();
+  }, [task._id, token]);
 
-  //??need it??
-  useEffect(() => {
-    if (currentQuestion && currentQuestion.type == 'American' && currentQuestion.option) { setSelectedOption({ option: currentQuestion.option[0], key: 0 }) }
-  }, [currentQuestion])
-
-
-  //keep the answer
   const keepAnswer = async () => {
-
-    if (answer.current || currentQuestion.type == 'American')//if the question is regular 
-    {
-      console.log('the answersssss...', selectedOption);
-      const currentAnswer = {
-        text: currentQuestion.type == 'American' ? selectedOption.option : answer.current.value,
-        question: questions[index]._id,
-        user: user._id
-      };
-
+    if (answer.current || currentQuestion.type === "American") {
       try {
-        const respond = await axios.post('http://localhost:5000/answer', currentAnswer, {//try to keep the answer
+        const currentAnswer = {
+          text: currentQuestion.type === "American" ? selectedOption.option : answer.current.value,
+          question: questions[index]._id,
+          user: user._id,
+        };
+
+        const respond = await axios.post("http://localhost:5000/answer", currentAnswer, {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        setAnswers(prevAnswers => {
-          const newAnswers = [...prevAnswers, respond.data._id];
-          return newAnswers;
-        });
-
-        // setAnswers(prevAnswers=>[...prevAnswers,respond.data._id])
-        // console.log('Answer saved: ', respond.data);
+        setAnswers((prevAnswers) => [...prevAnswers, respond.data._id]);
 
         const nextIndex = index + 1;
-        // Check if there are more questions
         if (nextIndex <= lastIndex) {
-          setIndex(nextIndex); // Update the index to the next one
-          setCurrentQuestion(questions[nextIndex]); // Set the next question
+          setIndex(nextIndex);
+          setCurrentQuestion(questions[nextIndex]);
         } else {
-
           const userTask = {
             user: user._id,
             task: task._id,
-            answers: [...answers, respond.data._id]
-          }
-          const userTaskrespond = await axios.post(`http://localhost:5000/userTask`, userTask, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          console.log('userTaskrespond', userTaskrespond);
+            answers: [...answers, respond.data._id],
+          };
 
-          alert('You have completed all the questions!');
-          navigate('/LessonsList')
+          await axios.post("http://localhost:5000/userTask", userTask, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          setShowCompletionAlert(true);
         }
       } catch (error) {
-        console.log('Error saving answer: ', error);
+        console.log("Error saving answer: ", error);
       }
-    }//there is no answer 
-    else {
-
-      alert('Please provide an answer');//---or this is an american question
+    } else {
+      alert("Please provide an answer.");
     }
-    console.log('Index:', index, ' Last Index:', lastIndex);
-    // answer.current.value = "";//??--??
   };
 
-
-
   const showAmericanQuestion = (options) => {
-    //want to insert the options to the shape of option and key:
     const arrayOptions = options.map((option, index) => ({
       option: option,
-      key: index
-    }))
-    console.log('arrayOptions', arrayOptions);
-    // const [selectedOption,setSelectedOption]=useState(arrayOptions[1])
-    // setSelectedOption(arrayOptions[1])/////////---------=========???need it???
-    return (<>
+      key: index,
+    }));
+
+    return (
       <div className="card flex justify-content-center">
         <div className="flex flex-column gap-3">
-          {arrayOptions && arrayOptions.map((option) => {
-            return (
-              <div key={option.key} className="flex align-items-center">
-                {console.log('option', option)}
-                <RadioButton inputId={option.key} name="category" value={option} onChange={(e) => setSelectedOption(e.value)} checked={selectedOption.key === option.key} />
-                <label htmlFor={option.key} className="ml-2">{option.option}</label>
-              </div>
-            );
-          })}
+          {arrayOptions.map((option) => (
+            <div key={option.key} className="flex align-items-center">
+              <RadioButton
+                inputId={option.key}
+                name="category"
+                value={option}
+                onChange={(e) => setSelectedOption(e.value)}
+                checked={selectedOption.key === option.key}
+              />
+              <label htmlFor={option.key} className="ml-2">
+                {option.option}
+              </label>
+            </div>
+          ))}
         </div>
-      </div></>
+      </div>
     );
-    // return(<>{options.map(option=>{
-    //     return(<> option: {option}</>)
-    //   })}</>) 
+  };
 
-  }
-  // return (
-  //   <>
-  //     {load ?
-  //       (<>Loading...</>) : <>
-
-  //         {currentQuestion &&
-  //           <Card>
-
-  //             <p>{currentQuestion.text}</p>
-
-  //             {
-  //               currentQuestion.type == 'American' ? <>choose the correct answer:
-  //                 {
-  //                   showAmericanQuestion(currentQuestion.options)
-  //                 }
-  //                 <Button onClick={keepAnswer}>keep american answer</Button>
-  //               </> : <>
-
-  //                 <InputText ref={answer} type="text" className="p-inputtext-lg" placeholder="your answer" />
-  //                 {<Button onClick={() => { keepAnswer() }}>keep</Button>}</>}
-  //             <></>
-  //           </Card>
-  //         }
-  //       </>}
-
-  //   </>)
-
-  // const handleKeyPress = async(event) => {
-  //   if (event.key === "Enter") {
-  //    await keepAnswer();
-  //   }
-  
   return (
     <div>
-    <div className="flex justify-content-center align-items-center h-screen bg-light-purple">
-      {load ? (
-        <>Loading...</>
-      ) : (
-        <>
-          {currentQuestion && (
-            <Card
-              className="p-4 shadow-3"
-              style={{
-                width: "40rem",
-                borderRadius: "10px",
-                border: "1px solid #D8BFD8",
-                textAlign: "center",
-              }}
-            >
-              {/* Question Text */}
-              <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#8B008B" }}>
-                {currentQuestion.text}
-              </p>
+      <div className="flex justify-content-center align-items-center h-screen bg-light-purple">
+        {load ? (
+          <>Loading...</>
+        ) : (
+          <>
+            {currentQuestion && (
+              <Card
+                className="p-4 shadow-3"
+                style={{
+                  width: "40rem",
+                  borderRadius: "10px",
+                  border: "1px solid #D8BFD8",
+                  textAlign: "center",
+                }}
+              >
+                <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#8B008B" }}>
+                  {currentQuestion.text}
+                </p>
 
-              {/* American Question Options */}
-              {currentQuestion.type === "American" ? (
-                <>
-                  <p style={{ fontSize: "1.2rem", color: "#8B008B" }}>
-                    Choose the correct answer:
-                  </p>
-                  <div className="options-container">{showAmericanQuestion(currentQuestion.options)}</div>
-                  <Button
-                   onClick={keepAnswer}
-                    label="Keep American Answer"
-                    style={{
-                      backgroundColor: "#8B008B",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      marginTop: "1rem",
-                    }}
-                  />
-                </>
-              ) : (
-                // Regular Question Input
-                <>
-                  <InputText
-                    ref={answer}
-                    type="text"
-                    className="p-inputtext-lg"
-                    placeholder="Your answer"
-                    style={{
-                      borderColor: "#D8BFD8",
-                      borderRadius: "8px",
-                      width: "100%",
-                      marginBottom: "1rem",
-                    }}
-                  //  onKeyDown={handleKeyPress} // Automatically trigger on Enter
-                  />
-                  <Button
-                    label="Keep"
-                    onClick={keepAnswer}
-                    style={{
-                      backgroundColor: "#8B008B",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      width: "100%",
-                    }}
-                  />
-                </>
-              )}
-            </Card>
-          )}
-        </>
-      )}
+                {currentQuestion.type === "American" ? (
+                  <>
+                    <p style={{ fontSize: "1.2rem", color: "#8B008B" }}>Choose the correct answer:</p>
+                    <div className="options-container">{showAmericanQuestion(currentQuestion.options)}</div>
+                    <Button
+                      onClick={keepAnswer}
+                      label="Keep American Answer"
+                      style={{
+                        backgroundColor: "#8B008B",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "8px",
+                        marginTop: "1rem",
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <InputText
+                      ref={answer}
+                      type="text"
+                      className="p-inputtext-lg"
+                      placeholder="Your answer"
+                      style={{
+                        borderColor: "#D8BFD8",
+                        borderRadius: "8px",
+                        width: "100%",
+                        marginBottom: "1rem",
+                      }}
+                    />
+                    <Button
+                      label="Keep"
+                      onClick={keepAnswer}
+                      style={{
+                        backgroundColor: "#8B008B",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "8px",
+                        width: "100%",
+                      }}
+                    />
+                  </>
+                )}
+              </Card>
+            )}
+          </>
+        )}
       </div>
+
+      {showCompletionAlert && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "2rem",
+              borderRadius: "10px",
+              textAlign: "center",
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+              width: "90%",
+              maxWidth: "400px",
+            }}
+          >
+            <h2 style={{ color: "#8B008B", marginBottom: "1rem" }}>🎉 Congratulations! 🎉</h2>
+            <p style={{ fontSize: "1.2rem", color: "#333", marginBottom: "1.5rem" }}>
+              You have completed all the questions!
+            </p>
+            <Button
+              label="Go to Lessons List"
+              onClick={() => navigate("/LessonsList")}
+              style={{
+                backgroundColor: "#8B008B",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                padding: "0.5rem 1rem",
+                fontSize: "1rem",
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
-export default Task
-
-
-
+export default Task;
