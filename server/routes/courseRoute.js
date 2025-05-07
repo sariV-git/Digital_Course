@@ -38,6 +38,15 @@ const multerErrorHandler = (err, req, res, next) => {
         next(err); // אם לא מדובר בשגיאה של multer, תעביר ל-middlewares אחרים
     };
 
+// router.post('/', verifyJWTmanager, upload.fields([{name:'pathTriler',maxCount:1},{name:'backgroundImage',maxCount:1}]), courseController.createCourse)
+// router.put('/', verifyJWTmanager, upload.fields([{name:'pathTriler',maxCount:1},{name:'backgroundImage',maxCount:1}]), courseController.updateCourse)
+// router.delete('/:_id', verifyJWTmanager, courseController.deleteCourse)
+// router.get('/', courseController.getAllCourses)
+// router.get(':_id', courseController.getCourse)
+// router.get("/getSpeakerInformation/:_id", courseController.getSpeakerInformationByCoursId)
+// // router.get('/allLessonsAccordingCourse/:_id', verifyJWTuser, courseController.getAllLessonAccordingCourse)
+
+
 
     // const upload = multer({ storage: storage })
 

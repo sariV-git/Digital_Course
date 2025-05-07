@@ -1,5 +1,4 @@
 
-
 // import React, { useState, useEffect } from "react";
 // import { Button } from "primereact/button";
 // import { Dialog } from "primereact/dialog";
@@ -252,10 +251,12 @@ const ManagerAddCourse = (props) => {
     const [videoTriler, setVideoTriler] = useState(null);
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [isCreateEnabled, setIsCreateEnabled] = useState(false);
+
     const [videoErrorMessage, setVideoErrorMessage] = useState(""); // הודעת שגיאה עבור וידאו
     const [imageErrorMessage, setImageErrorMessage] = useState(""); // הודעת שגיאה עבור תמונה
 
     // בדיקה אם ניתן להפעיל את כפתור היצירה
+
     useEffect(() => {
         const isNameValid = courseName.trim() !== "";
         const isVideoValid = videoTriler !== null;
@@ -311,8 +312,6 @@ const ManagerAddCourse = (props) => {
             );
 
             formData.append("speaker", speakerRes.data._id);
-
-            // שליחת הקורס לשרת
             const courseRes = await axios.post("http://localhost:5000/course", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -367,11 +366,14 @@ const ManagerAddCourse = (props) => {
 
                     <div className="input-group">
                         <label htmlFor="information">Information</label>
-                        <InputText
+                        <textarea
                             id="information"
-                            className="input-field"
+                            className="textarea-field"
                             value={courseInfo}
                             onChange={(e) => setCourseInfo(e.target.value)}
+                            rows={5}
+                            cols={30}
+                            placeholder="Enter course information..."
                         />
                     </div>
 
@@ -416,22 +418,99 @@ const ManagerAddCourse = (props) => {
                     <div className="button-group">
                         <Button
                             label="Create"
-                            onClick={createCourse}
+
+                            onClick={() => {
+                                setVisible(false);
+                                createCourse();
+                            }}
                             disabled={!isCreateEnabled}
                             className="p-button-rounded p-button-purple"
                         />
                         <Button
                             label="Cancel"
+
                             onClick={() => {
                                 setVideoErrorMessage("");
                                 setImageErrorMessage("");
                                 setVisible(false);
                             }}
                             className="p-button-rounded p-button-secondary"
+
                         />
                     </div>
                 </div>
             </Dialog>
+
+            <style>{`
+                .dialog-container {
+                    background-color: #f3e5f5;
+                    border-radius: 15px;
+                    padding: 20px;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                }
+
+                .input-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-bottom: 15px;
+                }
+
+                .input-group label {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    color: #6a1b9a;
+                }
+
+                .input-field {
+                    background-color: #ffffff;
+                    border: 2px solid #ba68c8;
+                    border-radius: 8px;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    color: #333;
+                    outline: none;
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                }
+
+                .textarea-field {
+                    background-color: #ffffff;
+                    border: 2px solid #ba68c8;
+                    border-radius: 8px;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    color: #333;
+                    outline: none;
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                    resize: none;
+                }
+
+                .textarea-field:focus {
+                    border-color: #8e24aa;
+                    box-shadow: 0px 0px 5px rgba(142, 36, 170, 0.5);
+                }
+
+                .input-field:focus {
+                    border-color: #8e24aa;
+                    box-shadow: 0px 0px 5px rgba(142, 36, 170, 0.5);
+                }
+
+                .button-group {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 20px;
+                }
+
+                .p-button-purple {
+                    background-color: rgb(128, 61, 147);
+                    border: none;
+                    color: white;
+                }
+
+                .p-button-purple:hover {
+                    background-color: #6a1b9a;
+                }
+            `}</style>
         </div>
     );
 };
