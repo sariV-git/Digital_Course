@@ -67,7 +67,7 @@ const Login = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f7f1fa', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ backgroundColor: "rgba(206, 240, 225, 0.3)", height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '12px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', border: '1px solid #d8bfd8', width: '30rem' }}>
         <h2 style={{ color: '#8b008b', marginBottom: '20px', textAlign: 'center' }}>כניסה לקורס</h2>
         {(errorMessage||!isRegistered) && (

@@ -383,7 +383,7 @@ const CoursesPage = () => {
             <style>{`
                 .courses-page {
                     padding: 20px;
-                    background-color: #f3e5f5;
+                    background-color:#e8f5e9;
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;

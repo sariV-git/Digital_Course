@@ -8,7 +8,7 @@ const UserTask = (prop) => {
 
   console.log('in userTask state: ', { questions, answers, titleTask });
   return (
-    <div style={{ fontFamily: '"Poppins", "Nunito", "Lato", Arial, sans-serif', padding: '20px', direction: 'rtl', textAlign: 'right', backgroundColor: '#f7faff' }}>
+    <div style={{ fontFamily: '"Poppins", "Nunito", "Lato", Arial, sans-serif', padding: '20px', direction: 'rtl', textAlign: 'right', backgroundColor: '#e8f5e9' }}>
       <h1 style={{ color: '#2b6cb0', borderBottom: '2px solid #e2e8f0', paddingBottom: '10px' }}>{titleTask}</h1>
       {questions.map(question => {
         // Find the corresponding answer using the question ID

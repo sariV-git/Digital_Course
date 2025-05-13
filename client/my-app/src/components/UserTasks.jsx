@@ -377,7 +377,7 @@ const UserTasks = () => {
   }
 
   return (
-    <div className="card" style={{ padding: "20px", backgroundColor: "#F3E5F5" }}>
+    <div className="card" style={{ padding: "20px", backgroundColor: "#e8f5e9" }}>
       <h1 style={{ textAlign: "center", color: "#6A1B9A", marginBottom: "20px" }}>
         משימות משתמש עבור {userName}
       </h1>

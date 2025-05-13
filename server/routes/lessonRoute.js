@@ -25,6 +25,7 @@ router.put('/',verifyJWTspeeker,lessonController.updatLesson)
 router.delete('/:_id',verifyJWTspeeker,lessonController.deleteLesson)
 router.get('/:_id',verifyJWTuser,lessonController.getByIdLesson)
 router.get('/',verifyJWTuser,lessonController.getAllLessons)
-router.get('/getForUserAccordingCourse/:user/:course',verifyJWTuser,lessonController.getLessonForUserAccordingCourse)
+router.get('/getLessonForUserAccordingCourse/:user/:course',verifyJWTuser,lessonController.getLessonForUserAccordingCourse)
+// router.get('/getForUserAccordingCourse/:user/:course',verifyJWTuser,lessonController.getLessonForUserAccordingCourse)
 router.get('/getAllLessonsAccordingCourse/:course',verifyJWTspeeker,lessonController.getAllLessonsAccordingCourse)
 module.exports=router 

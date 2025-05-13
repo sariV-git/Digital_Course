@@ -167,7 +167,7 @@ const CourseIntroduce = () => {
                                     }}
                                 ></div>
                             </div>} subTitle={course.information} footer={footer}
-                                className="shadow-2xl" style={{ width: "92%", margin: "0 auto", overflow: "hidden", backgroundColor: "rgba(252, 237, 253, 0.3)"  }}>
+                                className="shadow-2xl" style={{ width: "92%", margin: "0 auto", overflow: "hidden", backgroundColor: "rgba(206, 240, 225, 0.3)"  }}>
 
                                 <h4 /*className="text-gray-700 mb-4"*/>
                                     מרצה: {speakerInformation && speakerInformation.name.firstName + " " + speakerInformation.name.lastName}

@@ -150,7 +150,7 @@ const css = `
   align-items: center;
   justify-content: flex-start;
   padding: 20px;
-  background: linear-gradient(to bottom, #f3e5f5, #e8eaf6);
+  background: linear-gradient(to bottom,#e8f5e9, #e8f5e9);
   min-height: 100vh;
 }
 
@@ -160,7 +160,7 @@ const css = `
   text-align: center;
   margin-bottom: 20px;
   padding: 20px 0;
-  background: linear-gradient(to right, #8e24aa, #6a1b9a);
+  background: linear-gradient(to right,rgb(102, 188, 219),rgb(64, 145, 192));
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }

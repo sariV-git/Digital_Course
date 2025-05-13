@@ -175,7 +175,7 @@ const getAllLessonsAccordingCourse = async (req, res) => {
     return res.json(lessons)
 }
 
-//getLessonForUserAccordingCourse
+//getLessonForUserAccordingCours
 const getLessonForUserAccordingCourse = async (req, res) => {
     let matchLessons = []; // the lessons that match for this specific user
     const { user, course } = req.params;
