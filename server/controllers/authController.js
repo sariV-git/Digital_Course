@@ -3,7 +3,6 @@ const User = require('../models/User')
 const UserCourse = require('../models/UserCourse')
 const jwt = require('jsonwebtoken')
 const { funcCreateUserCourse } = require('./userCourseController')
-
 //register
 const register = async (req, res) => {
     const { username, password, firstName, lastName, email, phone, course } = req.body
@@ -20,12 +19,11 @@ const register = async (req, res) => {
         if (!match)
             return res.status(409).send('duplicate username')
         const alreadyRegistered = UserCourse.find({ user: duplicate._id, course: course })
-
         if (alreadyRegistered)
             {
                 console.log("already registered for this course", alreadyRegistered);
                 
-                return res.status(401).send('you already regestered for this course')
+                return res.status(401).send('you already registered for this course')
             }
         const usercourse_id = await funcCreateUserCourse({ user: duplicate._id, course: course })
         if (!usercourse_id)
